@@ -42,6 +42,8 @@ void draw(){
   
   noCursor();
   
+  
+  
   background( palette[0] );
   
   if( myTable == null ) 
@@ -54,6 +56,8 @@ void draw(){
        textAlign(CENTER);
        text("My first line chart", width/2, 20);
   }
+  
+  noLoop();
 }
 
 

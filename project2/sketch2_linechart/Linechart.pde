@@ -14,65 +14,132 @@ class Linechart extends Frame {
     useColumn = _useColumn;
   }
 
-  void draw() {
-      // Draw the y axis: Draw the GPA_score's points
-      float[] xPosArray = new float[myTable.getRowCount()];
+  void draw() {  
       
-      float[] yPosArray = new float[myTable.getRowCount()];
+      drawXAxis();
       
-      float x;
-      
-      float y;
-      
-      String myYear;
-      
-      float myGpa_Score;
+      drawYAxis();
            
-      // Line and labels for X axis
-
+      drawLines();    
+  }
+  
+  void drawXAxis(){
+    
+     String myYear; 
+         
+     float xPos;
+     
+     float minYr_xPos = map(0, 0, data.getRowCount(), 100, width-100);
+     
+     //println(minYr_xPos);
+     
+     float maxYr_xPos = map(data.getRowCount(), 0, data.getRowCount(), 100, width-100);
+     
      textAlign(CENTER);
-      
-     line(100, 250, width - 100, 250);
      
-     text("Year", 325, 445);
-     
-     // Draw
+     float deltaC = 1.2;
       
-      for (int row = 0; row < myTable.getRowCount(); row++) {
+     line(minYr_xPos, 300, maxYr_xPos, 300);
+    
+     for (int row = 0; row < data.getRowCount(); row++) {  
+       
+        myYear = this.data.getString(row, 0);
+        
+        xPos = map(row, 0, data.getRowCount(), 100, width-100);
+        
+        text(myYear, xPos, 315);
+        
+        line(xPos, 300 - deltaC, xPos, 300 + deltaC);
+     }
+       text("Year", (minYr_xPos + maxYr_xPos)/2, 340);
+  }
+  void drawYAxis(){
+    // 2004; 5.70;90; REP
+    // 2008; 5.00;12; DEM
+    float maxGPA = 10.0;
+    
+    float minGPA = 0.0;
+    
+    float numSpace = ( maxGPA - minGPA )/data.getRowCount(); 
+    
+    float maxGPA_yPos = map(10, 3, 10, height/2, 100);
+    
+    float minGPA_yPos = map(3, 3, 10, height/2, 100);
+    
+    //float yPos;
+    float yPos;
+    
+    // Line and labels for Y axis
+    textAlign(RIGHT);
+    
+    line(100, minGPA_yPos, 100, maxGPA_yPos);
+    
+    float deltaC = 1.2;
+    
+    for (int i = 3; i < 11; i++) {
+        yPos = map(i, 3, 10, height/2, 100);
+      //println("tickMark_yPos = " + yPos);
+        text (i, 90, yPos);
+         
+        line(100 - deltaC, yPos, 100 + deltaC, yPos);
+    }
+    text("GPA", 75, (maxGPA_yPos + minGPA_yPos)/2);    
+    
+  }
+  void drawTitle(){
+    
+  }
+  
+  
+  void drawLines(){
+    
+    float[] xPosArray = new float[data.getRowCount()];
+      
+    float[] yPosArray = new float[data.getRowCount()];
+    
+    String myYear;
+    
+    float myGpa_Score;
+    
+    float xPos;
+    
+    float yPos;
+    
+    for (int row = 0; row < data.getRowCount(); row++) {
         
         myYear = this.data.getString(row, 0);
         
         myGpa_Score = this.data.getFloat(row, 1);
         
-        x = map(row, 0, myTable.getRowCount(), 100, width-100);
+        xPos = map(row, 0, data.getRowCount(), 100, width-100);
         
-        y = map(myGpa_Score, 12, 90, height/4, 0);
+        yPos = map(myGpa_Score, 3, 10, height/2, 100);
         
-        xPosArray[row] = x;
+        xPosArray[row] = xPos;
         
-        yPosArray[row] = y;
+        yPosArray[row] = yPos;
         
-        //println(myYear + "," + x);
+        //println(myYear + "=" + xPos + "/" + myGpa_Score + "=" + yPos);
         //println("-----------------------");
-        //println(myGpa_Score + "," + y);
+       // println(myGpa_Score + "," + y);
         stroke(palette[1]);
         // line(x, y, x, 150);
         noStroke();
         
         fill(palette[1]);
         
-        int d = 10;
+        int d = 8;
         
-        ellipse(x, y, d, d);
+        ellipse(xPos, yPos, d, d);
         
-        text(myYear, x, 300);
+        //text(myYear, x, 300);
      }
      // Connecting the dots
      int xPrevIndex = 0;
      
      int yPrevIndex = 0;
      
-     for (int row = 1; row < myTable.getRowCount(); row++) {
+     for (int row = 1; row < data.getRowCount(); row++) {
          //println(xPosArray[row] +" " + yPosArray[row] );
          stroke(palette[1]);
          
@@ -82,26 +149,6 @@ class Linechart extends Frame {
          
          yPrevIndex = row;
      }
-     
-     
-     
-  }
-  
-  void drawXAxis(){
-  
-  }
-  void drawYAxis(){
-    
-  }
-  void drawTitle(){
-    
-  }
-  void drawPoints(){
-    
-  }
-  
-  void drawLines(){
-  
   }
   
   void drawLabels(){
