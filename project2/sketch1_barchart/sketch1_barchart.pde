@@ -3,8 +3,9 @@
 Table myTable = null;
 Frame myFrame = null;
 
-// Initialize bar chart object to be used by setup() and draw()
-Barchart myFirstBarChart = null;
+color[] dessert = {#9F9694, #791F33, #BA3D49, #F1E6D4, #E2E1DC};
+color[] palette = dessert;
+
 
 ///** Bar Chart
 //  * An application .
@@ -39,7 +40,7 @@ void setup(){
    // int sHeight = 600;//int sWidth = 600;
    // int sHeight = 600;
    
-     size(500,400);  
+     size(600,600); 
     
     selectInput("Select a file to process:", "fileSelected");
      
@@ -57,33 +58,35 @@ void fileSelected(File selection) {
     
     myTable = loadTable( selection.getAbsolutePath(), "header" );   
     
-    myFirstBarChart = new Barchart( myTable, myTable.getColumnTitles()[0] );
-  //  println(myTable.getColumnCount() + " total columns in table");
-     
-     println(myFirstBarChart.getNumberRows() + " total rows in table");
-     
-     println(myFirstBarChart.getNumberFields() + " total fields in table");
+    String myFirstVariable =  "ACT";
     
-     myFirstBarChart.setColumn(myTable.getColumnTitles()[1]);
+  //  println(myTable.getColumnCount() + " total columns in table");
+    
+     myFrame = new Barchart( myTable, myFirstVariable );
+     
+    
   }
 }
 
 
 void draw(){
   
-  //set the window background color to green
- // background(0, 200, 0);
+  noCursor();
   
- // if( myTable == null ) 
- //   return;
+  //set the window background color to green
+  background(0, 200, 0);
+  
+  if( myTable == null ) 
+    return;
   
   if( myFrame != null ){
-       myFrame.setPosition( 0, 0, width, height );
-     //  println("Hello Long");
+      myFrame.setPosition( 50, 50, width - 50 , height -50 );
+
        myFrame.draw();
+       
+        textAlign(CENTER);
   }
-  // Draw the bar chart in the sketch
-  // barChart.draw(15,15,width-30,height-30); 
+   noLoop(); 
   
     
    
@@ -111,6 +114,23 @@ abstract class Frame {
     this.v0 = v0;
     this.w = w;
     this.h = h;
+  }
+  
+   int getXPosition(){
+    return u0;
+  }
+  
+  
+  int getYPosition(){
+    return v0;
+  }
+  
+  int getWidth(){
+    return this.w;
+  }
+  
+  int getHeight(){
+    return this.h;
   }
   
   abstract void draw();

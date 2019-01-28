@@ -15,6 +15,7 @@ void setup(){
    // 2008; 5.00;12; DEM
    // 2012; 8.30;14; DEM
    // 2016; 4.90;50; REP
+  // Step 01: Draw a sketch
   size(600,600);  
   selectInput("Select a file to process:", "fileSelected");
 }
@@ -29,10 +30,42 @@ void fileSelected(File selection) {
         
         myTable = loadTable( selection.getAbsolutePath(), "header" );
         
-        myFrame = new Linechart( myTable, myTable.getColumnTitles()[0] );
+        String myFirstVariable =  "GPA";
         
-        // TODO: create object
-        // Read year
+       // myFrame = new Linechart( myTable, myTable.getColumnTitles()[0] );
+        
+        // Add constructor with color/shape, but how about the scale?
+        // Ex: myFrame = new Linechart( myTable, myFirstVariable, "Yellow" );
+        // Ex: myFrame = new Linechart( myTable, myFirstVariable, Square );
+        myFrame = new Linechart( myTable, myFirstVariable );
+        
+        // Step 02: Choose data points
+        // Select the variable
+        
+        
+        // Choose the corresponding data values from Step 01 above
+        
+        // If can not find the selected variable, returns error message
+        
+        // Step 03: Draw the line chart
+        
+        // Select and draw the title
+        
+        // Draw the y-Axis lines 
+        
+        // Draw the data points
+        
+        // Step 04: Add embellishments
+        
+        // Select the categorical variables, e.g: time period values, or date values
+        
+        // Choose the corresponding data values from the above step
+        
+        // Draw the x-Axis  
+        
+        // Draw the labels
+        
+        // Draw the legends
 
     }
 }
@@ -51,10 +84,13 @@ void draw(){
   
   if( myFrame != null ){
     //Draw the line chart
-       myFrame.setPosition( 0, 0, width, height );
+       myFrame.setPosition( 50, 50, width - 50 , height -50 );
+       
        myFrame.draw();
+       
        textAlign(CENTER);
-       text("My first line chart", width/2, 20);
+       
+       //text("My first line chart", width/2, 20);
   }
   
   noLoop();
@@ -82,6 +118,23 @@ abstract class Frame {
     this.v0 = v0;
     this.w = w;
     this.h = h;
+  }
+  
+  int getXPosition(){
+    return u0;
+  }
+  
+  
+  int getYPosition(){
+    return v0;
+  }
+  
+  int getWidth(){
+    return this.w;
+  }
+  
+  int getHeight(){
+    return this.h;
   }
   
   abstract void draw();
