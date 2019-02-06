@@ -53,9 +53,9 @@ void fileSelected(File selection) {
    
     // TODO: create object
     // ScatterPlot( Table _data, String _useColumnX, String _useColumnY , String _chartName, int _xPos,int _yPos,int _sWidth, int _sHeight)
-    myFirstFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
+    myFirstFrame = new ScatterPlot( myTable,myTable.getColumnTitles()[0] ,myTable.getColumnTitles()[1],"SATM vs SATV", 200, 100, 400, 400);
     
-    mySecondFrame = new ScatterPlot( myTable, "ACT","GPA","ACT vs GPA", 200, 100, 400, 400);
+    mySecondFrame = new ScatterPlot( myTable, myTable.getColumnTitles()[2],myTable.getColumnTitles()[3],"ACT vs GPA", 200, 100, 400, 400);
     
   }
 }
