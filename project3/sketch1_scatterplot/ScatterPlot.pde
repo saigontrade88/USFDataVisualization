@@ -77,8 +77,11 @@ class ScatterPlot extends Frame {
 
   } 
   
-  void createList()
-  { 
+  /*
+  * Create a list containing (x actual value, y actual value)
+  */
+  
+  void createList() { 
     int xIndex = this.data.getColumnIndex(useColumnX);
     int yIndex = this.data.getColumnIndex(useColumnY);
     for (TableRow row : data.rows())
@@ -96,6 +99,12 @@ class ScatterPlot extends Frame {
     }*/
     
   }
+  /**
+  *  Find the maximum value
+  *
+  * @param an array containing values of the selected column
+  * @return the maximum data value
+  */
 
   float findMaxValue(float[] _useCol) {
    // if ( (_useColumn != useColumnX) &&  (_useColumn != useColumnY))
@@ -109,10 +118,15 @@ class ScatterPlot extends Frame {
     }
     return maxValue;
   }
+  
+  /**
+  *  Find the minimum value
+  *
+  * @param an array containing values of the selected column
+  * @return the minimum data value
+  */
   float findMinValue(float[] _useCol) {
-    //if ( (_useColumn != useColumnX) &&  (_useColumn != useColumnY))
-    //  return 1000.0f;
-
+    
     float minValue =_useCol[0];
 
     for (int k=1; k < _useCol.length; k++) {
@@ -121,7 +135,12 @@ class ScatterPlot extends Frame {
     }
     return minValue;
   }
-  
+  /**
+  * Create a list containing the screen positions
+  *
+  * @param:
+  * 
+  */  
   void createMap(){
     
      for (int k=0; k < myList.size(); k++) {
@@ -133,13 +152,13 @@ class ScatterPlot extends Frame {
         float _myXBuffer = 0.0;
         
         float _myYBuffer = 0.0;
+        
+        // use map function to scale the input data values
   
         xPos = map(myList.get(k).getXVal(), myMin_XValue - _myXBuffer, myMax_XValue+ _myXBuffer, 10, this.sWidth);
   
         yPos = map(myList.get(k).getYVal(), myMin_YValue - _myYBuffer, myMax_YValue + _myYBuffer, this.sHeight -20, 10);
-  
-        //stroke(palette[1]);
-        
+          
         ScreenPosition temp = new ScreenPosition(myList.get(k), xPos, yPos);
   
         this.myScatterPoints.add(temp);
@@ -271,6 +290,20 @@ class ScatterPlot extends Frame {
   }
 
   void mouseReleased() {
+    
+  }
+ 
+  void mousePressed() {
+    for (int k=0; k < myScatterPoints.size(); k++) {
+      if((dist(myScatterPoints.getXPos(), myScatterPoints.getYPos(), mouseX, mouseY) < 8) && mousePressed)
+          println("The point is clicked");
+    }
   }
   
-}
+  
+  
+  
+  
+  
+  
+  
