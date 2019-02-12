@@ -56,7 +56,9 @@ class ScatterPlot extends Frame {
   }
 
   
-   void draw() {  
+   void draw() { 
+     
+    pushMatrix();
 
     //(0,0) - the origin point
     translate(x_pos, y_pos);
@@ -74,6 +76,8 @@ class ScatterPlot extends Frame {
     drawXAxis(this.useColumnX, 0.0f);
 
     drawPoints(this.useColumnX, this.useColumnY, 0.0f, 0.0f);
+    
+    popMatrix();
 
   } 
   
@@ -295,15 +299,8 @@ class ScatterPlot extends Frame {
  
   void mousePressed() {
     for (int k=0; k < myScatterPoints.size(); k++) {
-      if((dist(myScatterPoints.getXPos(), myScatterPoints.getYPos(), mouseX, mouseY) < 8) && mousePressed)
-          println("The point is clicked");
+      if((dist(myScatterPoints.get(k).getXPos(), myScatterPoints.get(k).getYPos(), mouseX, mouseY) < 20) && mousePressed)
+          rect(mouseX, mouseY, 10, 10);
     }
   }
-  
-  
-  
-  
-  
-  
-  
-  
+}
