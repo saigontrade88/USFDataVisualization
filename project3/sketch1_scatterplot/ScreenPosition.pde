@@ -1,11 +1,20 @@
+/**
+*a column data point
+*a source data’s min
+*a source data’s max
+*a graphical data’s min
+*a graphical data’s max
+*distance from Point a to b
+**/
+
+
 class ScreenPosition{
   
   PointEntry myPoint;
+  // Graph positions
   private float xPos;
   private float yPos;
- // private float quantVar3;
- // private float quantVar4;
- // public PointEntry(float _quantVar1, float _quantVar2, float _quantVar3, float _quantVar4 )
+ 
  
   public ScreenPosition(PointEntry _myPoint, float _quantVar1, float _quantVar2){
       myPoint = _myPoint;
@@ -31,9 +40,15 @@ class ScreenPosition{
   float getYPos(){
     return yPos;
   }
+  /*void setXPos(float _xPos){
+    xPos = _xPos;
+  }
   
+  void setYPos(float _yPos){
+    yPos = _yPos;
+  }*/
   
-  
-  
-  
+  float distanceTo(ScreenPosition b){
+    return dist(xPos, yPos, b.getXPos(), b.getYPos());
+  }
 }
