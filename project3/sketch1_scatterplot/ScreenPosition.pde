@@ -14,6 +14,8 @@ class ScreenPosition{
   // Graph positions
   private float xPos;
   private float yPos;
+  // Records whether this marker has been clicked (most recently)
+  protected boolean clicked = false;
  
  
   public ScreenPosition(PointEntry _myPoint, float _quantVar1, float _quantVar2){
@@ -32,7 +34,7 @@ class ScreenPosition{
   
   //overriding the toString() method
   public String toString(){  
-      return "The scaled position is at" + "(" + xPos + "," + yPos + ")";  
+      return myPoint.toString();  
   }  
   float getXPos(){
     return xPos;
@@ -51,4 +53,10 @@ class ScreenPosition{
   float distanceTo(ScreenPosition b){
     return dist(xPos, yPos, b.getXPos(), b.getYPos());
   }
+  
+  // Setter method for clicked field
+  public void setClicked(boolean state) {
+    clicked = state;
+  }
+  
 }
