@@ -25,6 +25,13 @@ class ScreenPosition{
    
   }
   
+  public ScreenPosition(float _quantVar1, float _quantVar2){
+      myPoint = new PointEntry();
+      xPos = _quantVar1;
+      yPos = _quantVar2;
+   
+  }
+  
   public ScreenPosition(){
       myPoint = new PointEntry();
       xPos = 0.0;
@@ -42,16 +49,20 @@ class ScreenPosition{
   float getYPos(){
     return yPos;
   }
-  /*void setXPos(float _xPos){
+  void setXPos(float _xPos){
     xPos = _xPos;
   }
   
   void setYPos(float _yPos){
     yPos = _yPos;
-  }*/
+  }
   
   float distanceTo(ScreenPosition b){
     return dist(xPos, yPos, b.getXPos(), b.getYPos());
+  }
+  
+  float distanceTo(float x, float y){
+    return dist(xPos, yPos, x, y);
   }
   
   // Setter method for clicked field
