@@ -16,16 +16,21 @@ float THRESHOLD_HIGH_ACT = 10;
 
 int currentFrame = 0; // flag to catch which sketch is drawn.
 
+//Handle the mouse click interaction
+int Clicked = 0;
+
+ScreenPosition lastClicked = null;
+
 void setup(){
   
   size(800,600);  
   
-  selectInput("Select a file to process:", "fileSelected");
+//  selectInput("Select a file to process:", "fileSelected");
  
 // myTable = loadTable( "srsatact_cut.csv", "header" );
 // myTable = loadTable( "srsatact.csv", "header" );
  
-// myTable = loadTable( "ketchup_cut.csv", "header" );
+ myTable = loadTable( "ketchup_cut.csv", "header" );
 
   //myTable = loadTable( "ketchup.csv", "header" );
 
@@ -36,8 +41,9 @@ void setup(){
  
 //myFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
 // myFrame = new ScatterPlot( myTable, "ACT","GPA","ACT vs GPA", 200, 100, 400, 400);
-//myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400);
-//mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
+
+myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400);
+mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
  
  
 }
@@ -71,8 +77,7 @@ void draw(){
     
  if( myFirstFrame == null ) 
     println("Your Frame is null");
- if(myFirstFrame != null ){
-    
+ if(myFirstFrame != null ){  
     //Keyboard interaction to switch between the two sketches
     //Press l to select the SATM vs SATV
     //Press r to select the ACT vs GPA
@@ -100,6 +105,20 @@ void draw(){
     else{
         mySecondFrame.draw();   
     }
+    
+    if(Clicked == 1){
+        lastClicked = new ScreenPosition((float) mouseX, (float) mouseY);
+        int existed = myFirstFrame.checkPointsForClick(lastClicked.getXPos(),lastClicked.getYPos());
+        if(existed == 1){
+           ScreenPosition temp = myFirstFrame.returnPointsForClick(lastClicked);
+           myFirstFrame.showTitle(temp);
+        }
+        else
+          Clicked = 0;
+        
+    }
+    
+      
      
  }
   //keyPressed();
@@ -119,14 +138,20 @@ void keyPressed() {
       } 
  }
 
-
-void mousePressed(){
-  myFirstFrame.mousePressed();
+/** The event handler for mouse clicks
+   * It will display a short message when the point is clicked
+   */
+void mouseClicked(){
+     if(Clicked == 0)
+       Clicked = 1;
+     else
+       Clicked = 0;   //<>//
 }
 
 
+
 void mouseReleased(){
-  myFirstFrame.mouseReleased();
+  //myFirstFrame.mouseReleased();
 }
 
 
@@ -146,6 +171,13 @@ abstract class Frame {
   abstract void draw();
   void mousePressed(){ }
   void mouseReleased(){ }
+  void mouseClicked(){ }
+  
+ abstract int checkPointsForClick(float _mouseXPos, float _mouseYPos);
+ 
+ abstract ScreenPosition returnPointsForClick(ScreenPosition p);
+ 
+ abstract void showTitle(ScreenPosition p);
   
   
   boolean mouseInside(){
