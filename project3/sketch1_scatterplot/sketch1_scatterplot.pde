@@ -100,12 +100,15 @@ void draw(){
         ellipse(650, 200, 16, 16);
         fill(0);
         text("> " + THRESHOLD_HIGH_SATM, 700, 200);
-        myFirstFrame.draw();   
+        myFirstFrame.draw();
+        addTitle(myFirstFrame);
     }
     else{
-        mySecondFrame.draw();   
+        mySecondFrame.draw();
+        addTitle(mySecondFrame);
+        
     }
-    
+    /*
     if(Clicked == 1){
         lastClicked = new ScreenPosition((float) mouseX, (float) mouseY);
         int existed = myFirstFrame.checkPointsForClick(lastClicked.getXPos(),lastClicked.getYPos());
@@ -116,13 +119,31 @@ void draw(){
         else
           Clicked = 0;
         
-    }
+    }*/
     
       
      
  }
   //keyPressed();
   //noLoop();
+  
+}
+
+// Helper method that will draw description for each data point in the sketch if it was clicked/hovered
+void addTitle(Frame currentScatterPlot){
+  
+  if(Clicked == 1){
+        lastClicked = new ScreenPosition((float) mouseX, (float) mouseY);
+        int existed = currentScatterPlot.checkPointsForClick(lastClicked.getXPos(),lastClicked.getYPos());
+        if(existed == 1){
+           ScreenPosition temp = currentScatterPlot.returnPointsForClick(lastClicked);
+           currentScatterPlot.showTitle(temp);
+        }
+        else{
+          Clicked = 0;
+          lastClicked = null;
+        }
+  }
   
 }
 
@@ -145,7 +166,7 @@ void mouseClicked(){
      if(Clicked == 0)
        Clicked = 1;
      else
-       Clicked = 0;   //<>//
+       Clicked = 1;   //<>//
 }
 
 
