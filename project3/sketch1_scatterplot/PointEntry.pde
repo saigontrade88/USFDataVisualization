@@ -30,14 +30,7 @@ class PointEntry{
   float getYVal(){
     return yVal;
   }
-  void setXVal(Float _xValue){
-    xVal = _xValue;
-  }
-  
-  void setYVal(Float _yValue){
-    yVal = _yValue;
-  }
-  
+    
   private void colorDetermineXVal(float THRESHOLD_INTERMEDIATE, float THRESHOLD_HIGH) {
     
     //int yellow = color(255, 255, 0);
