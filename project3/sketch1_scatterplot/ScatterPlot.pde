@@ -308,23 +308,20 @@ class ScatterPlot extends Frame {
     }*/
   }
 
-  // Helper method that will check if a scatter point was clicked on
-  // and respond appropriately
-  
+  // Helper method that will check if a scatter point was clicked on  
   public int checkPointsForClick(float _mouseXPos, float _mouseYPos){
     //println("this.sWidth = ,(" + this.sWidth + "," + this.sHeight + ")");
     //if (lastClicked != null) return ;
     println("mouse pos = ,(" + _mouseXPos + "," + _mouseYPos + ")");
     // Loop over the points to see if one of them is selected
     for (int k=0; k < myScatterPoints.size(); k++) {
-      println("My Point pos = (" + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos() + ")");
-     // rect(myScatterPoints.get(k).getXPos(), myScatterPoints.get(k).getXPos(), 10, 10);
+      //println("My Point pos = (" + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos() + ")");
       //Restores the coordinate system
       //Ref: https://processing.org/tutorials/transform2d/
       if ( abs(myScatterPoints.get(k).distanceTo(_mouseXPos - this.x_pos, _mouseYPos - this.y_pos)) < 8 ) {
          //println("mouseX pos = " + _mouseXPos + "mouseY pos = " + _mouseYPos);
-         println("You hit it! X Point pos = " + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos()); 
-         println(myScatterPoints.get(k).toString());
+         //println("You hit it! X Point pos = " + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos()); 
+         //println(myScatterPoints.get(k).toString());
          //text(myScatterPoints.get(k).toString(), _mouseXPos, _mouseYPos - 5);
          //fill(255);
          return 1;
@@ -334,6 +331,8 @@ class ScatterPlot extends Frame {
     } 
     return 0;
   }
+  
+  // Helper method that will return the scatter point object if it was clicked
   public ScreenPosition returnPointsForClick(ScreenPosition p){
     ScreenPosition myLastClicked = null;
     for (int k=0; k < myScatterPoints.size(); k++) {
@@ -343,22 +342,22 @@ class ScatterPlot extends Frame {
     }
     return myLastClicked;
   }
+  
+  // Helper method that will draw the point position description if it was hover/clicked
   public void showTitle(ScreenPosition p)
   {
     String pop = p.toString();
     
-    //pushStyle();  
+    pushStyle();  
     
-    fill(0, 0, 0);
+    fill(255, 0, 0);
     textSize(12);
     rectMode(CORNER);
-    //rect(p.getXPos() + this.x_pos , p.getYPos() + this.y_pos, textWidth(pop) + 6, 39
-    
+    //rect(p.getXPos() + this.x_pos , p.getYPos() + this.y_pos, textWidth(pop) + 6, 39);
     fill(0, 0, 0);
     textAlign(LEFT, TOP);
-    text(pop, p.getXPos() + this.x_pos + 3, p.getXPos() + this.x_pos -18);
-    
-   // popStyle();
+    text(pop, p.getXPos() + this.x_pos + 3, p.getYPos() + this.y_pos -18);   
+    popStyle();
   }
 
 }
