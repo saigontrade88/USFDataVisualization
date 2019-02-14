@@ -6,6 +6,7 @@ float []myArrayBuffer = {69.5, 60, 1.05, 0.38}; // 1 standard deviation
 
 
 
+
 class ScatterPlot extends Frame {
 
   Table data;// Table contains x-data, y-data
@@ -39,7 +40,7 @@ class ScatterPlot extends Frame {
     myMin_YValue = findMinValue(_data.getFloatColumn(_useColumnY));
     myMax_YValue = findMaxValue(_data.getFloatColumn(_useColumnY));
       
-    println("row count: "+_data.getRowCount());
+    //println("row count: "+_data.getRowCount());
     
     println("min X: "+ myMin_XValue);
     println("max X: "+ myMax_XValue);
@@ -48,7 +49,7 @@ class ScatterPlot extends Frame {
     
     myList = new ArrayList<PointEntry>();
     
-    createList(); //<>//
+    createList();
     
     myScatterPoints = new ArrayList<ScreenPosition>();
     
@@ -208,9 +209,9 @@ class ScatterPlot extends Frame {
       float yPos;
       //tick mark's actual value
       tickMark = myMin_YValue + i*scale_unit;
-      println(tickMark);
+      //println(tickMark);
       yPos = map(tickMark, myMin_YValue - myBuffer, myMax_YValue + myBuffer, this.sHeight -20, 10);
-      println("tickMark = " + tickMark + " tickMark_yPos = " + yPos);
+      //println("tickMark = " + tickMark + " tickMark_yPos = " + yPos);
       String num = String.format ("%,.2f",tickMark); 
       text (num, 0, yPos);
       line( 10-deltaC, yPos, 10+deltaC, yPos);
@@ -297,10 +298,67 @@ class ScatterPlot extends Frame {
     
   }
  
-  void mousePressed() {
+  void mouseClicked() {
+    //rect(100,100,100,100);
+    checkPointsForClick(mouseX, mouseY);
+    /*
     for (int k=0; k < myScatterPoints.size(); k++) {
       if((dist(myScatterPoints.get(k).getXPos(), myScatterPoints.get(k).getYPos(), mouseX, mouseY) < 20) && mousePressed)
           rect(mouseX, mouseY, 10, 10);
-    }
+    }*/
   }
+
+  // Helper method that will check if a scatter point was clicked on
+  // and respond appropriately
+  
+  public int checkPointsForClick(float _mouseXPos, float _mouseYPos){
+    //println("this.sWidth = ,(" + this.sWidth + "," + this.sHeight + ")");
+    //if (lastClicked != null) return ;
+    println("mouse pos = ,(" + _mouseXPos + "," + _mouseYPos + ")");
+    // Loop over the points to see if one of them is selected
+    for (int k=0; k < myScatterPoints.size(); k++) {
+      println("My Point pos = (" + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos() + ")");
+     // rect(myScatterPoints.get(k).getXPos(), myScatterPoints.get(k).getXPos(), 10, 10);
+      //Restores the coordinate system
+      //Ref: https://processing.org/tutorials/transform2d/
+      if ( abs(myScatterPoints.get(k).distanceTo(_mouseXPos - this.x_pos, _mouseYPos - this.y_pos)) < 8 ) {
+         //println("mouseX pos = " + _mouseXPos + "mouseY pos = " + _mouseYPos);
+         println("You hit it! X Point pos = " + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos()); 
+         println(myScatterPoints.get(k).toString());
+         //text(myScatterPoints.get(k).toString(), _mouseXPos, _mouseYPos - 5);
+         //fill(255);
+         return 1;
+         //showTitle(myScatterPoints.get(k));
+      }
+      
+    } 
+    return 0;
+  }
+  public ScreenPosition returnPointsForClick(ScreenPosition p){
+    ScreenPosition myLastClicked = null;
+    for (int k=0; k < myScatterPoints.size(); k++) {
+      if ( abs(myScatterPoints.get(k).distanceTo(p.getXPos() - this.x_pos, p.getYPos() - this.y_pos)) < 8 ) {
+         myLastClicked = myScatterPoints.get(k);
+      }   
+    }
+    return myLastClicked;
+  }
+  public void showTitle(ScreenPosition p)
+  {
+    String pop = p.toString();
+    
+    //pushStyle();  
+    
+    fill(0, 0, 0);
+    textSize(12);
+    rectMode(CORNER);
+    //rect(p.getXPos() + this.x_pos , p.getYPos() + this.y_pos, textWidth(pop) + 6, 39
+    
+    fill(0, 0, 0);
+    textAlign(LEFT, TOP);
+    text(pop, p.getXPos() + this.x_pos + 3, p.getXPos() + this.x_pos -18);
+    
+   // popStyle();
+  }
+
 }
