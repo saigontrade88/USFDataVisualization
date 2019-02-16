@@ -47,6 +47,10 @@ class PointEntry{
         fill(255,0,0);
   }
   
+  float distanceTo(PointEntry b){
+    return dist(xVal, yVal, b.getXVal(), b.getYVal());
+  }
+  
   
   
   
