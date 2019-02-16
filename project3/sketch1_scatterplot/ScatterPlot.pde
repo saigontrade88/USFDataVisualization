@@ -42,10 +42,10 @@ class ScatterPlot extends Frame {
       
     //println("row count: "+_data.getRowCount());
     
-    println("min X: "+ myMin_XValue);
-    println("max X: "+ myMax_XValue);
-    println("min Y: "+ myMin_YValue);
-    println("max Y: "+ myMax_YValue);
+    //println("min X: "+ myMin_XValue);
+    //println("max X: "+ myMax_XValue);
+    //println("min Y: "+ myMin_YValue);
+    //println("max Y: "+ myMax_YValue);
     
     myList = new ArrayList<PointEntry>();
     
@@ -54,6 +54,12 @@ class ScatterPlot extends Frame {
     myScatterPoints = new ArrayList<ScreenPosition>();
     
     createMap();
+    
+    //listBigValue(_data.getFloatColumn(_useColumnX), 1.2);
+    
+    listBigValues(myList, 2.35); //<>//
+    
+    
   }
 
   
@@ -140,11 +146,57 @@ class ScatterPlot extends Frame {
     }
     return minValue;
   }
+  
+  /**
+  * Find the all big values exceeding a certain value
+  *
+  * @param an array containing values of the selected column, a predefined magnitude
+  * 
+  */
+  
+  void listBigValues(float[] _useCol, float myThreshold){
+      
+      for (int k=0; k < _useCol.length; k++) {
+          if (_useCol[k] > myThreshold)
+            println(_useCol[k]);
+        }
+        
+  }
+  /**
+  *  Create a list containing all the points satisfying a magnitude
+  *
+  * @param an array containing values of the selected column, a predefined magnitude
+  * 
+  */
+  ArrayList<PointEntry> filterByTotalMagnitudes(ArrayList<PointEntry> PointList, float totalMin){
+      ArrayList<PointEntry> answer = new ArrayList<PointEntry>();
+      for(PointEntry p : PointList){
+          float totalValue = p.getXVal() + p.getYVal(); 
+          if(totalValue >= totalMin){
+              answer.add(p); //<>//
+          }
+      }
+      return answer;
+  }
+  
+  /**
+  * Find the all big values exceeding a certain value
+  *
+  * @param an array list containing values of the two selected columns, a predefined total magnitude
+  * 
+  */
+  void listBigValues(ArrayList<PointEntry> PointList, float myThreshold){
+      ArrayList<PointEntry> bigList = filterByTotalMagnitudes(PointList, myThreshold);
+      for (PointEntry p : bigList) {
+          println(p.toString());    
+      }
+        
+  }
   /**
   * Create a list containing the screen positions
   *
   * @param:
-  * 
+  * @return the array list
   */  
   void createMap(){
     
@@ -299,13 +351,13 @@ class ScatterPlot extends Frame {
   }
  
   void mouseClicked() {
-    //rect(100,100,100,100);
+    
     checkPointsForClick(mouseX, mouseY);
-    /*
-    for (int k=0; k < myScatterPoints.size(); k++) {
-      if((dist(myScatterPoints.get(k).getXPos(), myScatterPoints.get(k).getYPos(), mouseX, mouseY) < 20) && mousePressed)
-          rect(mouseX, mouseY, 10, 10);
-    }*/
+
+  }
+  
+  void mouseMoved(){
+    checkPointsForClick(mouseX, mouseY);
   }
 
   // Helper method that will check if a scatter point was clicked on  
