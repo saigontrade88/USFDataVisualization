@@ -21,6 +21,10 @@ int Clicked = 0;
 
 ScreenPosition lastClicked = null;
 
+ScreenPosition lastSelected = null;
+
+int Moved = 0;
+
 void setup(){
   
   size(800,600);  
@@ -101,27 +105,15 @@ void draw(){
         fill(0);
         text("> " + THRESHOLD_HIGH_SATM, 700, 200);
         myFirstFrame.draw();
-        addTitle(myFirstFrame);
+      //  addTitleIfClicked(myFirstFrame);
+      //  addTitleIfHover(myFirstFrame);
+        
     }
     else{
         mySecondFrame.draw();
-        addTitle(mySecondFrame);
-        
+      //  addTitleIfClicked(mySecondFrame);
+      //  addTitleIfHover(mySecondFrame);
     }
-    /*
-    if(Clicked == 1){
-        lastClicked = new ScreenPosition((float) mouseX, (float) mouseY);
-        int existed = myFirstFrame.checkPointsForClick(lastClicked.getXPos(),lastClicked.getYPos());
-        if(existed == 1){
-           ScreenPosition temp = myFirstFrame.returnPointsForClick(lastClicked);
-           myFirstFrame.showTitle(temp);
-        }
-        else
-          Clicked = 0;
-        
-    }*/
-    
-      
      
  }
   //keyPressed();
@@ -130,7 +122,7 @@ void draw(){
 }
 
 // Helper method that will draw description for each data point in the sketch if it was clicked/hovered
-void addTitle(Frame currentScatterPlot){
+void addTitleIfClicked(Frame currentScatterPlot){
   
   if(Clicked == 1){
         lastClicked = new ScreenPosition((float) mouseX, (float) mouseY);
@@ -141,12 +133,28 @@ void addTitle(Frame currentScatterPlot){
         }
         else{
           Clicked = 0;
+          // clear the last selection
           lastClicked = null;
         }
   }
   
 }
 
+// If there is a marker selected 
+void addTitleIfHover(Frame currentScatterPlot){
+    lastSelected = new ScreenPosition((float) mouseX, (float) mouseY);
+    int existed = currentScatterPlot.checkPointsForClick(lastSelected.getXPos(),lastSelected.getYPos());
+    if(existed == 1){
+           ScreenPosition temp = currentScatterPlot.returnPointsForClick(lastSelected);
+           currentScatterPlot.showTitle(temp);
+    }
+    else{
+          Moved = 0;
+          // clear the last selection
+          lastSelected = null;
+    }
+ }
+ 
 void keyPressed() {
   //println(key);
   if(keyPressed){
@@ -160,15 +168,30 @@ void keyPressed() {
  }
 
 /** The event handler for mouse clicks
-   * It will display a short message when the point is clicked
-   */
+* It will display a brief discription when the point is clicked
+*/
 void mouseClicked(){
-     if(Clicked == 0)
+  
+     if(Clicked == 0){
        Clicked = 1;
-     else
-       Clicked = 1;   //<>//
+       // clear the last selection
+       lastClicked = null;
+     }  
+      //<>//
 }
 
+/** Event handler that gets called automatically when the 
+ * mouse moves.
+*/
+void mouseMoved(){
+  
+      if(Moved == 0){
+           Moved = 1;
+           // clear the last selection
+           lastSelected = null;
+       }
+  
+}
 
 
 void mouseReleased(){
@@ -193,6 +216,7 @@ abstract class Frame {
   void mousePressed(){ }
   void mouseReleased(){ }
   void mouseClicked(){ }
+  void mouseMoved(){}
   
  abstract int checkPointsForClick(float _mouseXPos, float _mouseYPos);
  
