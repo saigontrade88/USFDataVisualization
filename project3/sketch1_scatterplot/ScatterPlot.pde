@@ -57,7 +57,9 @@ class ScatterPlot extends Frame {
     
     //listBigValue(_data.getFloatColumn(_useColumnX), 1.2);
     
-    listBigValues(myList, 2.35); //<>//
+    //listBigValues(myList, 2.35);
+    
+    getClosest(myList, new PointEntry(1.19, 1.36));
     
     
   }
@@ -163,7 +165,7 @@ class ScatterPlot extends Frame {
         
   }
   /**
-  *  Create a list containing all the points satisfying a magnitude
+  *  Create a list containing all the actual points satisfying a magnitude
   *
   * @param an array containing values of the selected column, a predefined magnitude
   * 
@@ -173,10 +175,30 @@ class ScatterPlot extends Frame {
       for(PointEntry p : PointList){
           float totalValue = p.getXVal() + p.getYVal(); 
           if(totalValue >= totalMin){
-              answer.add(p); //<>//
+              answer.add(p);
           }
       }
       return answer;
+  }
+  /**
+  *  Create a list containing all the actual points closest to a selected point
+  *
+  * @param an array list containing all points on the skatterplot, a selected point, e.x: the minimum point
+  * 
+  */
+  ArrayList<PointEntry> getClosest(ArrayList<PointEntry> PointList, PointEntry currPoint){ //<>//
+      ArrayList<PointEntry> answer = new ArrayList<PointEntry>();
+      int minIndex = 0;
+       
+      for(int i = 1; i < PointList.size(); i++){
+          PointEntry p = PointList.get(i);
+          if(p.distanceTo(currPoint) < PointList.get(minIndex).distanceTo(currPoint))
+              minIndex = i;
+      }
+      answer.add(PointList.get(minIndex));
+      println(answer.size());
+      println(answer.get(0).toString());
+      return answer;    
   }
   
   /**
