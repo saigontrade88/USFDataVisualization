@@ -23,6 +23,7 @@ class ScatterPlot extends Frame {
   ArrayList<PointEntry> myList; // to store x-,y- data from raw data
   ArrayList<ScreenPosition> myScatterPoints; 
   boolean clicked;
+  //boolean selected;
 
   ScatterPlot( Table _data, String _useColumnX, String _useColumnY, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) {
     data = _data;
@@ -37,6 +38,8 @@ class ScatterPlot extends Frame {
     sHeight = _sHeight;
     
     clicked = false;
+    
+    //selected = false;
     
     myMin_XValue = findMinValue(_data.getFloatColumn(_useColumnX));
     myMax_XValue = findMaxValue(_data.getFloatColumn(_useColumnX));
