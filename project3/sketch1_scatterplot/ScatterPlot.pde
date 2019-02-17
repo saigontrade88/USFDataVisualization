@@ -80,7 +80,8 @@ class ScatterPlot extends Frame {
   }
   
   //Drawing method for scatterplot
-   void draw() { 
+   void draw() {
+     if(clicked == true){
      
           //println("Draw the scatterplot");
           pushMatrix();
@@ -103,6 +104,7 @@ class ScatterPlot extends Frame {
           drawPoints(this.useColumnX, this.useColumnY, 0.0f, 0.0f);
           
           popMatrix();
+     }
      
 
   } 
