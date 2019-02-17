@@ -2,6 +2,8 @@
 Table myTable = null;
 Frame myFirstFrame = null;
 Frame mySecondFrame = null;
+ArrayList<ScatterPlot> myScatterplotList = null; 
+
 
 color[] dessert = {#9F9694, #791F33, #BA3D49, #F1E6D4, #E2E1DC};
 color[] palette = dessert;
@@ -34,7 +36,7 @@ void setup(){
 // myTable = loadTable( "srsatact_cut.csv", "header" );
 // myTable = loadTable( "srsatact.csv", "header" );
  
- myTable = loadTable( "ketchup_cut.csv", "header" );
+  myTable = loadTable( "ketchup_cut.csv", "header" );
 
   //myTable = loadTable( "ketchup.csv", "header" );
 
@@ -46,9 +48,23 @@ void setup(){
 //myFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
 // myFrame = new ScatterPlot( myTable, "ACT","GPA","ACT vs GPA", 200, 100, 400, 400);
 
-myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400);
-mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
- 
+  myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400); //<>//
+  mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
+
+ // myScatterplotList = new ArrayList<ScatterPlot>();
+
+// Create the scatterplot containers 
+/*
+  for(int i = 0; i < myTable.getColumnCount();i++){
+       for(int j = 0; j < myTable.getColumnCount(); j++){
+           //print("i= " + i + "origin is= " + i*width/4);
+           //ScatterPlot( Table _data, String _useColumnX, String _useColumnY, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) 
+           ScatterPlot temp = new ScatterPlot( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[j], myTable.getColumnTitles()[i] + " vs " + myTable.getColumnTitles()[j], 200, 100, 400, 400);
+           myScatterplotList.add(temp);
+       }
+  }*/
+
+// Add the selected scatterplot to the main sketch based on the key interactions
  
 }
 
@@ -72,6 +88,7 @@ void fileSelected(File selection) {
 
 
 void draw(){
+  
   background( 255 );
   
   //noCursor();
@@ -81,11 +98,12 @@ void draw(){
     
  if( myFirstFrame == null ) 
     println("Your Frame is null");
+ 
  if(myFirstFrame != null ){  
     //Keyboard interaction to switch between the two sketches
     //Press l to select the SATM vs SATV
     //Press r to select the ACT vs GPA
-    if (currentFrame == 0){
+    if (currentFrame == 0 & myFirstFrame.getClicked()){
         textSize(15);
         fill(0);
         text(myFirstFrame.getColumnX(), 650, 75);
@@ -109,13 +127,19 @@ void draw(){
       //  addTitleIfHover(myFirstFrame);
         
     }
-    else{
+    else if(currentFrame == 1 & mySecondFrame.getClicked()){
         mySecondFrame.draw();
       //  addTitleIfClicked(mySecondFrame);
       //  addTitleIfHover(mySecondFrame);
     }
-     
- }
+    /*
+    println("Draw function in the main sketch");
+    for(int i = 0; i < myScatterplotList.size();i++){
+        if(myScatterplotList.get(i).getClicked() == true)
+            myScatterplotList.get(i).draw();
+    }*/
+   
+}
   //keyPressed();
   //noLoop();
   
@@ -161,9 +185,18 @@ void keyPressed() {
       // Click "l" key
       if(key == 'l')
          currentFrame = 0;
+         println("I pressed the key");
+         mySecondFrame.setClicked(false);
+         myFirstFrame.setClicked(true);
+         println("clicked First Frame = " + myFirstFrame.getClicked());
+         println("clicked Second Frame = " + mySecondFrame.getClicked());
       } // click "r" key
       if(key == 'r'){
-        currentFrame = 1;
+          currentFrame = 1;
+          myFirstFrame.setClicked(false);
+          mySecondFrame.setClicked(true);
+          //println("clicked First Frame = " + myFirstFrame.getClicked());
+          //println("clicked Second Frame = " + mySecondFrame.getClicked());
       } 
  }
 
@@ -177,7 +210,7 @@ void mouseClicked(){
        // clear the last selection
        lastClicked = null;
      }  
-      //<>//
+     
 }
 
 /** Event handler that gets called automatically when the 
@@ -223,11 +256,17 @@ abstract class Frame {
  abstract ScreenPosition returnPointsForClick(ScreenPosition p);
  
  abstract void showTitle(ScreenPosition p);
+ 
+ abstract void setClicked(boolean state);
+ 
+ abstract boolean getClicked();
+ 
   
   
   boolean mouseInside(){
      return (u0-clickBuffer < mouseX) && (u0+w+clickBuffer)>mouseX && (v0-clickBuffer)< mouseY && (v0+h+clickBuffer)>mouseY; 
   }
+  
   abstract String getColumnX();
   
 }
