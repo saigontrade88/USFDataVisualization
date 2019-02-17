@@ -22,6 +22,7 @@ class ScatterPlot extends Frame {
   //float[]  myYValueArray;
   ArrayList<PointEntry> myList; // to store x-,y- data from raw data
   ArrayList<ScreenPosition> myScatterPoints; 
+  boolean clicked;
 
   ScatterPlot( Table _data, String _useColumnX, String _useColumnY, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) {
     data = _data;
@@ -34,6 +35,8 @@ class ScatterPlot extends Frame {
     
     sWidth = _sWidth;
     sHeight = _sHeight;
+    
+    clicked = false;
     
     myMin_XValue = findMinValue(_data.getFloatColumn(_useColumnX));
     myMax_XValue = findMaxValue(_data.getFloatColumn(_useColumnX));
@@ -51,6 +54,8 @@ class ScatterPlot extends Frame {
     
     createList();
     
+    //println("My original size list is = " + myList.size());
+    
     myScatterPoints = new ArrayList<ScreenPosition>();
     
     createMap();
@@ -59,34 +64,46 @@ class ScatterPlot extends Frame {
     
     //listBigValues(myList, 2.35);
     
-    getClosest(myList, new PointEntry(1.19, 1.36));
+    //getClosest(myList, new PointEntry(1.19, 1.36), 2);
     
-    
+   
   }
 
+  // Getter method for clicked field
+  public boolean getClicked() {
+    return clicked;
+  }
   
+  // Setter method for clicked field
+  public void setClicked(boolean state) {
+    clicked = state;
+  }
+  
+  //Drawing method for scatterplot
    void draw() { 
      
-    pushMatrix();
-
-    //(0,0) - the origin point
-    translate(x_pos, y_pos);
-
-    //fill(255);
-
-    //rect(0,0,sWidth, sHeight);
-    
-    fill(0);
-    
-    drawTitle();
-    
-    drawYAxis(this.useColumnY, 0.0f);
-
-    drawXAxis(this.useColumnX, 0.0f);
-
-    drawPoints(this.useColumnX, this.useColumnY, 0.0f, 0.0f);
-    
-    popMatrix();
+          //println("Draw the scatterplot");
+          pushMatrix();
+      
+          //(0,0) - the origin point
+          translate(x_pos, y_pos);
+      
+          //fill(255);
+      
+          //rect(0,0,sWidth, sHeight);
+          
+          fill(0);
+          
+          drawTitle();
+          
+          drawYAxis(this.useColumnY, 0.0f);
+      
+          drawXAxis(this.useColumnX, 0.0f);
+      
+          drawPoints(this.useColumnX, this.useColumnY, 0.0f, 0.0f);
+          
+          popMatrix();
+     
 
   } 
   
@@ -186,18 +203,23 @@ class ScatterPlot extends Frame {
   * @param an array list containing all points on the skatterplot, a selected point, e.x: the minimum point
   * 
   */
-  ArrayList<PointEntry> getClosest(ArrayList<PointEntry> PointList, PointEntry currPoint){ //<>//
+  ArrayList<PointEntry> getClosest(ArrayList<PointEntry> PointList, PointEntry currPoint, int howMany){ //<>//
+      //Create a copy version to avoid changing the ArrayList PointList    
+      ArrayList<PointEntry> copy = new ArrayList<PointEntry>(PointList);
       ArrayList<PointEntry> answer = new ArrayList<PointEntry>();
       int minIndex = 0;
-       
-      for(int i = 1; i < PointList.size(); i++){
-          PointEntry p = PointList.get(i);
-          if(p.distanceTo(currPoint) < PointList.get(minIndex).distanceTo(currPoint))
-              minIndex = i;
+      for(int j = 0; j < howMany; j++){ 
+          for(int i = 1; i < copy.size(); i++){
+              PointEntry p = copy.get(i);
+              if(p.distanceTo(currPoint) < copy.get(minIndex).distanceTo(currPoint))
+                  minIndex = i;
+          }
+          answer.add(copy.get(minIndex));
+          copy.remove(minIndex);
       }
-      answer.add(PointList.get(minIndex));
-      println(answer.size());
-      println(answer.get(0).toString());
+      //println(answer.size());
+      //println(answer.get(0).toString());
+      //println(answer.get(1).toString());
       return answer;    
   }
   
