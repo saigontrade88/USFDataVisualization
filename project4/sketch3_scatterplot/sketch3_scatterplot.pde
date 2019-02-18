@@ -36,30 +36,18 @@ void setup(){
   
 //  selectInput("Select a file to process:", "fileSelected");
  
-//   myTable = loadTable( "srsatact_cut.csv", "header" );
- //  myTable = loadTable( "srsatact.csv", "header" );
- 
-//  myTable = loadTable( "ketchup_cut.csv", "header" );
-
+  
+  //*Test: first data set
+  //myTable = loadTable( "srsatact_cut.csv", "header" );
+    myTable = loadTable( "srsatact.csv", "header" );
+  //*Test: second data set
+    myTable = loadTable( "ketchup_cut_100.csv", "header" );
   //myTable = loadTable( "ketchup.csv", "header" );
-  
+  //*Test: third data set
   //myTable = loadTable( "iris_cut.csv.csv", "header" );
-
-  myTable = loadTable( "iris_cut.csv", "header" );
-  
+  //myTable = loadTable( "iris_cut.csv", "header" );
   //myTable = loadTable( "iris.csv", "header" );
-  
 
-// myFirstFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
- 
-// mySecondFrame = new ScatterPlot( myTable, "ACT","GPA","ACT vs GPA", 200, 100, 400, 400); 
- 
- 
-//myFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
-// myFrame = new ScatterPlot( myTable, "ACT","GPA","ACT vs GPA", 200, 100, 400, 400);
-
-//  myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400);
-//  mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
 
 // Create the scatterplot containers
   myScatterplotList = new ArrayList<ScatterPlot>();
@@ -90,7 +78,7 @@ void setup(){
   
   for(int i = 0; i < myTable.getColumnCount();i++){
              
-         Barchart temp = new Barchart( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[i], 200, 100, 800, 600);
+         Barchart temp = new Barchart( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[i], 100, 50, 500, 600);
          myBarchartList.add(temp);        
   }
 
@@ -104,13 +92,7 @@ void fileSelected(File selection) {
   } else {
      println("User selected " + selection.getAbsolutePath());
      myTable = loadTable( selection.getAbsolutePath(), "header" );
-   
-    // TODO: create object
-    // ScatterPlot( Table _data, String _useColumnX, String _useColumnY , String _chartName, int _xPos,int _yPos,int _sWidth, int _sHeight)
-    myFirstFrame = new ScatterPlot( myTable,myTable.getColumnTitles()[0] ,myTable.getColumnTitles()[1],"SATM vs SATV", 200, 100, 400, 400);
-    
-    mySecondFrame = new ScatterPlot( myTable, myTable.getColumnTitles()[2],myTable.getColumnTitles()[3],"ACT vs GPA", 200, 100, 400, 400);
-    
+       
   }
 }
 
@@ -125,42 +107,77 @@ void draw(){
     return;
     
   //draw skatterplot according to the keyboard press
+  /*
   for(int i = 0; i < myScatterplotList.size();i++){
       if(i == currentFrame){
           hideMarkers(myScatterplotList);
           //Disable the scatterplot - TO CHECK
-          myScatterplotList.get(i).setClicked(false);
+          myScatterplotList.get(i).setClicked(true);
           myScatterplotList.get(i).draw();
           addTitleIfClicked(myScatterplotList.get(i));
           addTitleIfHover(myScatterplotList.get(i));
       }
-  }
+  }*/
   
   
   
   //Draw line chart
+  /*
   for(int i = 0; i < myLinechartList.size();i++){
       if(i == currentFrame){
           hideLineChartMarkers(myLinechartList);
           //Disable the Linechart - TO CHECK
-          myLinechartList.get(i).setClicked(true);
+          myLinechartList.get(i).setClicked(false);
           myLinechartList.get(i).draw();
           addTitleIfClicked(myLinechartList.get(i));
           addTitleIfHover(myLinechartList.get(i));
       }
-  }
-  //myFirstLineChart.setClicked(true);
-  //myFirstLineChart.draw();
-  //addTitleIfClicked(myFirstLineChart);
-  //addTitleIfHover(myFirstLineChart);
-  
+  }*/
+    
   //Draw bar chart
-  /*myFirstBarChart.setClicked(true);
-  myFirstBarChart.draw();
-  addTitleIfClicked(myFirstBarChart);
-  addTitleIfHover(myFirstBarChart);*/
-
-   
+  for(int i = 0; i < myBarchartList.size();i++){
+      if(i == currentFrame){
+          hideBarChartMarkers(myBarchartList);
+          //Disable the Barchart - TO CHECK
+          myBarchartList.get(i).setClicked(true);
+          myBarchartList.get(i).draw();
+          //myBarchartList.get(i).drawLegend();
+          addTitleIfClicked(myBarchartList.get(i));
+          addTitleIfHover(myBarchartList.get(i));
+      }
+  }
+  //Draw legend for key and mouse interaction
+  pushStyle();
+  textSize(12);
+  fill(0);
+  textAlign(LEFT);
+  int legxPos = myBarchartList.get(0).getXPos() + myBarchartList.get(0).getWidth() + 50;
+  int legyPos = 75;
+  int legVerticalSpace = 25;
+  text("- Keyboard interaction legend:", legxPos, legyPos);
+  for(int i = 0; i < myBarchartList.size();i++){
+    //drawLegend(float xPos, float yPos, float Width, float Height)
+      
+    String message = "Press " + (i + 1)  + ": switch to this attribute "  + myBarchartList.get(i).getColumnX();
+    
+    text(message, legxPos, legyPos + legVerticalSpace * (i + 1));
+       
+  }
+  
+  text("- Mouse click/hover interaction legend:", legxPos, 100 + legVerticalSpace*myBarchartList.size());
+  
+  String message1 = "Click to show triangular";
+  
+  text(message1, legxPos, legyPos + legVerticalSpace * (myBarchartList.size() + 2));
+  
+  String message2 = "Hover to show the bar magnitude";
+  
+  text(message2, legxPos, legyPos + legVerticalSpace * (myBarchartList.size() + 3));
+  
+  
+  // Restore previous drawing style
+  popStyle();
+  
   //keyPressed();
   //noLoop();
   
@@ -202,6 +219,8 @@ void addTitleIfHover(Frame currentScatterPlot){
           lastSelected = null;
     }
  }
+ 
+ 
  
 void keyPressed() {
   //println(key);
@@ -260,6 +279,7 @@ void keyPressed() {
       
   }
   // loop over and hide all markers
+  //To be enhanced to avoid code duplication
     private void hideMarkers(ArrayList<ScatterPlot> myList) {
       for(ScatterPlot s : myList) {
         if(s.getClicked() == true)
@@ -269,8 +289,18 @@ void keyPressed() {
     }
     
     // loop over and hide all markers
+    //To be enhanced to avoid code duplication
     private void hideLineChartMarkers(ArrayList<Linechart> myList) {
       for(Linechart s : myList) {
+        if(s.getClicked() == true)
+          s.setClicked(false);
+      }
+        
+    }
+    
+    //To be enhanced to avoid code duplication
+    private void hideBarChartMarkers(ArrayList<Barchart> myList) {
+      for(Barchart s : myList) {
         if(s.getClicked() == true)
           s.setClicked(false);
       }
@@ -327,6 +357,8 @@ abstract class Frame {
   void mouseReleased(){ }
   void mouseClicked(){ }
   void mouseMoved(){}
+  
+ 
   
  abstract int checkPointsForClick(float _mouseXPos, float _mouseYPos);
  
