@@ -69,6 +69,22 @@ class Barchart extends Frame {
   public void setClicked(boolean state) {
     clicked = state;
   }
+  
+  public int getXPos(){
+    return x_pos;
+  }
+  
+  public int getYPos(){
+    return y_pos;
+  }
+  
+  public int getWidth(){
+    return sWidth;
+  }
+  
+  public int getHeight(){
+    return sHeight;
+  }
 
   //Drawing method for scatterplot
   void draw() {
@@ -87,7 +103,7 @@ class Barchart extends Frame {
       fill(0);
 
       drawTitle();
-
+    
       drawYAxis(this.useColumn, 0.0f);
 
       drawXAxis(this.useColumn, 0.0f);
@@ -300,9 +316,9 @@ class Barchart extends Frame {
       //myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
 
       //Draw bar
-      ellipse(myPoints.get(k).getXPos(), myPoints.get(k).getYPos(), d, d);
+      //ellipse(myPoints.get(k).getXPos(), myPoints.get(k).getYPos(), d, d);
 
-      fill(255, 0, 0);
+      fill(80, 80, 100);
 
       rect(myPoints.get(k).getXPos(), myPoints.get(k).getYPos(), rectWidth, myMinValue_yPos - myPoints.get(k).getYPos());
       //myMinValue_yPos - myPoints.get(k).getYPos()
@@ -414,9 +430,9 @@ class Barchart extends Frame {
         textSize(12);
         rectMode(CORNER);
         //rect(p.getXPos() + this.x_pos , p.getYPos() + this.y_pos, textWidth(pop) + 6, 39);
-        fill(0, 0, 0);
+        fill(0);
         textAlign(LEFT, TOP);
-        text(pop, p.getXPos() + this.x_pos, p.getYPos() + this.y_pos);   
+        text(pop, p.getXPos() + this.x_pos, p.getYPos() + this.y_pos - 20);   
         popStyle();
     }
   }
