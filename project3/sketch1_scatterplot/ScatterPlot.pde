@@ -4,7 +4,7 @@ float []myArrayBuffer = {69.5, 60, 1.05, 0.38}; // 1 standard deviation
 
 //float myYBuffer = 60;
 
-
+public static int TRI_SIZE = 5; 
 
 
 class ScatterPlot extends Frame {
@@ -413,7 +413,7 @@ class ScatterPlot extends Frame {
   public int checkPointsForClick(float _mouseXPos, float _mouseYPos){
     //println("this.sWidth = ,(" + this.sWidth + "," + this.sHeight + ")");
     //if (lastClicked != null) return ;
-    println("mouse pos = ,(" + _mouseXPos + "," + _mouseYPos + ")");
+    //println("mouse pos = ,(" + _mouseXPos + "," + _mouseYPos + ")");
     // Loop over the points to see if one of them is selected
     for (int k=0; k < myScatterPoints.size(); k++) {
       //println("My Point pos = (" + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos() + ")");
@@ -458,6 +458,21 @@ class ScatterPlot extends Frame {
     fill(0, 0, 0);
     textAlign(LEFT, TOP);
     text(pop, p.getXPos() + this.x_pos + 3, p.getYPos() + this.y_pos -18);   
+    popStyle();
+  }
+  
+  public void drawMarker(ScreenPosition p) {
+    // Save previous drawing style
+    pushStyle();
+    
+    // IMPLEMENT: drawing triangle for each point
+    fill(150, 30, 30);
+    
+    float xMarkerPos = p.getXPos() + this.x_pos;
+    float yMarkerPos = p.getYPos() + this.y_pos;
+    triangle(xMarkerPos, yMarkerPos-TRI_SIZE, xMarkerPos-TRI_SIZE, yMarkerPos+TRI_SIZE, xMarkerPos+TRI_SIZE, yMarkerPos+TRI_SIZE);
+    
+    // Restore previous drawing style
     popStyle();
   }
 
