@@ -1,34 +1,26 @@
 import java.util.ArrayList;
 
-float []myArrayBuffer = {69.5, 60, 1.05, 0.38}; // 1 standard deviation
-
 //float myYBuffer = 60;
 
-public static int TRI_SIZE = 5; 
-
-
-class ScatterPlot extends Frame {
+class Linechart extends Frame{
 
   Table data;// Table contains x-data, y-data
-  String useColumnX, useColumnY, chartName;
-  int x_pos, y_pos; // Refer to the top left corner of the scatter plot
+  String useColumn, chartName;
+  int x_pos, y_pos; // Refer to the top left corner of the line chart
   int sWidth; // Scatterplot chart is a rectangular canvas with the corresponding width and height 
   int sHeight; 
   //Build the scale
-  float  myMin_XValue;
-  float  myMax_XValue;
-  float  myMin_YValue;
-  float  myMax_YValue;
+  float  myMinValue;
+  float  myMaxValue;
   //float[]  myYValueArray;
   ArrayList<PointEntry> myList; // to store x-,y- data from raw data
-  ArrayList<ScreenPosition> myScatterPoints; 
+  ArrayList<ScreenPosition> myPoints; 
   boolean clicked;
   //boolean selected;
 
-  ScatterPlot( Table _data, String _useColumnX, String _useColumnY, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) {
+  Linechart( Table _data, String _useColumn, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) {
     data = _data;
-    useColumnX = _useColumnX;
-    useColumnY = _useColumnY;
+    useColumn = _useColumn;
     chartName = _chartName;
     
     x_pos  = _xPos;
@@ -41,10 +33,8 @@ class ScatterPlot extends Frame {
     
     //selected = false;
     
-    myMin_XValue = findMinValue(_data.getFloatColumn(_useColumnX));
-    myMax_XValue = findMaxValue(_data.getFloatColumn(_useColumnX));
-    myMin_YValue = findMinValue(_data.getFloatColumn(_useColumnY));
-    myMax_YValue = findMaxValue(_data.getFloatColumn(_useColumnY));
+    myMinValue = findMinValue(_data.getFloatColumn(_useColumn));
+    myMaxValue = findMaxValue(_data.getFloatColumn(_useColumn));
       
     //println("row count: "+_data.getRowCount());
     
@@ -59,7 +49,7 @@ class ScatterPlot extends Frame {
     
     //println("My original size list is = " + myList.size());
     
-    myScatterPoints = new ArrayList<ScreenPosition>();
+    myPoints = new ArrayList<ScreenPosition>();
     
     createMap();
     
@@ -92,7 +82,7 @@ class ScatterPlot extends Frame {
           //(0,0) - the origin point
           translate(x_pos, y_pos);
       
-          //fill(255);
+          fill(255);
       
           //rect(0,0,sWidth, sHeight);
           
@@ -100,11 +90,11 @@ class ScatterPlot extends Frame {
           
           drawTitle();
           
-          drawYAxis(this.useColumnY, 0.0f);
+          drawYAxis(this.useColumn, 0.0f);
       
-          drawXAxis(this.useColumnX, 0.0f);
+          drawXAxis(this.useColumn, 0.0f);
       
-          drawPoints(this.useColumnX, this.useColumnY, 0.0f, 0.0f);
+          drawPoints(this.useColumn, this.useColumn, 0.0f, 0.0f);
           
           popMatrix();
      }
@@ -117,17 +107,14 @@ class ScatterPlot extends Frame {
   */
   
   void createList() { 
-    int xIndex = this.data.getColumnIndex(useColumnX);
-    int yIndex = this.data.getColumnIndex(useColumnY);
+    int xIndex = this.data.getColumnIndex(useColumn);
     for (TableRow row : data.rows())
     {
       float quantVar1 = row.getFloat(xIndex);
-      float quantVar2 = row.getFloat(yIndex);
-      //println(quantVar2);
-      PointEntry temp = new PointEntry(quantVar1, quantVar2);
-      myList.add(temp);
+      float quantVar2 = 0.0f;
+      myList.add(new PointEntry(quantVar2, quantVar1));
     }
-    //print(myList.size());
+    print(myList.size());
     
     /*for (int k=1; k < myList.size(); k++) {
         println(myList.get(k).getXVal() - myList.get(k-1).getXVal());
@@ -170,89 +157,20 @@ class ScatterPlot extends Frame {
     }
     return minValue;
   }
-  
-  /**
-  * Find the all big values exceeding a certain value
-  *
-  * @param an array containing values of the selected column, a predefined magnitude
-  * 
-  */
-  
-  void listBigValues(float[] _useCol, float myThreshold){
-      
-      for (int k=0; k < _useCol.length; k++) {
-          if (_useCol[k] > myThreshold)
-            println(_useCol[k]);
-        }
-        
-  }
-  /**
-  *  Create a list containing all the actual points satisfying a magnitude
-  *
-  * @param an array containing values of the selected column, a predefined magnitude
-  * 
-  */
-  ArrayList<PointEntry> filterByTotalMagnitudes(ArrayList<PointEntry> PointList, float totalMin){
-      ArrayList<PointEntry> answer = new ArrayList<PointEntry>();
-      for(PointEntry p : PointList){
-          float totalValue = p.getXVal() + p.getYVal(); 
-          if(totalValue >= totalMin){
-              answer.add(p);
-          }
-      }
-      return answer;
-  }
-  /**
-  *  Create a list containing all the actual points closest to a selected point
-  *
-  * @param an array list containing all points on the skatterplot, a selected point, e.x: the minimum point
-  * 
-  */
-  ArrayList<PointEntry> getClosest(ArrayList<PointEntry> PointList, PointEntry currPoint, int howMany){ //<>//
-      //Create a copy version to avoid changing the ArrayList PointList    
-      ArrayList<PointEntry> copy = new ArrayList<PointEntry>(PointList);
-      ArrayList<PointEntry> answer = new ArrayList<PointEntry>();
-      int minIndex = 0;
-      for(int j = 0; j < howMany; j++){ 
-          for(int i = 1; i < copy.size(); i++){
-              PointEntry p = copy.get(i);
-              if(p.distanceTo(currPoint) < copy.get(minIndex).distanceTo(currPoint))
-                  minIndex = i;
-          }
-          answer.add(copy.get(minIndex));
-          copy.remove(minIndex);
-      }
-      //println(answer.size());
-      //println(answer.get(0).toString());
-      //println(answer.get(1).toString());
-      return answer;    
-  }
-  
-  /**
-  * Find the all big values exceeding a certain value
-  *
-  * @param an array list containing values of the two selected columns, a predefined total magnitude
-  * 
-  */
-  void listBigValues(ArrayList<PointEntry> PointList, float myThreshold){
-      ArrayList<PointEntry> bigList = filterByTotalMagnitudes(PointList, myThreshold);
-      for (PointEntry p : bigList) {
-          println(p.toString());    
-      }
-        
-  }
+ 
   /**
   * Create a list containing the screen positions
   *
   * @param:
   * @return the array list
-  */  
+  */ 
+  
   void createMap(){
     
      for (int k=0; k < myList.size(); k++) {
-
+        
         float xPos;
-  
+        
         float yPos;
         
         float _myXBuffer = 0.0;
@@ -261,13 +179,15 @@ class ScatterPlot extends Frame {
         
         // use map function to scale the input data values
   
-        xPos = map(myList.get(k).getXVal(), myMin_XValue - _myXBuffer, myMax_XValue+ _myXBuffer, 10, this.sWidth);
+        xPos = map(k, 0, myList.size() - 1 + _myXBuffer, 10, this.sWidth);
   
-        yPos = map(myList.get(k).getYVal(), myMin_YValue - _myYBuffer, myMax_YValue + _myYBuffer, this.sHeight -20, 10);
+        yPos = map(myList.get(k).getYVal(), myMinValue - _myYBuffer, myMaxValue + _myYBuffer, this.sHeight -20, 10);
           
-        ScreenPosition temp = new ScreenPosition(myList.get(k), xPos, yPos);
+        ScreenPosition temp = new ScreenPosition(myList.get(k),xPos, yPos);
   
-        this.myScatterPoints.add(temp);
+        this.myPoints.add(temp);
+        
+        println(myPoints.size());
       
      }
   }
@@ -282,7 +202,7 @@ class ScatterPlot extends Frame {
     //Factor used to draw the tick marks
     float deltaC = 1.2;
     
-    float scale_unit = (myMax_YValue - myMin_YValue)/binCount;
+    float scale_unit = (myMaxValue - myMinValue)/binCount;
 
     // Scaled min and max values    
     //float maxValue_yPos = map(maxValue, myMin_YValue - myBuffer, myMax_YValue + myBuffer, this.sHeight - 20, 10);
@@ -309,9 +229,9 @@ class ScatterPlot extends Frame {
       //tick mark's y position
       float yPos;
       //tick mark's actual value
-      tickMark = myMin_YValue + i*scale_unit;
+      tickMark = myMinValue + i*scale_unit;
       //println(tickMark);
-      yPos = map(tickMark, myMin_YValue - myBuffer, myMax_YValue + myBuffer, this.sHeight -20, 10);
+      yPos = map(tickMark, myMinValue - myBuffer, myMaxValue + myBuffer, this.sHeight -20, 10);
       //println("tickMark = " + tickMark + " tickMark_yPos = " + yPos);
       String num = String.format ("%,.2f",tickMark); 
       text (num, 0, yPos);
@@ -325,11 +245,11 @@ class ScatterPlot extends Frame {
   void drawXAxis(String _useColumnX, Float myBuffer) {
    
     // Used to find the scale unit; 
-    int binCount = 5;
+    int binCount = myList.size();
     //Factor used to draw the tick marks
     float deltaC = 1.5;
   
-    float scale_unit = (myMax_XValue - myMin_XValue)/binCount;
+    float scale_unit = (this.sWidth - 10)/binCount;
 
     //println(maxValue);
 
@@ -348,20 +268,21 @@ class ScatterPlot extends Frame {
     //println(this.x_pos + "," + this.y_pos+ "," + maxValue_xPos + "," + this.y_pos);
      float tickMark;
     // Draw the values and the corresponding tick marks
-     for (int i = 0;i <= binCount; i++) {
+     for (int i = 0;i < myPoints.size(); i++) {
       //tick mark's x position 
       float xPos;
       //tick mark's actual values
-      tickMark = myMin_XValue + i*scale_unit;
+      //tickMark = myMinValue + i*scale_unit;
       
-      xPos = map(tickMark, myMin_XValue - myBuffer, myMax_XValue + myBuffer, 10, this.sWidth);
+      //xPos = map(k, 0, myList.size() - 1 + _myXBuffer, 10, this.sWidth);
+      xPos = myPoints.get(i).getXPos();
       //println("tickMark_yPos = " + yPos);
       
-       String num = String.format ("%,.2f",tickMark); 
+       //String num = String.format ("%,.2f",tickMark); 
       
-      text (num, xPos, this.sHeight);
+       //text (num, xPos, this.sHeight);
 
-      line(xPos, this.sHeight - 20 - deltaC, xPos, this.sHeight - 20 + deltaC);
+       line(xPos, this.sHeight - 20 - deltaC, xPos, this.sHeight - 20 + deltaC);
     }
 
     // Draw the label according to the min and max values's y positions
@@ -370,23 +291,46 @@ class ScatterPlot extends Frame {
   
   void drawPoints(String _useColumnX, String _useColumnY, float _myXBuffer, float _myYBuffer) {
 
-    for (int k=0; k < myScatterPoints.size(); k++) {
+    for (int k=0; k < myPoints.size(); k++) {
 
       int d = 8;
       //Color determine
-      myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
+      //myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
       
       //Draw points
-      ellipse(myScatterPoints.get(k).getXPos(), myScatterPoints.get(k).getYPos(), d, d);
+      ellipse(myPoints.get(k).getXPos(), myPoints.get(k).getYPos(), d, d);
       
       //Debug: text(myList.get(k).toString(),xPos, yPos + 2);
       
     }
+    //Connectig the dots
+    int prevIndex = 0;
+    
+    for (int k=1; k < myPoints.size(); k++) {
+
+      //Color determine
+      //myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
+      
+      //Draw line
+      line(myPoints.get(prevIndex).getXPos(), myPoints.get(prevIndex).getYPos(),myPoints.get(k).getXPos(), myPoints.get(k).getYPos());
+      
+      prevIndex = k;
+      //Debug: text(myList.get(k).toString(),xPos, yPos + 2);
+      
+    }
+    
+    
+    
   }
   
   String getColumnX(){
-      return useColumnX;
+      return useColumn;
   }
+  
+  void setColumn( String _useColumn ){
+    useColumn = _useColumn;
+  }
+  
   void drawTitle(){
       text (chartName, this.sWidth/2, 10);
   }
@@ -415,13 +359,13 @@ class ScatterPlot extends Frame {
     //if (lastClicked != null) return ;
     //println("mouse pos = ,(" + _mouseXPos + "," + _mouseYPos + ")");
     // Loop over the points to see if one of them is selected
-    for (int k=0; k < myScatterPoints.size(); k++) {
+    for (int k=0; k < myPoints.size(); k++) {
       //println("My Point pos = (" + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos() + ")");
       //Restores the coordinate system
       //Ref: https://processing.org/tutorials/transform2d/
-      if ( abs(myScatterPoints.get(k).distanceTo(_mouseXPos - this.x_pos, _mouseYPos - this.y_pos)) < 8 ) {
+      if ( abs(myPoints.get(k).distanceTo(_mouseXPos - this.x_pos, _mouseYPos - this.y_pos)) < 8 ) {
          //println("mouseX pos = " + _mouseXPos + "mouseY pos = " + _mouseYPos);
-         //println("You hit it! X Point pos = " + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos()); 
+         //println("You hit it! X Point pos = " + myPoints.get(k).getXPos() + "," + myPoints.get(k).getYPos()); 
          //println(myScatterPoints.get(k).toString());
          //text(myScatterPoints.get(k).toString(), _mouseXPos, _mouseYPos - 5);
          //fill(255);
@@ -436,9 +380,9 @@ class ScatterPlot extends Frame {
   // Helper method that will return the scatter point object if it was clicked
   public ScreenPosition returnPointsForClick(ScreenPosition p){
     ScreenPosition myLastClicked = null;
-    for (int k=0; k < myScatterPoints.size(); k++) {
-      if ( abs(myScatterPoints.get(k).distanceTo(p.getXPos() - this.x_pos, p.getYPos() - this.y_pos)) < 8 ) {
-         myLastClicked = myScatterPoints.get(k);
+    for (int k=0; k < myPoints.size(); k++) {
+      if ( abs(myPoints.get(k).distanceTo(p.getXPos() - this.x_pos, p.getYPos() - this.y_pos)) < 8 ) {
+         myLastClicked = myPoints.get(k);
       }   
     }
     return myLastClicked;

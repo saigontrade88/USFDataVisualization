@@ -17,7 +17,7 @@ class ScreenPosition{
   // Records whether this marker has been clicked (most recently)
   protected boolean clicked = false;
   
-  public int TRI_SIZE = 5; 
+  public int TRI_SIZE = 10; 
  
  
   public ScreenPosition(PointEntry _myPoint, float _quantVar1, float _quantVar2){
