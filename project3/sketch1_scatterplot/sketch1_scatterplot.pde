@@ -5,6 +5,7 @@ Frame mySecondFrame = null;
 ArrayList<ScatterPlot> myScatterplotList = null; 
 ScatterPlot mySelectedScatterplot = null;
 Frame myFirstLineChart = null;
+Frame myFirstBarChart = null;
 
 color[] dessert = {#9F9694, #791F33, #BA3D49, #F1E6D4, #E2E1DC};
 color[] palette = dessert;
@@ -35,7 +36,7 @@ void setup(){
 //  selectInput("Select a file to process:", "fileSelected");
  
 //   myTable = loadTable( "srsatact_cut.csv", "header" );
-   myTable = loadTable( "srsatact.csv", "header" );
+ //  myTable = loadTable( "srsatact.csv", "header" );
  
 //  myTable = loadTable( "ketchup_cut.csv", "header" );
 
@@ -44,6 +45,8 @@ void setup(){
   //myTable = loadTable( "iris_cut.csv.csv", "header" );
 
   myTable = loadTable( "iris_cut.csv", "header" );
+  
+  //myTable = loadTable( "iris.csv", "header" );
   
 
 // myFirstFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
@@ -57,10 +60,10 @@ void setup(){
 //  myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400); //<>//
 //  mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
 
+// Create the scatterplot containers
+//  myScatterplotList = new ArrayList<ScatterPlot>();
 
-  myScatterplotList = new ArrayList<ScatterPlot>();
-
-// Create the scatterplot containers 
+ 
 /*
   for(int i = 0; i < myTable.getColumnCount();i++){
        for(int j = 0; j < myTable.getColumnCount(); j++){
@@ -75,8 +78,11 @@ void setup(){
 
 //Line chart
 
-myFirstLineChart = new Linechart( myTable, myTable.getColumnTitles()[0] , myTable.getColumnTitles()[0], 200, 100, 400, 400);
+//myFirstLineChart = new Linechart( myTable, myTable.getColumnTitles()[0] , myTable.getColumnTitles()[0], 200, 100, 800, 600);
 
+//Bar chart
+
+myFirstBarChart = new Barchart( myTable, myTable.getColumnTitles()[0] , myTable.getColumnTitles()[0], 100, 50, 800, 600);
 
  
 }
@@ -122,10 +128,16 @@ void draw(){
   }*/
   
   //Draw line chart
-  myFirstLineChart.setClicked(true);
-  myFirstLineChart.draw();
-  addTitleIfClicked(myFirstLineChart); //<>//
-  addTitleIfHover(myFirstLineChart);
+  //myFirstLineChart.setClicked(true);
+  //myFirstLineChart.draw();
+  //addTitleIfClicked(myFirstLineChart);
+  //addTitleIfHover(myFirstLineChart);
+  
+  //Draw bar chart
+  myFirstBarChart.setClicked(true);
+  myFirstBarChart.draw();
+  addTitleIfClicked(myFirstBarChart);
+  addTitleIfHover(myFirstBarChart);
 
    
   //keyPressed();
@@ -137,7 +149,7 @@ void draw(){
 void addTitleIfClicked(Frame currentScatterPlot){
   
   if(Clicked == 1){
-        lastClicked = new ScreenPosition((float) mouseX, (float) mouseY);
+        lastClicked = new ScreenPosition((float) mouseX, (float) mouseY); //<>//
         int existed = currentScatterPlot.checkPointsForClick(lastClicked.getXPos(),lastClicked.getYPos());
         if(existed == 1){
            ScreenPosition temp = currentScatterPlot.returnPointsForClick(lastClicked);
