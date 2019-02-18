@@ -4,6 +4,7 @@ Frame myFirstFrame = null;
 Frame mySecondFrame = null;
 ArrayList<ScatterPlot> myScatterplotList = null; 
 ScatterPlot mySelectedScatterplot = null;
+Frame myFirstLineChart = null;
 
 color[] dessert = {#9F9694, #791F33, #BA3D49, #F1E6D4, #E2E1DC};
 color[] palette = dessert;
@@ -29,7 +30,7 @@ int Moved = 0;
 
 void setup(){
   
-  size(800,600);  
+  size(1000,700);  
   
 //  selectInput("Select a file to process:", "fileSelected");
  
@@ -39,6 +40,11 @@ void setup(){
 //  myTable = loadTable( "ketchup_cut.csv", "header" );
 
   //myTable = loadTable( "ketchup.csv", "header" );
+  
+  //myTable = loadTable( "iris_cut.csv.csv", "header" );
+
+  myTable = loadTable( "iris_cut.csv", "header" );
+  
 
 // myFirstFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
  
@@ -55,7 +61,7 @@ void setup(){
   myScatterplotList = new ArrayList<ScatterPlot>();
 
 // Create the scatterplot containers 
-
+/*
   for(int i = 0; i < myTable.getColumnCount();i++){
        for(int j = 0; j < myTable.getColumnCount(); j++){
            if(i != j){
@@ -65,9 +71,13 @@ void setup(){
            myScatterplotList.add(temp);
            }
        }
-  }
+  }*/
 
-// Add the selected scatterplot to the main sketch based on the key interactions
+//Line chart
+
+myFirstLineChart = new Linechart( myTable, myTable.getColumnTitles()[0] , myTable.getColumnTitles()[0], 200, 100, 400, 400);
+
+
  
 }
 
@@ -100,6 +110,7 @@ void draw(){
     return;
     
   //draw skatterplot according to the keyboard press
+  /*
   for(int i = 0; i < myScatterplotList.size();i++){
       if(i == currentFrame){
           hideMarkers(myScatterplotList);
@@ -108,8 +119,14 @@ void draw(){
           addTitleIfClicked(myScatterplotList.get(i));
           addTitleIfHover(myScatterplotList.get(i));
       }
-  }
- //<>//
+  }*/
+  
+  //Draw line chart
+  myFirstLineChart.setClicked(true);
+  myFirstLineChart.draw();
+  addTitleIfClicked(myFirstLineChart); //<>//
+  addTitleIfHover(myFirstLineChart);
+
    
   //keyPressed();
   //noLoop();
@@ -124,7 +141,9 @@ void addTitleIfClicked(Frame currentScatterPlot){
         int existed = currentScatterPlot.checkPointsForClick(lastClicked.getXPos(),lastClicked.getYPos());
         if(existed == 1){
            ScreenPosition temp = currentScatterPlot.returnPointsForClick(lastClicked);
-           currentScatterPlot.showTitle(temp);
+           //If clicked, draw a triangle       
+           currentScatterPlot.drawMarker(temp);
+           
         }
         else{
           Clicked = 0;
@@ -141,6 +160,7 @@ void addTitleIfHover(Frame currentScatterPlot){
     int existed = currentScatterPlot.checkPointsForClick(lastSelected.getXPos(),lastSelected.getYPos());
     if(existed == 1){
            ScreenPosition temp = currentScatterPlot.returnPointsForClick(lastSelected);
+           //If mouse hovered, show a description text
            currentScatterPlot.showTitle(temp);
     }
     else{
@@ -195,42 +215,7 @@ void keyPressed() {
             break;
         
       }
-    /*
-      // Click "l" key
-      if(key == 'q'){
-         println("I press the key l");
-         currentFrame = 0;
-         println(currentFrame);
-      }
-      else if(key == 'w'){
-          println("I press the key w");
-          currentFrame = 1;
-          println(currentFrame);
-      }
-      else if(key == 'e'){
-          println("I press the key r");
-          currentFrame = 2;
-          println(currentFrame);
-      }
-      else if(key == 'r'){
-          println("I press the key r");
-          currentFrame = 3;
-          println(currentFrame);
-      }
-      else if(key == 't'){
-          println("I press the key t");
-          currentFrame = 4;
-          println(currentFrame);
-      }
-      else if(key == 'y'){
-          println("I press the key y");
-          currentFrame = 5;
-          println(currentFrame);
-      }
-      else{
-          println("Key is not assigned yet");
-      }*/
-  }
+    }
 }
 
 // loop over and unhide all markers
@@ -306,6 +291,8 @@ abstract class Frame {
  abstract ScreenPosition returnPointsForClick(ScreenPosition p);
  
  abstract void showTitle(ScreenPosition p);
+ 
+ abstract void drawMarker(ScreenPosition p);
  
  abstract void setClicked(boolean state);
  
