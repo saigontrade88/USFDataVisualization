@@ -3,6 +3,8 @@ Table myTable = null;
 Frame myFirstFrame = null;
 Frame mySecondFrame = null;
 ArrayList<ScatterPlot> myScatterplotList = null; 
+ArrayList<Barchart> myBarchartList = null;
+ArrayList<Linechart> myLinechartList = null;
 ScatterPlot mySelectedScatterplot = null;
 Frame myFirstLineChart = null;
 Frame myFirstBarChart = null;
@@ -16,7 +18,6 @@ float THRESHOLD_INTERMEDIATE_SATV = 615;
 float THRESHOLD_HIGH_SATV = 650;
 float THRESHOLD_INTERMEDIATE_ACT = 10;
 float THRESHOLD_HIGH_ACT = 10;
-
 
 int currentFrame = 0; // flag to catch which sketch is drawn.
 
@@ -61,10 +62,7 @@ void setup(){
 //  mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
 
 // Create the scatterplot containers
-//  myScatterplotList = new ArrayList<ScatterPlot>();
-
- 
-/*
+  myScatterplotList = new ArrayList<ScatterPlot>();
   for(int i = 0; i < myTable.getColumnCount();i++){
        for(int j = 0; j < myTable.getColumnCount(); j++){
            if(i != j){
@@ -74,17 +72,28 @@ void setup(){
            myScatterplotList.add(temp);
            }
        }
-  }*/
+  }
 
-//Line chart
+  //Line chart
+  myLinechartList = new ArrayList<Linechart>();
+  
+  for(int i = 0; i < myTable.getColumnCount();i++){
+             
+         Linechart temp = new Linechart( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[i], 200, 100, 800, 600);
+         myLinechartList.add(temp);        
+  }
+  
 
-//myFirstLineChart = new Linechart( myTable, myTable.getColumnTitles()[0] , myTable.getColumnTitles()[0], 200, 100, 800, 600);
+  //Bar chart
 
-//Bar chart
+  myBarchartList = new ArrayList<Barchart>();
+  
+  for(int i = 0; i < myTable.getColumnCount();i++){
+             
+         Barchart temp = new Barchart( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[i], 200, 100, 800, 600);
+         myBarchartList.add(temp);        
+  }
 
-myFirstBarChart = new Barchart( myTable, myTable.getColumnTitles()[0] , myTable.getColumnTitles()[0], 100, 50, 800, 600);
-
- 
 }
 
 
@@ -116,28 +125,40 @@ void draw(){
     return;
     
   //draw skatterplot according to the keyboard press
-  /*
   for(int i = 0; i < myScatterplotList.size();i++){
       if(i == currentFrame){
           hideMarkers(myScatterplotList);
-          myScatterplotList.get(i).setClicked(true);
+          //Disable the scatterplot - TO CHECK
+          myScatterplotList.get(i).setClicked(false);
           myScatterplotList.get(i).draw();
           addTitleIfClicked(myScatterplotList.get(i));
           addTitleIfHover(myScatterplotList.get(i));
       }
-  }*/
+  }
+  
+  
   
   //Draw line chart
+  for(int i = 0; i < myLinechartList.size();i++){
+      if(i == currentFrame){
+          hideLineChartMarkers(myLinechartList);
+          //Disable the Linechart - TO CHECK
+          myLinechartList.get(i).setClicked(true);
+          myLinechartList.get(i).draw();
+          addTitleIfClicked(myLinechartList.get(i));
+          addTitleIfHover(myLinechartList.get(i));
+      }
+  }
   //myFirstLineChart.setClicked(true);
   //myFirstLineChart.draw();
   //addTitleIfClicked(myFirstLineChart);
   //addTitleIfHover(myFirstLineChart);
   
   //Draw bar chart
-  myFirstBarChart.setClicked(true);
+  /*myFirstBarChart.setClicked(true);
   myFirstBarChart.draw();
   addTitleIfClicked(myFirstBarChart);
-  addTitleIfHover(myFirstBarChart);
+  addTitleIfHover(myFirstBarChart);*/
 
    
   //keyPressed();
@@ -241,6 +262,15 @@ void keyPressed() {
   // loop over and hide all markers
     private void hideMarkers(ArrayList<ScatterPlot> myList) {
       for(ScatterPlot s : myList) {
+        if(s.getClicked() == true)
+          s.setClicked(false);
+      }
+        
+    }
+    
+    // loop over and hide all markers
+    private void hideLineChartMarkers(ArrayList<Linechart> myList) {
+      for(Linechart s : myList) {
         if(s.getClicked() == true)
           s.setClicked(false);
       }
