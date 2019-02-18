@@ -72,6 +72,22 @@ class Linechart extends Frame{
     clicked = state;
   }
   
+  public int getXPos(){
+    return x_pos;
+  }
+  
+  public int getYPos(){
+    return y_pos;
+  }
+  
+  public int getWidth(){
+    return sWidth;
+  }
+  
+  public int getHeight(){
+    return sHeight;
+  }
+  
   //Drawing method for scatterplot
    void draw() {
      if(clicked == true){
@@ -282,11 +298,11 @@ class Linechart extends Frame{
       
        //text (num, xPos, this.sHeight);
 
-      // line(xPos, this.sHeight - 20 - deltaC, xPos, this.sHeight - 20 + deltaC);
+       line(xPos, this.sHeight - 20 - deltaC, xPos, this.sHeight - 20 + deltaC);
     }
 
     // Draw the label according to the min and max values's y positions
-    text(_useColumnX, sWidth, this.sHeight - 25);
+    //text(_useColumnX, sWidth, this.sHeight - 25);
   }
   
   void drawPoints(String _useColumnX, String _useColumnY, float _myXBuffer, float _myYBuffer) {

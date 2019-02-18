@@ -125,28 +125,28 @@ void draw(){
   textSize(12);
   fill(0);
   textAlign(LEFT);
-  int legxPos = myBarchartList.get(0).getXPos() + myBarchartList.get(0).getWidth() + 50;
+  int legxPos = myLinechartList.get(0).getXPos() + myLinechartList.get(0).getWidth() + 50;
   int legyPos = 75;
   int legVerticalSpace = 25;
   text("- Basic Keyboard interaction legend:", legxPos, legyPos);
-  for(int i = 0; i < myBarchartList.size();i++){
+  for(int i = 0; i < myLinechartList.size();i++){
     //drawLegend(float xPos, float yPos, float Width, float Height)
       
-    String message = "Press " + (i + 1)  + ": switch to this attribute "  + myBarchartList.get(i).getColumnX();
+    String message = "Press " + (i + 1)  + ": switch to this attribute "  + myLinechartList.get(i).getColumnX();
     
     text(message, legxPos, legyPos + legVerticalSpace * (i + 1));
        
   }
   
-  text("- Mouse click/hover interaction legend:", legxPos, legyPos + legVerticalSpace + legVerticalSpace*myBarchartList.size());
+  text("- Mouse click/hover interaction legend:", legxPos, legyPos + legVerticalSpace + legVerticalSpace*myLinechartList.size());
   
   String message1 = "Click to simply show the red triangular";
   
-  text(message1, legxPos, legyPos + legVerticalSpace * (myBarchartList.size() + 2));
+  text(message1, legxPos, legyPos + legVerticalSpace * (myLinechartList.size() + 2));
   
   String message3 = "Hover to show the bar magnitude";
   
-  text(message3, legxPos, legyPos + legVerticalSpace * (myBarchartList.size() + 3));
+  text(message3, legxPos, legyPos + legVerticalSpace * (myLinechartList.size() + 3));
   
   
   // Restore previous drawing style
