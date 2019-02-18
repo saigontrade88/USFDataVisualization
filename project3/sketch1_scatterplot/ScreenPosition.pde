@@ -16,6 +16,8 @@ class ScreenPosition{
   private float yPos;
   // Records whether this marker has been clicked (most recently)
   protected boolean clicked = false;
+  
+  public int TRI_SIZE = 5; 
  
  
   public ScreenPosition(PointEntry _myPoint, float _quantVar1, float _quantVar2){
@@ -26,7 +28,7 @@ class ScreenPosition{
   }
   
   public ScreenPosition(float _quantVar1, float _quantVar2){
-      myPoint = new PointEntry();
+     // myPoint = new PointEntry();
       xPos = _quantVar1;
       yPos = _quantVar2;
    
@@ -38,6 +40,8 @@ class ScreenPosition{
       yPos = 0.0;
    
   }
+  
+  
   
   //overriding the toString() method
   public String toString(){  
