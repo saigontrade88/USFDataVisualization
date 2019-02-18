@@ -72,6 +72,22 @@ class Linechart extends Frame{
     clicked = state;
   }
   
+  public int getXPos(){
+    return x_pos;
+  }
+  
+  public int getYPos(){
+    return y_pos;
+  }
+  
+  public int getWidth(){
+    return sWidth;
+  }
+  
+  public int getHeight(){
+    return sHeight;
+  }
+  
   //Drawing method for scatterplot
    void draw() {
      if(clicked == true){

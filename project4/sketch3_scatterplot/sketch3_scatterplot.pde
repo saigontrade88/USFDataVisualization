@@ -41,12 +41,12 @@ void setup(){
   //myTable = loadTable( "srsatact_cut.csv", "header" );
     myTable = loadTable( "srsatact.csv", "header" );
   //*Test: second data set
-    myTable = loadTable( "ketchup_cut_100.csv", "header" );
-  //myTable = loadTable( "ketchup.csv", "header" );
+   // myTable = loadTable( "ketchup_cut_100.csv", "header" );
+    myTable = loadTable( "ketchup.csv", "header" );
   //*Test: third data set
   //myTable = loadTable( "iris_cut.csv.csv", "header" );
   //myTable = loadTable( "iris_cut.csv", "header" );
-  //myTable = loadTable( "iris.csv", "header" );
+    myTable = loadTable( "iris.csv", "header" );
 
 
 // Create the scatterplot containers
@@ -56,7 +56,7 @@ void setup(){
            if(i != j){
            //print("i= " + i + "origin is= " + i*width/4);
            //ScatterPlot( Table _data, String _useColumnX, String _useColumnY, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) 
-           ScatterPlot temp = new ScatterPlot( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[j], myTable.getColumnTitles()[i] + " vs " + myTable.getColumnTitles()[j], 200, 100, 400, 400);
+           ScatterPlot temp = new ScatterPlot( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[j], myTable.getColumnTitles()[i] + " vs " + myTable.getColumnTitles()[j], 100, 50, 500, 600);
            myScatterplotList.add(temp);
            }
        }
@@ -67,7 +67,7 @@ void setup(){
   
   for(int i = 0; i < myTable.getColumnCount();i++){
              
-         Linechart temp = new Linechart( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[i], 200, 100, 800, 600);
+         Linechart temp = new Linechart( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[i], 100, 50, 500, 600);
          myLinechartList.add(temp);        
   }
   
@@ -107,7 +107,7 @@ void draw(){
     return;
     
   //draw skatterplot according to the keyboard press
-  /*
+  
   for(int i = 0; i < myScatterplotList.size();i++){
       if(i == currentFrame){
           hideMarkers(myScatterplotList);
@@ -117,62 +117,54 @@ void draw(){
           addTitleIfClicked(myScatterplotList.get(i));
           addTitleIfHover(myScatterplotList.get(i));
       }
-  }*/
-  
-  
-  
-  //Draw line chart
-  /*
-  for(int i = 0; i < myLinechartList.size();i++){
-      if(i == currentFrame){
-          hideLineChartMarkers(myLinechartList);
-          //Disable the Linechart - TO CHECK
-          myLinechartList.get(i).setClicked(false);
-          myLinechartList.get(i).draw();
-          addTitleIfClicked(myLinechartList.get(i));
-          addTitleIfHover(myLinechartList.get(i));
-      }
-  }*/
-    
-  //Draw bar chart
-  for(int i = 0; i < myBarchartList.size();i++){
-      if(i == currentFrame){
-          hideBarChartMarkers(myBarchartList);
-          //Disable the Barchart - TO CHECK
-          myBarchartList.get(i).setClicked(true);
-          myBarchartList.get(i).draw();
-          //myBarchartList.get(i).drawLegend();
-          addTitleIfClicked(myBarchartList.get(i));
-          addTitleIfHover(myBarchartList.get(i));
-      }
   }
+  
   //Draw legend for key and mouse interaction
   pushStyle();
   textSize(12);
   fill(0);
   textAlign(LEFT);
-  int legxPos = myBarchartList.get(0).getXPos() + myBarchartList.get(0).getWidth() + 50;
+  int legxPos = myScatterplotList.get(0).getXPos() + myScatterplotList.get(0).getWidth() + 50;
   int legyPos = 75;
   int legVerticalSpace = 25;
   text("- Keyboard interaction legend:", legxPos, legyPos);
-  for(int i = 0; i < myBarchartList.size();i++){
+  for(int i = 0; i < myScatterplotList.size();i++){
+    if(i<9){ 
     //drawLegend(float xPos, float yPos, float Width, float Height)
       
-    String message = "Press " + (i + 1)  + ": switch to this attribute "  + myBarchartList.get(i).getColumnX();
+    String message = "Press " + (i+1)  + ": switch to "  + myScatterplotList.get(i).getColumnX() + " vs " + myScatterplotList.get(i).getColumnY();
     
     text(message, legxPos, legyPos + legVerticalSpace * (i + 1));
-       
+    }
+    else{
+      
+      String message = "Press " + 'q'  + ": switch to "  + myScatterplotList.get(9).getColumnX() + " vs " + myScatterplotList.get(9).getColumnY();
+    
+      text(message, legxPos, legyPos + legVerticalSpace * (10));
+      
+      message = "Press " + 'w'  + ": switch to "  + myScatterplotList.get(10).getColumnX() + " vs " + myScatterplotList.get(10).getColumnY();
+    
+      text(message, legxPos, legyPos + legVerticalSpace * (10 + 1));
+      
+      message = "Press " + 'e'  + ": switch to "  + myScatterplotList.get(11).getColumnX() + " vs " + myScatterplotList.get(11).getColumnY();
+    
+      text(message, legxPos, legyPos + legVerticalSpace * (11 + 1));
+      
+      break;
+      
+    }
+    
   }
   
-  text("- Mouse click/hover interaction legend:", legxPos, 100 + legVerticalSpace*myBarchartList.size());
+  text("- Mouse click/hover interaction legend:", legxPos, 100 + legVerticalSpace * myScatterplotList.size());
   
   String message1 = "Click to show triangular";
   
-  text(message1, legxPos, legyPos + legVerticalSpace * (myBarchartList.size() + 2));
+  text(message1, legxPos, legyPos + legVerticalSpace * (myScatterplotList.size() + 2));
   
   String message2 = "Hover to show the bar magnitude";
   
-  text(message2, legxPos, legyPos + legVerticalSpace * (myBarchartList.size() + 3));
+  text(message2, legxPos, legyPos + legVerticalSpace * (myScatterplotList.size() + 3));
   
   
   // Restore previous drawing style

@@ -82,6 +82,26 @@ class ScatterPlot extends Frame {
     clicked = state;
   }
   
+  public int getXPos(){
+    return x_pos;
+  }
+  
+  public int getYPos(){
+    return y_pos;
+  }
+  
+  public int getWidth(){
+    return sWidth;
+  }
+  
+  public int getHeight(){
+    return sHeight;
+  }
+   
+  public String getColumnY(){
+    return useColumnY;
+  }
+  
   //Drawing method for scatterplot
    void draw() {
      if(clicked == true){
