@@ -3,7 +3,7 @@ Table myTable = null;
 Frame myFirstFrame = null;
 Frame mySecondFrame = null;
 ArrayList<ScatterPlot> myScatterplotList = null; 
-
+ScatterPlot mySelectedScatterplot = null;
 
 color[] dessert = {#9F9694, #791F33, #BA3D49, #F1E6D4, #E2E1DC};
 color[] palette = dessert;
@@ -33,10 +33,10 @@ void setup(){
   
 //  selectInput("Select a file to process:", "fileSelected");
  
-// myTable = loadTable( "srsatact_cut.csv", "header" );
-// myTable = loadTable( "srsatact.csv", "header" );
+//   myTable = loadTable( "srsatact_cut.csv", "header" );
+   myTable = loadTable( "srsatact.csv", "header" );
  
-  myTable = loadTable( "ketchup_cut.csv", "header" );
+//  myTable = loadTable( "ketchup_cut.csv", "header" );
 
   //myTable = loadTable( "ketchup.csv", "header" );
 
@@ -48,21 +48,24 @@ void setup(){
 //myFrame = new ScatterPlot( myTable, "SATM","SATV","SATM vs SATV", 200, 100, 400, 400);
 // myFrame = new ScatterPlot( myTable, "ACT","GPA","ACT vs GPA", 200, 100, 400, 400);
 
-  myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400); //<>//
-  mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
+//  myFirstFrame = new ScatterPlot( myTable, "price.heinz","price.hunts","price.heinz vs price.hunts", 200, 100, 400, 400); //<>//
+//  mySecondFrame = new ScatterPlot( myTable, "price.delmonte","price.stb","price.heinz vs price.hunts", 200, 100, 400, 400);
 
- // myScatterplotList = new ArrayList<ScatterPlot>();
+
+  myScatterplotList = new ArrayList<ScatterPlot>();
 
 // Create the scatterplot containers 
-/*
+
   for(int i = 0; i < myTable.getColumnCount();i++){
        for(int j = 0; j < myTable.getColumnCount(); j++){
+           if(i != j){
            //print("i= " + i + "origin is= " + i*width/4);
            //ScatterPlot( Table _data, String _useColumnX, String _useColumnY, String _chartName, int _xPos, int _yPos, int _sWidth, int _sHeight) 
            ScatterPlot temp = new ScatterPlot( myTable, myTable.getColumnTitles()[i], myTable.getColumnTitles()[j], myTable.getColumnTitles()[i] + " vs " + myTable.getColumnTitles()[j], 200, 100, 400, 400);
            myScatterplotList.add(temp);
+           }
        }
-  }*/
+  }
 
 // Add the selected scatterplot to the main sketch based on the key interactions
  
@@ -93,53 +96,21 @@ void draw(){
   
   //noCursor();
     
-  if( myTable == null ) 
+  if(myTable == null) 
     return;
     
- if( myFirstFrame == null ) 
-    println("Your Frame is null");
- 
- if(myFirstFrame != null ){  
-    //Keyboard interaction to switch between the two sketches
-    //Press l to select the SATM vs SATV
-    //Press r to select the ACT vs GPA
-    if (currentFrame == 0 & myFirstFrame.getClicked()){
-        textSize(15);
-        fill(0);
-        text(myFirstFrame.getColumnX(), 650, 75);
-        //yellow
-        fill(255, 255, 0);
-        ellipse(650, 100, 16, 16);
-        fill(0);
-        text("<= " + THRESHOLD_INTERMEDIATE_SATM, 700, 100);
-        //blue
-        fill(0,0,255);
-        ellipse(650, 150, 16, 16);
-        fill(0);
-        text("<= " + THRESHOLD_HIGH_SATM, 700, 150);
-        //red
-        fill(255,0,0);
-        ellipse(650, 200, 16, 16);
-        fill(0);
-        text("> " + THRESHOLD_HIGH_SATM, 700, 200);
-        myFirstFrame.draw();
-      //  addTitleIfClicked(myFirstFrame);
-      //  addTitleIfHover(myFirstFrame);
-        
-    }
-    else if(currentFrame == 1 & mySecondFrame.getClicked()){
-        mySecondFrame.draw();
-      //  addTitleIfClicked(mySecondFrame);
-      //  addTitleIfHover(mySecondFrame);
-    }
-    /*
-    println("Draw function in the main sketch");
-    for(int i = 0; i < myScatterplotList.size();i++){
-        if(myScatterplotList.get(i).getClicked() == true)
-            myScatterplotList.get(i).draw();
-    }*/
+  //draw skatterplot according to the keyboard press
+  for(int i = 0; i < myScatterplotList.size();i++){
+      if(i == currentFrame){
+          hideMarkers(myScatterplotList);
+          myScatterplotList.get(i).setClicked(true);
+          myScatterplotList.get(i).draw();
+          addTitleIfClicked(myScatterplotList.get(i));
+          addTitleIfHover(myScatterplotList.get(i));
+      }
+  }
+ //<>//
    
-}
   //keyPressed();
   //noLoop();
   
@@ -182,23 +153,102 @@ void addTitleIfHover(Frame currentScatterPlot){
 void keyPressed() {
   //println(key);
   if(keyPressed){
+      switch(key){
+        case '1':  
+            currentFrame = 0;
+            break;
+        case '2':  
+            currentFrame = 1;
+            break;
+        case '3':  
+            currentFrame = 2;
+            break;
+        case '4':  
+            currentFrame = 3;
+            break;
+        case '5':  
+            currentFrame = 4;
+            break;
+        case '6':  
+            currentFrame = 5;
+            break;
+        case '7':  
+            currentFrame = 6;
+            break;
+        case '8':  
+            currentFrame = 7;
+            break;
+        case '9':  
+            currentFrame = 8;
+            break;
+        case 'q':  
+            currentFrame = 9;
+            break;
+        case 'w':  
+            currentFrame = 10;
+            break;
+        case 'e':  
+            currentFrame = 11;
+            break;
+        default:
+            println("Default key presss");
+            break;
+        
+      }
+    /*
       // Click "l" key
-      if(key == 'l')
+      if(key == 'q'){
+         println("I press the key l");
          currentFrame = 0;
-         println("I pressed the key");
-         mySecondFrame.setClicked(false);
-         myFirstFrame.setClicked(true);
-         println("clicked First Frame = " + myFirstFrame.getClicked());
-         println("clicked Second Frame = " + mySecondFrame.getClicked());
-      } // click "r" key
-      if(key == 'r'){
+         println(currentFrame);
+      }
+      else if(key == 'w'){
+          println("I press the key w");
           currentFrame = 1;
-          myFirstFrame.setClicked(false);
-          mySecondFrame.setClicked(true);
-          //println("clicked First Frame = " + myFirstFrame.getClicked());
-          //println("clicked Second Frame = " + mySecondFrame.getClicked());
-      } 
- }
+          println(currentFrame);
+      }
+      else if(key == 'e'){
+          println("I press the key r");
+          currentFrame = 2;
+          println(currentFrame);
+      }
+      else if(key == 'r'){
+          println("I press the key r");
+          currentFrame = 3;
+          println(currentFrame);
+      }
+      else if(key == 't'){
+          println("I press the key t");
+          currentFrame = 4;
+          println(currentFrame);
+      }
+      else if(key == 'y'){
+          println("I press the key y");
+          currentFrame = 5;
+          println(currentFrame);
+      }
+      else{
+          println("Key is not assigned yet");
+      }*/
+  }
+}
+
+// loop over and unhide all markers
+  private void unhideScatterplots(ArrayList<ScatterPlot> myList) {
+    for(ScatterPlot s : myList) {
+      if(s.getClicked() == false)
+        s.setClicked(true);
+    }
+      
+  }
+  // loop over and hide all markers
+    private void hideMarkers(ArrayList<ScatterPlot> myList) {
+      for(ScatterPlot s : myList) {
+        if(s.getClicked() == true)
+          s.setClicked(false);
+      }
+        
+    }
 
 /** The event handler for mouse clicks
 * It will display a brief discription when the point is clicked
