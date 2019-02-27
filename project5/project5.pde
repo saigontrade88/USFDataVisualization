@@ -4,8 +4,15 @@ Frame myFrame = null;
 
 
 void setup(){
-  size(600,600);  
+  size(1000,600);  
   selectInput("Select a file to process:", "fileSelected");
+  
+  //myTable = loadTable( "srsatact.csv", "header" );
+  
+  //myTable = loadTable( "ketchup.csv", "header" );
+  
+  //myFrame = new parallelcoordinates( myTable.getColumnTitle(0), myTable.getColumnTitle(1), myTable.getColumnTitle(2),myTable.getColumnTitle(3));
+  
 }
 
 
@@ -16,7 +23,9 @@ void fileSelected(File selection) {
   } else {
     println("User selected " + selection.getAbsolutePath());
     myTable = loadTable( selection.getAbsolutePath(), "header" );
-    // TODO: create object
+    //myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+    myFrame = new parallelcoordinates( myTable.getColumnTitle(0), myTable.getColumnTitle(1), myTable.getColumnTitle(2),myTable.getColumnTitle(3)); //<>//
+    //myFrame = new splom( );
   }
 }
 
@@ -28,9 +37,10 @@ void draw(){
     return;
   
   if( myFrame != null ){
-       myFrame.setPosition( 0, 0, width, height );
+       myFrame.setPosition( 50, 50, width-100, height - 100 );
        myFrame.draw();
   }
+  //noLoop();
 }
 
 
@@ -44,11 +54,19 @@ void mouseReleased(){
 }
 
 
-
+void keyPressed(){
+  
+  switch( key ){
+     case '1': ((parallelcoordinates)myFrame).setAttributes( myTable.getColumnTitle(1), myTable.getColumnTitle(0), myTable.getColumnTitle(2), myTable.getColumnTitle(3)); break;
+     case '2': ((parallelcoordinates)myFrame).setAttributes( myTable.getColumnTitle(2), myTable.getColumnTitle(1), myTable.getColumnTitle(0), myTable.getColumnTitle(3)); break;
+     case '3': ((parallelcoordinates)myFrame).setAttributes( myTable.getColumnTitle(3), myTable.getColumnTitle(1), myTable.getColumnTitle(2), myTable.getColumnTitle(0) ); break;
+  }
+  
+}
 abstract class Frame {
   
   int u0,v0,w,h;
-  int clickBuffer = 2;
+  int clickBuffer = 8;
      
   void setPosition( int u0, int v0, int w, int h ){
     this.u0 = u0;
