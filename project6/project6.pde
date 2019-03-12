@@ -1,11 +1,20 @@
+import java.util.*;
 
 Table myTable = null;
 Frame myFrame = null;
 
+//int selectedPoint = -1;
+HashSet<Integer> selectedPoints = new HashSet<Integer>();
 
 void setup(){
-  size(600,600);  
-  selectInput("Select a file to process:", "fileSelected");
+   size(800,600);  
+  //selectInput("Select a file to process:", "fileSelected");
+   //myTable = loadTable( "srsatact.csv", "header" );
+   myTable = loadTable( "srsatact_cut.csv", "header" );
+    //myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+    //myFrame = new splom( );
+   // myFrame = new PCP( );
+   myFrame = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
 }
 
 
@@ -16,7 +25,9 @@ void fileSelected(File selection) {
   } else {
     println("User selected " + selection.getAbsolutePath());
     myTable = loadTable( selection.getAbsolutePath(), "header" );
-    // TODO: create object
+    //myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+    myFrame = new splom( );
+   // myFrame = new PCP( );
   }
 }
 
@@ -28,9 +39,10 @@ void draw(){
     return;
   
   if( myFrame != null ){
-       myFrame.setPosition( 0, 0, width, height );
+       myFrame.setPosition( 100, 100, width - 100, height - 100);
        myFrame.draw();
   }
+  //noLoop();
 }
 
 
@@ -44,17 +56,39 @@ void mouseReleased(){
 }
 
 
-
+void keyPressed(){
+  switch( key ){
+     //case '1': ((Scatterplot)myFrame).setAttributes( myTable.getColumnTitle(0), myTable.getColumnTitle(1) ); break;
+     //case '2': ((Scatterplot)myFrame).setAttributes( myTable.getColumnTitle(1), myTable.getColumnTitle(2) ); break;
+     //case '3': ((Scatterplot)myFrame).setAttributes( myTable.getColumnTitle(0), myTable.getColumnTitle(2) ); break;
+  }
+}
 abstract class Frame {
   
   int u0,v0,w,h;
-  int clickBuffer = 2;
+  int clickBuffer = 8;
      
   void setPosition( int u0, int v0, int w, int h ){
     this.u0 = u0;
     this.v0 = v0;
     this.w = w;
     this.h = h;
+  }
+  
+  int getXPos(){
+      return u0;
+  }
+  
+  int getYPos(){
+      return v0;
+  }
+  
+  int getWidth(){
+      return w;
+  }
+  
+  int getHeight(){
+      return h;
   }
   
   abstract void draw();
