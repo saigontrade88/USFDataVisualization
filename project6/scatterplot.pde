@@ -86,7 +86,8 @@ class Scatterplot extends Frame{
          selDist = d;
          selected = p;
          //add the point's index to the ordered Integer HashSet
-         selectedPoints.add(i);
+         println("Index inside of Scatterplot = " + i);
+         if(!selectedPoints.contains(i)) selectedPoints.add(i);
       }
     }    
     /*
