@@ -4,6 +4,9 @@ int buffer = 5;
  interactions: click, selection, highlight
  1. switch axes
  **/
+ 
+int binCount = 4;
+float scale_unit;
 
 class Line extends Frame {
   String attr0, attr1;
@@ -61,8 +64,8 @@ class Line extends Frame {
     //Vertical axis
     int v1 = (int)map( rmin1 - buffer, rmin1, rmax1, v0+h-20, v0+20 );
     int v2 = (int)map( rmax1 + buffer, rmin1, rmax1, v0+h-20, v0+20 );
-    //println("max - min= " + (u2 - u1));
-
+    //println("axes[0] height = 0, width = max - min= " + (u2 - u1));
+    //highlight the origin 
     fill( 255, 0, 0);
     ellipse( u1, v1, 10, 10 );
 
@@ -72,7 +75,24 @@ class Line extends Frame {
     axes[0].draw();
     axes[1].draw();
 
-    //To do: drawing tickmarks
+    //To do: drawing horizontal tickmarks
+    
+    scale_unit = (rmax0 - rmin0)/binCount;
+    
+    //draw the tick marks
+    for (int i = 0; i <= binCount; i++) {
+      //tick mark's y position
+      int xPos;
+      //tick mark's actual value
+      float tickMark = rmin0 + i*scale_unit;
+      xPos = (int)map(tickMark, rmin0, rmax0, u0+20, u0+w-20);
+      //println("tickMark = " + tickMark + " tickMark_yPos = " + xPos);
+      String num = String.format ("%,.2f", tickMark); 
+      text (num, xPos, v1 + 10);
+      line( xPos, v1 - 10, xPos, v1 + 10);
+    }
+    // Draw the label according to the min and max values's y positions
+     text(attr0, u1 + axes[0].w/2, v1 + 20);
     //To do: drawing horizontal gridlines
 
     //update point positions - ArrayList of PVector objects 
@@ -94,64 +114,54 @@ class Line extends Frame {
      println(markers.get(i).toString());
      }
      */
-
-
     stroke(0);
     strokeWeight(1); //default
     //draw points with ellipse
     for ( int i = 0; i < markers.size(); i++ ) {
       PVector p = new PVector(markers.get(i).getXPos(), markers.get(i).getYPos());
       fill( 200 );
-      //if( selectedPointsLineChart.contains(i) ) fill( 0,255,0);//green
-      if ( selectedPoints.contains(i) ) fill( 0, 255, 0);//green
       ellipse( p.x, p.y, 10, 10 );
     }
     //if the point is selected, pop up an information window
     if ( selectedMarker != null ) {  
       String pop = selectedMarker.toString();
-      fill( 255, 0, 0);
       ellipse( selectedMarker.getXPos(), selectedMarker.getYPos(), 10, 10 );
       textSize(12);
       rectMode(CORNER);
-      //rect(p.getXPos() + this.x_pos , p.getYPos() + this.y_pos, textWidth(pop) + 6, 39);
       fill(0, 0, 0);
       textAlign(LEFT, TOP);
       text(pop, selectedMarker.getXPos() + 3, selectedMarker.getYPos() -18);
-      //selected.draw();
     }
 
     //iteration over the HashSet data structure selectedPoints 
-    for ( int i : selectedPoints ) {
-      
-        PVector p = points.get(i);
-        //visualizae all the selected points with green ellipses  
-        fill( 0, 255, 0);//green
-        ellipse( p.x, p.y, 10, 10 );
-      
+    for ( int i : selectedPoints ) {   
+      PVector p = points.get(i);
+      //visualizae all the selected points with green ellipses  
+      fill( 0, 255, 0);//green
+      ellipse( p.x, p.y, 10, 10 );
     }
-
 
     //draw connecting lines, chỉnh màu
     strokeWeight(1);
     stroke(0);
 
     int prevIndex = 0;
-    /**
-     for (int k=1; k < markers.size(); k++) {
-     
-     println("(" + prevIndex + "," + k + ")");
-     
-     //float x0 = markers.get(0).getXPos();
-     //float y0 = markers.get(0).getYPos();
-     //Color determine
-     //myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
-     
-     //Draw line
-     line(markers.get(prevIndex).getXPos(), markers.get(prevIndex).getYPos(), markers.get(k).getXPos(), markers.get(k).getYPos());
-     
-     prevIndex = k;
-     //Debug: text(myList.get(k).toString(),xPos, yPos + 2);
-     }*/
+
+    for (int k=1; k < myTable.getRowCount(); k++) {
+
+      //println("(" + prevIndex + "," + k + ")");
+
+      //float x0 = markers.get(0).getXPos();
+      //float y0 = markers.get(0).getYPos();
+      //Color determine
+      //myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
+
+      //Draw line
+      line(markers.get(prevIndex).getXPos(), markers.get(prevIndex).getYPos(), markers.get(k).getXPos(), markers.get(k).getYPos());
+
+      prevIndex = k;
+      //Debug: text(myList.get(k).toString(),xPos, yPos + 2);
+    }
     /**
      for (int k=0; k < markers.size(); k++) {
      float x0 = markers.get(0).getXPos();
@@ -211,7 +221,7 @@ class TwoDMarker {
 
   //overriding the toString() method
   public String toString() {  
-    return d.toString() + " (" + graphPoint.x + "," + graphPoint.y + ")";
+    return d.toString();
   } 
 
   float getXPos() {
@@ -244,12 +254,14 @@ class Axis extends Frame {
   float rmin, rmax;
   //flag variable for mouse click interaction
   boolean selected = false;
+  
 
   Axis( String attr ) {
     this.attr = attr;
     data = myTable.getFloatColumn(attr);
     rmin = min(data);
     rmax = max(data);
+    
   }
 
 
@@ -268,6 +280,8 @@ class Axis extends Frame {
      println("Width = " + getWidth());
      println("Height = " + getHeight()); **/
     line(u0, v0, u0 + w, v0 + h);
+    
+    
   }
 
   void mousePressed() {

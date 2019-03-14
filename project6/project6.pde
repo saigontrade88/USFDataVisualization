@@ -53,7 +53,7 @@ void draw(){
        myLinechart.draw();
        
   }
-  //noLoop();
+  noLoop();
 }
 
 
