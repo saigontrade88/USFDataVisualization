@@ -75,26 +75,14 @@ class Line extends Frame {
     axes[0].draw();
     axes[1].draw();
 
-    //To do: drawing horizontal tickmarks
+    //drawing horizontal tickmarks   
+    drawAxisValue( binCount, u1, v1, rmin0, rmax0, u0+20, u0+w-20, "horizontal");
     
-    scale_unit = (rmax0 - rmin0)/binCount;
+    //drawing  vertical tickmarks
+    drawAxisValue( binCount, u1, v1, rmin1, rmax1, v0+h-20, v0+20, "vertical");
     
-    //draw the tick marks
-    for (int i = 0; i <= binCount; i++) {
-      //tick mark's y position
-      int xPos;
-      //tick mark's actual value
-      float tickMark = rmin0 + i*scale_unit;
-      xPos = (int)map(tickMark, rmin0, rmax0, u0+20, u0+w-20);
-      //println("tickMark = " + tickMark + " tickMark_yPos = " + xPos);
-      String num = String.format ("%,.2f", tickMark); 
-      text (num, xPos, v1 + 10);
-      line( xPos, v1 - 10, xPos, v1 + 10);
-    }
-    // Draw the label according to the min and max values's y positions
-     text(attr0, u1 + axes[0].w/2, v1 + 20);
     //To do: drawing horizontal gridlines
-
+    
     //update point positions - ArrayList of PVector objects 
     for ( int i = 0; i < points.size(); i++) {
       //Map to the horizontal axis
@@ -202,6 +190,33 @@ class Line extends Frame {
   }
   /***end method mousePressed***/
   /***end Line class***/
+}
+void drawAxisValue(int binCount, int xOrigXPos, int yOrigYPos, 
+float minVal, float maxVal, 
+int startPos, int stopPos, String direction){
+    
+    int scale_unit = (int)((maxVal - minVal)/binCount);
+    
+    //draw the tick marks
+    for (int i = 0; i <= binCount; i++) {
+      //tick mark's y position
+      int tickMarkPos;
+      //tick mark's actual value
+      float tickMark = minVal + i*scale_unit;
+      tickMarkPos = (int)map(tickMark, minVal, maxVal, startPos, stopPos);
+      //println("tickMark = " + tickMark + " tickMark_yPos = " + xPos);
+      String num = String.format ("%,.2f", tickMark);
+      if(direction == "horizontal"){
+          text (num, tickMarkPos, yOrigYPos + 10);
+          line( tickMarkPos, yOrigYPos - 10, tickMarkPos, yOrigYPos + 10);
+      }
+      else{
+          text (num, xOrigXPos - 10, tickMarkPos);
+          line( xOrigXPos - 10, tickMarkPos, xOrigXPos + 10, 
+          tickMarkPos);
+      }
+      
+    }   
 }
 //Helper class Marker
 // Used by basic charts taught in class for on demand interactions with users
