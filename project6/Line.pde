@@ -65,6 +65,7 @@ class Line extends Frame {
     int v1 = (int)map( rmin1 - buffer, rmin1, rmax1, v0+h-20, v0+20 );
     int v2 = (int)map( rmax1 + buffer, rmin1, rmax1, v0+h-20, v0+20 );
     //println("axes[0] height = 0, width = max - min= " + (u2 - u1));
+    
     //highlight the origin 
     fill( 255, 0, 0);
     ellipse( u1, v1, 10, 10 );
@@ -75,7 +76,8 @@ class Line extends Frame {
     axes[0].draw();
     axes[1].draw();
 
-    //drawing horizontal tickmarks   
+    //drawing horizontal tickmarks
+    //To do: replace u1, v1 wih axis: xPos, yPos, width and length
     drawAxisValue( binCount, u1, v1, rmin0, rmax0, u0+20, u0+w-20, "horizontal");
     
     //drawing  vertical tickmarks
