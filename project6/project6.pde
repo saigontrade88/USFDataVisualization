@@ -2,29 +2,31 @@ import java.util.*;
 
 Table myTable = null;
 Frame myFrame = null;
+Frame mySplom = null;
 Frame myScatterplot = null;
 Frame myLinechart = null;
 Frame myBarchart = null;
+Frame myPCP = null;
 
 //int selectedPoint = -1;
 HashSet<Integer> selectedPoints = new HashSet<Integer>();
 
-int xStartPos = 50; 
-int yStartPos = 50;
+int xStartPos = 30; 
+int yStartPos = 30;
 
 void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
    //myTable = loadTable( "srsatact.csv", "header" );
-   myTable = loadTable( "srsatact_cut.csv", "header" );
+   //myTable = loadTable( "srsatact_cut.csv", "header" );
+   myTable = loadTable( "ketchup.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
-   // myFrame = new PCP( );
+   myPCP = new PCP( );
    myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-  // myFrame = new splom( );
+   mySplom = new splom( );
    myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-   
-   
+    
 }
 
 
@@ -51,20 +53,34 @@ void draw(){
   if( myFrame != null ){
        //myFrame.setPosition( 100, 100, (width - 100)/2, height - 100);
        //myFrame.draw();
-       int buffer = 50;
+       int buffer = 75;
        
+       int numbUnitWidth = 4;
+       int numbUnitLength = 4;
+       
+       int widthFactor = 2;
+       int heightFactor = 2;
+       
+       //Vertical direction
        myScatterplot.setPosition(xStartPos, yStartPos, 
-       (width - buffer)/3, height/3);
-       myScatterplot.draw();
+        widthFactor*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
+        myScatterplot.draw();
        
-       myLinechart.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), 
-       yStartPos, 
-       myScatterplot.getWidth(), myScatterplot.getHeight());
+       myPCP.setPosition(xStartPos, myScatterplot.getYPos() + myScatterplot.getHeight(), 
+       myScatterplot.getWidth(), myScatterplot.getHeight() - buffer);
+       myPCP.draw();
+       
+       mySplom.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
+       (numbUnitWidth - widthFactor)*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
+       mySplom.draw();
+       
+       myLinechart.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(), 
+       myScatterplot.getWidth()/2, myPCP.getHeight());
        myLinechart.draw();
        
-       myBarchart.setPosition(myScatterplot.getXPos(), 
-       myScatterplot.getYPos() + myScatterplot.getHeight(), 
-       myScatterplot.getWidth(), myScatterplot.getHeight());
+       myBarchart.setPosition(myLinechart.getXPos() + myLinechart.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(),
+       myScatterplot.getWidth()/2, 
+       myPCP.getHeight());
        myBarchart.draw();
        
   }
@@ -76,6 +92,8 @@ void mousePressed(){
   //myFrame.mousePressed();
   myScatterplot.mousePressed();
   myLinechart.mousePressed();
+  myBarchart.mousePressed();
+  myPCP.mousePressed();
 }
 
 
@@ -83,6 +101,8 @@ void mouseReleased(){
   myFrame.mouseReleased();
   myScatterplot.mouseReleased();
   myLinechart.mouseReleased();
+  myBarchart.mouseReleased();
+  myPCP.mouseReleased();
 }
 
 

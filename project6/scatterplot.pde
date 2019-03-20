@@ -34,7 +34,19 @@ class Scatterplot extends Frame{
   int buffer = 5;
   
   void draw(){
-    //update point positions
+   
+   //update point positions
+   
+   //textAlign(CENTER);
+   
+   textSize(8);
+   
+   //fill(255);
+   
+   text (attr0, u0 + w/2, v0 + h - 5);
+   
+   text (attr1, u0 + 5, v0 + h/2);
+      
    for( int i = 0; i < points.size(); i++){
      float x = map( data0[i], rmin0,rmax0, u0+buffer,u0+w-buffer );
      float y = map( data1[i], rmin1,rmax1, v0+h-buffer,v0+buffer );
@@ -86,7 +98,7 @@ class Scatterplot extends Frame{
          selDist = d;
          selected = p;
          //add the point's index to the ordered Integer HashSet
-         println("Index inside of Scatterplot = " + i);
+         //println("Index inside of Scatterplot = " + i);
          if(!selectedPoints.contains(i)) selectedPoints.add(i);
       }
     }    

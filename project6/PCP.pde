@@ -16,6 +16,7 @@ class PCP extends Frame {
      
    }
    
+   int buffer = 5;
    
    void draw() {
      //set position for each axis
@@ -23,7 +24,7 @@ class PCP extends Frame {
        //u: horizontal position, 20 is the buffer
        int u = (int)map( i, 0, axes.size()-1, u0+20, u0+w-20 );
        //h: height of the sketch as defined in the main sketch
-       axes.get(i).setPosition( u, v0, 10, h ); 
+       axes.get(i).setPosition( u, v0 , 10, h ); 
      }      
      
      //draw the axes
@@ -47,7 +48,33 @@ class PCP extends Frame {
             v0 = v1;
          }
       }
+      //interaction
+      for( int i : selectedPoints ){
+         
+         float u0 = axes.get(0).getU(i);
+         float v0 = axes.get(0).getV(i);
+         for( int j = 1; j < axes.size(); j++ ){
+            //determine the x,y position of the current point
+            float u1 = axes.get(j).getU(i);
+            float v1 = axes.get(j).getV(i);
+            pushStyle();
+            strokeWeight(5);  
+            fill(255);
+            line( u0, v0, u1, v1 );
+            popStyle();
+            //update the x,y position of the previous point
+            u0 = u1;
+            v0 = v1;
+         }
+      }
+      
+      //draw the borderline of the scatterplot sketch with black
+     stroke(0);
+     noFill();
+     rect( u0, v0, w, h );
    }
+   
+   //End the draw function
    
 
   void mousePressed(){ 
@@ -89,8 +116,17 @@ class PCPAxis extends Frame {
   }
   
   void draw(){
+    
+    textSize(10);
+   
+   fill(0);
+   
+    text (attr, u0, v0 + 10);
     if( selected ){
        //drag and drop the axis
+       
+       
+   
        u0 = mouseX; 
     }
 
@@ -98,7 +134,7 @@ class PCPAxis extends Frame {
     stroke(0);
     //if the axis is selected then paint it with red
     if( selected ) stroke( 255,0,0);
-    line(u0,v0,u0,v0+h);
+    line(u0,v0 + 15,u0,v0 + h);
     
   }
   

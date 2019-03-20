@@ -51,10 +51,7 @@ class Line extends Frame {
   }
   //draw the chart
   void draw() {
-    //Draw the borderline of the linechart
-    stroke(0);
-    noFill();
-    rect( u0, v0, w, h );
+    
 
     //set position of the axes
     //Horizontal axis
@@ -97,11 +94,11 @@ class Line extends Frame {
       TwoDMarker tempMarker = new TwoDMarker(tempPoint, points.get(i));
       markers.add(tempMarker);
     }
-    /* Debug  
+    /*
      println(markers.size());
      
      for (int i=0; i < markers.size(); i++) {
-     println(markers.get(i).toString());
+     println("Line chart " + markers.get(i).toString());
      }
      */
     stroke(0);
@@ -169,6 +166,11 @@ class Line extends Frame {
      }**/
 
     //Interaction if the point is selected, pop up the description
+    
+    //draw the borderline of the scatterplot sketch with black
+     stroke(0);
+     noFill();
+     rect( u0, v0, w, h );
   }
 
 
@@ -184,7 +186,7 @@ class Line extends Frame {
         selDist = d;
         selectedMarker = temp;
         //add the point's index to the ordered Integer HashSet
-        println("Index inside of Line chart = " + i);
+        //println("Index inside of Line chart = " + i);
         //if(!selectedPointsLineChart.contains(i)) selectedPointsLineChart.add(i);
         if (!selectedPoints.contains(i)) selectedPoints.add(i);
       }
@@ -238,7 +240,7 @@ class TwoDMarker {
 
   //overriding the toString() method
   public String toString() {  
-    return d.toString();
+    return d.toString() + "(" + graphPoint.x + "," + graphPoint.y + ")";
   } 
 
   float getXPos() {
