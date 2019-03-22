@@ -13,19 +13,31 @@ class PCP extends Frame {
    }
 
    void updatePositions(){
+     //new Comparator class - sort the array list based on the horizontal position
+     axes.sort(new Comparator<PCPAxis>(){
+         public int compare( PCPAxis a0, PCPAxis a1){
+           if(a0.u0 < a1.u0) return -1;
+           if(a0.u0 > a1.u0) return 1;
+           return 0;
+         }
+     });
+     //Reset the position
+     for( int i = 0; i < axes.size(); i++ ){
+       int u = (int)map( i, 0, axes.size()-1, u0+20, u0+w-20 );
+       axes.get(i).setPosition( u, v0, 10, h ); 
+     }
+     
      
    }
    
    int buffer = 5;
    
    void draw() {
-     //set position for each axis
-     for( int i = 0; i < axes.size(); i++ ){
-       //u: horizontal position, 20 is the buffer
-       int u = (int)map( i, 0, axes.size()-1, u0+20, u0+w-20 );
-       //h: height of the sketch as defined in the main sketch
-       axes.get(i).setPosition( u, v0 , 10, h ); 
-     }      
+    stroke(0);
+    fill(255);
+    
+     //set position for each axis incorporated with swapping axes interaction
+     updatePositions();      
      
      //draw the axes
      for( int i = 0; i < axes.size(); i++ ){
@@ -59,7 +71,7 @@ class PCP extends Frame {
             float v1 = axes.get(j).getV(i);
             pushStyle();
             strokeWeight(5);  
-            fill(255);
+            stroke(0, 255, 0);
             line( u0, v0, u1, v1 );
             popStyle();
             //update the x,y position of the previous point
@@ -100,12 +112,25 @@ class PCPAxis extends Frame {
   //flag variable for mouse click interaction
   boolean selected = false;
   
+  //used for animation
+  float futU = -1;
+  
   PCPAxis( String attr ){
     this.attr = attr;
     data = myTable.getFloatColumn(attr);
     rmin = min(data);
     rmax = max(data);
   }
+  
+  //implement the setPosition
+  void setPosition( int _u0, int _v0, int _w, int _h ){
+      if( futU == -1 ) u0 = _u0;
+      futU = _u0;
+      v0 = _v0;
+      w = _w;
+      h = _h;
+    }
+  
   
   
   float getU( int idx ){ return u0; }
@@ -116,6 +141,12 @@ class PCPAxis extends Frame {
   }
   
   void draw(){
+    
+    if(selected ){
+      futU = u0 = mouseX;
+    }
+    //lerp function: linear interpolation, animation: easing motion
+    u0 = (int) lerp( u0, futU, 0.05f);
     
     textSize(10);
    

@@ -34,6 +34,9 @@ class Scatterplot extends Frame{
   int buffer = 5;
   
   void draw(){
+    
+    stroke(0);
+    fill(255);
    
    //update point positions
    

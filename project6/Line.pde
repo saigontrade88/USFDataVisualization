@@ -52,7 +52,9 @@ class Line extends Frame {
   //draw the chart
   void draw() {
     
-
+    stroke(0);
+    fill(255);
+    
     //set position of the axes
     //Horizontal axis
     int u1 = (int)map( rmin0 - buffer, rmin0, rmax0, u0+20, u0+w-20 );

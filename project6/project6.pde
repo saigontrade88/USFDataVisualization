@@ -18,8 +18,8 @@ void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
    //myTable = loadTable( "srsatact.csv", "header" );
-   //myTable = loadTable( "srsatact_cut.csv", "header" );
-   myTable = loadTable( "ketchup.csv", "header" );
+   myTable = loadTable( "srsatact_cut.csv", "header" );
+   //myTable = loadTable( "ketchup.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
    myPCP = new PCP( );
