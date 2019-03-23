@@ -18,6 +18,7 @@ class Scatterplot extends Frame{
   //list of data points can be used to replace ArrayList points
   ArrayList<TwoDMarker> markers;
   
+  //Constructor
   Scatterplot( String _attr0, String _attr1 ){
     setAttributes( _attr0, _attr1 );
     
@@ -133,12 +134,30 @@ class Scatterplot extends Frame{
      fill( 0,255,0);
      ellipse( p.x, p.y, 10,10 ); 
    }
-   //if the point is selected, visualize it with red ellipse
-   if( selected != null ){
+   //interaction: if the point is selected, visualize it with red ellipse
+   if( selectedMarker != null ){
      fill( 255,0,0);
-     ellipse( selected.x, selected.y, 10,10 ); 
+     ellipse( selectedMarker.getXPos(), selectedMarker.getYPos(), 10,10 );
+     //draw the horizontal lines
+     
+     stroke(248, 151, 29);
+     line(selectedMarker.getXPos(), selectedMarker.getYPos(),
+          u0+w-buffer , selectedMarker.getYPos());
+     
+     line(selectedMarker.getXPos(), selectedMarker.getYPos(),
+          u0 , selectedMarker.getYPos());
+     
+     //draw the vertical lines    
+     line(selectedMarker.getXPos(), selectedMarker.getYPos(),
+      selectedMarker.getXPos(), v0+buffer);
+      
+      line(selectedMarker.getXPos(), selectedMarker.getYPos(),
+      selectedMarker.getXPos(), v1 + buffer/2);
      
    }
+   
+   
+   
    //draw the borderline of the scatterplot sketch with black
    stroke(0);
    noFill();
@@ -155,6 +174,8 @@ class Scatterplot extends Frame{
       if( d < selDist ){
          selDist = d;
          selectedMarker = temp;
+        
+         
          //add the point's index to the ordered Integer HashSet
          //println("Index inside of Scatterplot = " + i);
          if(!selectedPoints.contains(i)) selectedPoints.add(i);
@@ -171,6 +192,8 @@ class Scatterplot extends Frame{
     */
     
   }
+  //End mouse click
+  void mouseMoved(){  }
   
   
 }

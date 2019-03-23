@@ -120,6 +120,10 @@ void mouseReleased(){
   myPCP.mouseReleased();
 }
 
+void mouseMoved(){
+  myScatterplot.mouseMoved();
+}
+
 
 void keyPressed(){
   switch( key ){
@@ -159,6 +163,7 @@ abstract class Frame {
   abstract void draw();
   void mousePressed(){ }
   void mouseReleased(){ }
+  void mouseMoved(){ }
   
   
   boolean mouseInside(){
