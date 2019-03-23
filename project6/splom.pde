@@ -8,8 +8,10 @@ class splom extends Frame {
      
      for( int i = 0; i < scp.length; i++ ){
         for(int j = 0; j < scp.length; j++ ){
-          if( i > j ) 
+          if( i < j ) {
             scp[i][j] = new Scatterplot( myTable.getColumnTitle(i), myTable.getColumnTitle(j) );
+            println("(i,j)" + "(" + i + "," + j +")");
+          }
           else
             scp[i][j] = null;
         }

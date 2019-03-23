@@ -6,8 +6,17 @@ class Scatterplot extends Frame{
   float rmin0, rmax0;
   float rmin1, rmax1;
   
+  //Axes
+  Axis[] axes = new Axis[2];
+  //used to interaction: clicked and show description
+  TwoDMarker selectedMarker = null;
+  
   PVector selected = null;
+  
   ArrayList<PVector> points = new ArrayList<PVector>();
+  
+  //list of data points can be used to replace ArrayList points
+  ArrayList<TwoDMarker> markers;
   
   Scatterplot( String _attr0, String _attr1 ){
     setAttributes( _attr0, _attr1 );
@@ -15,6 +24,11 @@ class Scatterplot extends Frame{
     for( int i = 0; i < myTable.getRowCount(); i++ ){
       points.add( new PVector() );
     }
+    
+    markers = new ArrayList<TwoDMarker>();
+    
+    axes[0] = new Axis(_attr0);
+    axes[1] = new Axis(_attr1);
   }
   
   void setAttributes( String _attr0, String _attr1 ){
@@ -31,7 +45,7 @@ class Scatterplot extends Frame{
     rmax1 = max(data1);
   }
   
-  int buffer = 5;
+  int buffer = 20;
   
   void draw(){
     
@@ -44,16 +58,48 @@ class Scatterplot extends Frame{
    
    textSize(8);
    
-   //fill(255);
+   fill(0);
    
    text (attr0, u0 + w/2, v0 + h - 5);
    
    text (attr1, u0 + 5, v0 + h/2);
-      
+   
+   //draw horizontal axis
+    int u1 = (int)map( rmin0, rmin0, rmax0, u0+buffer,u0+w-buffer);
+    int u2 = (int)map( rmax0, rmin0, rmax0, u0+buffer,u0+w-buffer );
+
+    //Vertical axis
+    int v1 = (int)map( rmin1, rmin1, rmax1, v0+h-buffer,v0+buffer );
+    int v2 = (int)map( rmax1, rmin1, rmax1, v0+h-buffer,v0+buffer );
+    //println("axes[0] height = 0, width = max - min= " + (u2 - u1));
+    
+    //highlight the origin 
+    fill( 255, 0, 0);
+    ellipse( u1 - buffer/2, v1 + buffer/2, 10, 10 );
+
+    axes[0].setPosition( u1 - buffer/2, v1 + buffer/2, (u2 - u1) + buffer, 0);
+    axes[1].setPosition( u1 - buffer/2, v1 + buffer/2, 0, (v2 - v1) - buffer);
+    
+    axes[0].draw();
+    axes[1].draw();
+    
+    //drawing horizontal tickmarks
+    //To do: replace u1, v1 wih axis: xPos, yPos, width and length
+    drawAxisValue( binCount, u1 - buffer/2, v1 + buffer/2, rmin0, rmax0, u0+buffer, u0+w-buffer, "horizontal");
+    
+    //drawing  vertical tickmarks
+    drawAxisValue( binCount, u1 - buffer/2, v1 + buffer/2, rmin1, rmax1, v0+h-buffer, v0+buffer, "vertical");
+    
+   //read data   
    for( int i = 0; i < points.size(); i++){
      float x = map( data0[i], rmin0,rmax0, u0+buffer,u0+w-buffer );
      float y = map( data1[i], rmin1,rmax1, v0+h-buffer,v0+buffer );
      points.get(i).set(x,y);
+     
+     
+     TwoDPoint tempPoint = new TwoDPoint(data0[i], data1[i]);
+     TwoDMarker tempMarker = new TwoDMarker(tempPoint, points.get(i));
+     markers.add(tempMarker);
    }
    
    // draw points
@@ -70,7 +116,16 @@ class Scatterplot extends Frame{
      if( selectedPoints.contains(i) ) fill( 0,255,0);
      ellipse( p.x, p.y, 10,10 ); 
    }
-   
+   //interaction: if the point is selected, pop up an information window
+    if ( selectedMarker != null ) {  
+      String pop = selectedMarker.toString();
+      ellipse( selectedMarker.getXPos(), selectedMarker.getYPos(), 10, 10 );
+      textSize(12);
+      rectMode(CORNER);
+      fill(0, 0, 0);
+      textAlign(LEFT, TOP);
+      text(pop, selectedMarker.getXPos() + 3, selectedMarker.getYPos() -18);
+    }
    //iteration over the HashSet data structure selectedPoints 
    for( int i : selectedPoints ){
      PVector p = points.get(i);
@@ -94,12 +149,12 @@ class Scatterplot extends Frame{
   
   void mousePressed(){
     float selDist = 5;
-    for( int i = 0; i < points.size(); i++ ){
-      PVector p = points.get(i);
-      float d = dist( p.x,p.y, mouseX, mouseY );
+    for( int i = 0; i < markers.size(); i++ ){
+      TwoDMarker temp = markers.get(i);
+      float d = dist( temp.getXPos(), temp.getYPos(), mouseX, mouseY );
       if( d < selDist ){
          selDist = d;
-         selected = p;
+         selectedMarker = temp;
          //add the point's index to the ordered Integer HashSet
          //println("Index inside of Scatterplot = " + i);
          if(!selectedPoints.contains(i)) selectedPoints.add(i);

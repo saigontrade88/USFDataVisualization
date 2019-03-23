@@ -53,7 +53,8 @@ void draw(){
   if( myFrame != null ){
        //myFrame.setPosition( 100, 100, (width - 100)/2, height - 100);
        //myFrame.draw();
-       int buffer = 75;
+       
+       int buffer = 100;
        
        int numbUnitWidth = 4;
        int numbUnitLength = 4;
@@ -61,23 +62,37 @@ void draw(){
        int widthFactor = 2;
        int heightFactor = 2;
        
+       //draw a function for title
+       String title;
+       title ="Predicting success of all Calvin College 2004 seniors";
+       rect(xStartPos, 0, width - buffer, yStartPos - 2);
+       textSize(16);
+       textAlign(CENTER,CENTER);
+       fill(0);
+       text(title, (width - buffer)/2, (yStartPos - 2)/2);
+       
        //Vertical direction
+       //draw the Scatterplot
        myScatterplot.setPosition(xStartPos, yStartPos, 
         widthFactor*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
         myScatterplot.draw();
        
+       //Parallel coordinate
        myPCP.setPosition(xStartPos, myScatterplot.getYPos() + myScatterplot.getHeight(), 
        myScatterplot.getWidth(), myScatterplot.getHeight() - buffer);
        myPCP.draw();
        
+       //Splom
        mySplom.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
        (numbUnitWidth - widthFactor)*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
        mySplom.draw();
        
+       //Line chart
        myLinechart.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(), 
        myScatterplot.getWidth()/2, myPCP.getHeight());
        myLinechart.draw();
        
+       //Bar chart
        myBarchart.setPosition(myLinechart.getXPos() + myLinechart.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(),
        myScatterplot.getWidth()/2, 
        myPCP.getHeight());

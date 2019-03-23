@@ -137,36 +137,11 @@ class Line extends Frame {
     int prevIndex = 0;
 
     for (int k=1; k < myTable.getRowCount(); k++) {
-
-      //println("(" + prevIndex + "," + k + ")");
-
-      //float x0 = markers.get(0).getXPos();
-      //float y0 = markers.get(0).getYPos();
-      //Color determine
-      //myList.get(k).colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
-
       //Draw line
       line(markers.get(prevIndex).getXPos(), markers.get(prevIndex).getYPos(), markers.get(k).getXPos(), markers.get(k).getYPos());
-
       prevIndex = k;
-      //Debug: text(myList.get(k).toString(),xPos, yPos + 2);
     }
-    /**
-     for (int k=0; k < markers.size(); k++) {
-     float x0 = markers.get(0).getXPos();
-     float y0 = markers.get(0).getYPos();
-     
-     for (int j=1; j < markers.size(); j++){
-     float x1 = markers.get(j).getXPos();
-     float y1 = markers.get(j).getYPos();
-     
-     line( x0, y0, x1, y1 );
-     //update the x,y position of the previous point
-     x0 = x1;
-     y0 = y1;
-     }
-     }**/
-
+   
     //Interaction if the point is selected, pop up the description
     
     //draw the borderline of the scatterplot sketch with black
