@@ -111,11 +111,14 @@ class Scatterplot extends Frame{
    stroke(0);
    strokeWeight(1); //default
    //for( PVector p : points ){
-   for( int i = 0; i < points.size(); i++ ){
-     PVector p = points.get(i);
-     fill( 200 );
+   for( int i = 0; i < markers.size(); i++ ){
+     TwoDMarker p = markers.get(i);
+     TwoDPoint temp = new TwoDPoint(markers.get(i).getTwoDPoint());
+     //fill( 200 );
      if( selectedPoints.contains(i) ) fill( 0,255,0);
-     ellipse( p.x, p.y, 10,10 ); 
+     ellipse( p.getXPos(), p.getYPos(), 10,10 ); 
+     temp.colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
+     
    }
    //interaction: if the point is selected, pop up an information window
     if ( selectedMarker != null ) {  
@@ -136,8 +139,10 @@ class Scatterplot extends Frame{
    }
    //interaction: if the point is selected, visualize it with red ellipse
    if( selectedMarker != null ){
-     fill( 255,0,0);
-     ellipse( selectedMarker.getXPos(), selectedMarker.getYPos(), 10,10 );
+     
+     fill( 248, 151, 29);
+     
+     star(selectedMarker.getXPos(), selectedMarker.getYPos(), 3, 7, 5); 
      //draw the horizontal lines
      
      stroke(248, 151, 29);
@@ -196,4 +201,20 @@ class Scatterplot extends Frame{
   void mouseMoved(){  }
   
   
+  
+}
+//Source: https://processing.org/examples/star.html
+void star(float x, float y, float radius1, float radius2, int npoints) {
+  float angle = TWO_PI / npoints;
+  float halfAngle = angle/2.0;
+  beginShape();
+  for (float a = 0; a < TWO_PI; a += angle) {
+    float sx = x + cos(a) * radius2;
+    float sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a+halfAngle) * radius1;
+    sy = y + sin(a+halfAngle) * radius1;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
 }

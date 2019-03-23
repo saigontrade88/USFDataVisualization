@@ -226,6 +226,11 @@ class TwoDMarker {
   float getYPos() {
     return graphPoint.y;
   }
+  
+  TwoDPoint getTwoDPoint(){
+    return d;
+  }
+  
 
   float distanceTo(TwoDMarker b) {
     return dist(getXPos(), getYPos(), b.getXPos(), b.getYPos());

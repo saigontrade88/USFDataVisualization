@@ -13,6 +13,11 @@ class TwoDPoint{
       yVal = 0.0;
   }
   
+  public TwoDPoint(TwoDPoint p){
+      xVal = p.getXVal();
+      yVal = p.getYVal();
+  }
+  
   //overriding the toString() method
   public String toString(){  
       return  "(" + xVal + "," + yVal + ")";  
