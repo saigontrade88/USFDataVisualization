@@ -25,7 +25,7 @@ void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
    myTable = loadTable( "srsatact.csv", "header" );
-  // myTable = loadTable( "srsatact_cut.csv", "header" );
+   //myTable = loadTable( "srsatact_cut.csv", "header" );
    //myTable = loadTable( "ketchup.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
@@ -50,6 +50,22 @@ void fileSelected(File selection) {
   }
 }
 
+void drawTextOnScreen(float x, float y, float rotate, int textSize, String text)
+  {
+    pushMatrix();
+    
+    textSize(textSize);
+    fill(0,51,0);
+    stroke(0,0,0);
+    //translate(x,y);
+    rotate(radians(rotate));
+    textAlign(CENTER,CENTER);
+    text(text,x, y);
+    
+    popMatrix();
+    
+  }
+
 
 void draw(){
   background( 255 );
@@ -72,11 +88,11 @@ void draw(){
        //draw a function for title
        String title;
        title ="Predicting success of all Calvin College 2004 seniors";
+       //Border of the textbox
        rect(xStartPos, 0, width - buffer, yStartPos - 2);
-       textSize(16);
-       textAlign(CENTER,CENTER);
-       fill(0);
-       text(title, (width - buffer)/2, (yStartPos - 2)/2);
+           
+       drawTextOnScreen((width - buffer)/2, (yStartPos - 2)/2,
+       0, 16, title);
        
        //Vertical direction
        //draw the Scatterplot
@@ -84,22 +100,22 @@ void draw(){
         widthFactor*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
         myScatterplot.draw();
        
-       //Parallel coordinate
+       //Parallel coordinate based on Scatterplot position
        myPCP.setPosition(xStartPos, myScatterplot.getYPos() + myScatterplot.getHeight(), 
        myScatterplot.getWidth(), myScatterplot.getHeight() - buffer);
        myPCP.draw();
        
-       //Splom
+       //Splom based on Scatterplot position
        mySplom.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
        (numbUnitWidth - widthFactor)*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
        mySplom.draw();
        
-       //Line chart
+       //Line chart based on Scatterplot position
        myLinechart.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(), 
        myScatterplot.getWidth()/2, myPCP.getHeight());
        myLinechart.draw();
        
-       //Bar chart
+       //Bar chart based on line chart position
        myBarchart.setPosition(myLinechart.getXPos() + myLinechart.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(),
        myScatterplot.getWidth()/2, 
        myPCP.getHeight());

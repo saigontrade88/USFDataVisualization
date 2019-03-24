@@ -96,13 +96,13 @@ class Line extends Frame {
       TwoDMarker tempMarker = new TwoDMarker(tempPoint, points.get(i));
       markers.add(tempMarker);
     }
-    /*
+/**    
      println(markers.size());
      
      for (int i=0; i < markers.size(); i++) {
      println("Line chart " + markers.get(i).toString());
-     }
-     */
+     }**/
+     
     stroke(0);
     strokeWeight(1); //default
     //draw points with ellipse
@@ -213,6 +213,11 @@ class TwoDMarker {
   TwoDMarker(TwoDPoint _d, PVector _p) {
     d = new TwoDPoint(_d.getXVal(), _d.getYVal());
     graphPoint = new PVector(_p.x, _p.y);
+  }
+  
+  TwoDMarker(TwoDPoint _d, float _x, float _y) {
+    d = new TwoDPoint(_d.getXVal(), _d.getYVal());
+    graphPoint = new PVector(_x, _y);
   }
 
   //overriding the toString() method
