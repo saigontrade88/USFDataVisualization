@@ -46,6 +46,8 @@ class Bar extends Frame {
     
     stroke(0);
     fill(255);
+    
+    
         
     //set position of the axes
     //Horizontal axis
@@ -73,6 +75,17 @@ class Bar extends Frame {
     //print("Bar chart h  inside Draw =" + h);
     
     readData();
+    
+       String title;
+       title = attr1 + " Distribution";
+       //Border of the textbox
+       
+       //rect( u0, v0, w, h );
+       
+       rect(u0, v0, w, 18);
+           
+       this.drawTextOnScreen( (this.u0 + this.w)/2, 18/2,
+       0, 16, title);
         
     /**  
      for (int i=0; i < markers.size(); i++) {

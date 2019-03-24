@@ -50,21 +50,6 @@ void fileSelected(File selection) {
   }
 }
 
-void drawTextOnScreen(float x, float y, float rotate, int textSize, String text)
-  {
-    pushMatrix();
-    
-    textSize(textSize);
-    fill(0,51,0);
-    stroke(0,0,0);
-    //translate(x,y);
-    rotate(radians(rotate));
-    textAlign(CENTER,CENTER);
-    text(text,x, y);
-    
-    popMatrix();
-    
-  }
 
 
 void draw(){
@@ -91,7 +76,7 @@ void draw(){
        //Border of the textbox
        rect(xStartPos, 0, width - buffer, yStartPos - 2);
            
-       drawTextOnScreen((width - buffer)/2, (yStartPos - 2)/2,
+       myFrame.drawTextOnScreen((width - buffer)/2, (yStartPos - 2)/2,
        0, 16, title);
        
        //Vertical direction
@@ -187,6 +172,23 @@ abstract class Frame {
   void mousePressed(){ }
   void mouseReleased(){ }
   void mouseMoved(){ }
+  
+  void drawTextOnScreen(float x, float y, float rotate, int textSize, String text)
+  {
+    pushMatrix();
+    
+    textSize(textSize);
+    fill(0,51,0);
+    stroke(0,0,0);
+    //translate(x,y);
+    rotate(radians(rotate));
+    textAlign(CENTER,CENTER);
+    text(text,x, y);
+    
+    popMatrix();
+    
+  }
+  //End method draw text on screen
   
   
   boolean mouseInside(){
