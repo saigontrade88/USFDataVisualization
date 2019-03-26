@@ -252,7 +252,8 @@ class TwoDMarker {
 
   //overriding the toString() method
   public String toString() {  
-    return d.toString() + "(" + graphPoint.x + "," + graphPoint.y + ")";
+    return d.toString();
+    //Debug: return d.toString() + "(" + graphPoint.x + "," + graphPoint.y + ")";
   } 
 
   float getXPos() {

@@ -16,16 +16,16 @@ int yStartPos = 30;
 
 float THRESHOLD_INTERMEDIATE_SATM = 615;
 float THRESHOLD_HIGH_SATM = 660;
-float THRESHOLD_INTERMEDIATE_SATV = 615;
-float THRESHOLD_HIGH_SATV = 650;
+float THRESHOLD_INTERMEDIATE_SATV = 0;
+float THRESHOLD_HIGH_SATV = 0;
 float THRESHOLD_INTERMEDIATE_ACT = 10;
 float THRESHOLD_HIGH_ACT = 10;
 
 void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
-   //myTable = loadTable( "srsatact.csv", "header" );
-   myTable = loadTable( "srsatact_cut.csv", "header" );
+   myTable = loadTable( "srsatact.csv", "header" );
+   //myTable = loadTable( "srsatact_cut.csv", "header" );
    //myTable = loadTable( "ketchup.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );

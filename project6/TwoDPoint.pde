@@ -29,18 +29,22 @@ class TwoDPoint{
     return yVal;
   }
     
-  private void colorDetermineXVal(float THRESHOLD_INTERMEDIATE, float THRESHOLD_HIGH) {
+  private void colorDetermineXVal(float THRESHOLD_INTERMEDIATE_SATM, 
+  float THRESHOLD_HIGH_SATM,
+  float THRESHOLD_INTERMEDIATE_SATV,
+  float THRESHOLD_HIGH_SATV) {
     
     //int yellow = color(255, 255, 0);
     //int blue= color(0,0,255);
     //int red= color(255,0,0);
-    if( getXVal() <=THRESHOLD_INTERMEDIATE)
+    if( getXVal() <=THRESHOLD_INTERMEDIATE_SATM)
     //yellow
         fill(255, 255, 0);
-    else if((getXVal()>THRESHOLD_INTERMEDIATE) & (getXVal()<=THRESHOLD_HIGH))
+    else if((getXVal()>THRESHOLD_INTERMEDIATE_SATM) 
+    & (getXVal()<=THRESHOLD_HIGH_SATM))
     //blue
         fill(0,0,255);  
-    else if((getXVal()>THRESHOLD_HIGH))
+    else if((getXVal()>THRESHOLD_HIGH_SATM))
     //red
         fill(255,0,0);
   }

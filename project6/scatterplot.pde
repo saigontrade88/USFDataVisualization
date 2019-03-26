@@ -117,7 +117,10 @@ class Scatterplot extends Frame{
      //fill( 200 );
      if( selectedPoints.contains(i) ) fill( 0,255,0);
      ellipse( p.getXPos(), p.getYPos(), 10,10 ); 
-     temp.colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, THRESHOLD_HIGH_SATM);
+     //temp.colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, 
+     //THRESHOLD_HIGH_SATM,
+     //THRESHOLD_INTERMEDIATE_SATV,
+     //THRESHOLD_HIGH_SATV);
      
    }
    //interaction: if the point is selected, pop up an information window
@@ -137,13 +140,15 @@ class Scatterplot extends Frame{
      fill( 0,255,0);
      ellipse( p.x, p.y, 10,10 ); 
    }
-   //interaction: if the point is selected, visualize it with red ellipse
+   //interaction: if the point is selected, visualize it with a star shape
+   //Furthermore, draw the cross lines 
    
    if( selectedMarker != null ){
      
      fill( 248, 151, 29);
      
-     star(selectedMarker.getXPos(), selectedMarker.getYPos(), 3, 7, 5); 
+     //void star(float x, float y, float radius1, float radius2, int npoints)    
+     star(selectedMarker.getXPos(), selectedMarker.getYPos(), 5, 11, 5); 
      //draw the horizontal lines
      
      stroke(248, 151, 29);
@@ -151,7 +156,7 @@ class Scatterplot extends Frame{
           u0+w-buffer , selectedMarker.getYPos());
      
      line(selectedMarker.getXPos(), selectedMarker.getYPos(),
-          u0 , selectedMarker.getYPos());
+          axes[1].getXPos() , selectedMarker.getYPos());
      
      //draw the vertical lines    
      line(selectedMarker.getXPos(), selectedMarker.getYPos(),
