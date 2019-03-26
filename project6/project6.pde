@@ -24,8 +24,8 @@ float THRESHOLD_HIGH_ACT = 10;
 void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
-   myTable = loadTable( "srsatact.csv", "header" );
-   //myTable = loadTable( "srsatact_cut.csv", "header" );
+   //myTable = loadTable( "srsatact.csv", "header" );
+   myTable = loadTable( "srsatact_cut.csv", "header" );
    //myTable = loadTable( "ketchup.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
@@ -86,16 +86,19 @@ void draw(){
         myScatterplot.draw();
        
        //Parallel coordinate based on Scatterplot position
+       
        myPCP.setPosition(xStartPos, myScatterplot.getYPos() + myScatterplot.getHeight(), 
        myScatterplot.getWidth(), myScatterplot.getHeight() - buffer);
        myPCP.draw();
        
        //Splom based on Scatterplot position
+       
        mySplom.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
        (numbUnitWidth - widthFactor)*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
        mySplom.draw();
        
        //Line chart based on Scatterplot position
+       
        myLinechart.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(), 
        myScatterplot.getWidth()/2, myPCP.getHeight());
        myLinechart.draw();
@@ -183,7 +186,7 @@ abstract class Frame {
     //translate(x,y);
     rotate(radians(rotate));
     textAlign(CENTER,CENTER);
-    text(text,x, y);
+    text(text, u0 + x, v0 + y);
     
     popMatrix();
     

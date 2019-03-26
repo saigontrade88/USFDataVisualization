@@ -19,6 +19,18 @@ class splom extends Frame {
    }
    
    void draw(){
+     
+     String title;
+       
+       title = "Scatterplot Matrix(SPLOM)";
+       //Border of the textbox
+       
+       //rect( u0, v0, w, h );
+       fill(255);   
+           
+       this.drawTextOnScreen(w/2, 18/2,
+       0, 12, title);
+       
      for( int i = 0; i < scp.length; i++ ){
         for(int j = 0; j < scp.length; j++ ){
           float x = map( i, 0, scp.length, u0, u0+w );

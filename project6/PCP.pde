@@ -1,6 +1,4 @@
 
-
-
 class PCP extends Frame {
   
     ArrayList<PCPAxis> axes = new ArrayList<PCPAxis>( );
@@ -33,6 +31,18 @@ class PCP extends Frame {
    int buffer = 5;
    
    void draw() {
+     
+     String title;
+       
+       title = "Parallel Coordinate Plot";
+       //Border of the textbox
+       
+       //rect( u0, v0, w, h );
+       fill(255);   
+           
+       this.drawTextOnScreen(w/2, 18/2,
+       0, 12, title);
+       
     stroke(0);
     fill(255);
     
@@ -142,6 +152,9 @@ class PCPAxis extends Frame {
   
   void draw(){
     
+    
+        
+    
     if(selected ){
       futU = u0 = mouseX;
     }
@@ -150,14 +163,13 @@ class PCPAxis extends Frame {
     
     textSize(10);
    
-   fill(0);
-   
-    text (attr, u0, v0 + 10);
+    fill(0);
+     
+    //draw label 
+    text (attr, u0, v0 + 15);
     if( selected ){
        //drag and drop the axis
        
-       
-   
        u0 = mouseX; 
     }
 
@@ -165,7 +177,7 @@ class PCPAxis extends Frame {
     stroke(0);
     //if the axis is selected then paint it with red
     if( selected ) stroke( 255,0,0);
-    line(u0,v0 + 15,u0,v0 + h);
+    line(u0, v0 + 20, u0, v0 + h);
     
   }
   

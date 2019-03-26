@@ -19,11 +19,12 @@ class parallelcoordinates extends Frame{
     setAttributes(_attr0, _attr1, _attr2, _attr3);
     
     //Initialize the ArrayList points of float objects
-    for( int i = 0; i < myTable.getRowCount(); i++ ){
+    for( int row = 0; row < myTable.getRowCount(); row++ ){
       //this ArrayList containing of the float objects is redundant
       points.add(new float[myTable.getColumnCount()]);
       //myPVectorList.add( new PVector() );
     }
+    //Checkpoint 1: println("Your points array list's size. Expected =  2" + points.size());
   }
   //End Constructor
   
@@ -55,16 +56,36 @@ class parallelcoordinates extends Frame{
   
   void draw(){
     //update point positions
-   for( int i = 0; i < points.size(); i++){
-     float y1 = map( data0[i], rmin0,rmax0, v0+h-buffer,v0+buffer );
-     float y2 = map( data1[i], rmin1,rmax1, v0+h-buffer,v0+buffer );
-     float y3 = map( data2[i], rmin2,rmax2, v0+h-buffer,v0+buffer );
-     float y4 = map( data3[i], rmin3,rmax3, v0+h-buffer,v0+buffer );
+   for( int row = 0; row < points.size(); row++){
+     
+     print(data0[0] + "\n");
+     print(data1[0] + "\n");
+     print(data2[0] + "\n");
+     print(data3[0] + "\n");
+        
+        
+     float y1 = map( data0[row], rmin0,rmax0, v0+h-buffer,v0+buffer );
+     float y2 = map( data1[row], rmin1,rmax1, v0+h-buffer,v0+buffer );
+     float y3 = map( data2[row], rmin2,rmax2, v0+h-buffer,v0+buffer );
+     float y4 = map( data3[row], rmin3,rmax3, v0+h-buffer,v0+buffer );
      
      float []input={y1, y2, y3, y4};
-     points.set(i, input);
+     
+     for(int i = 0; i < input.length; i++)
+        print(input[i] + "\n");
+    
+     points.set(row, input);
     // myPVectorList.get(i).set(x,y);  
    }
+   
+   println("Your points array list's size. Expected =  2" + points.size());
+        
+   /*
+   for( PVector p : myPVectorList ){
+        println("The PVector point " + j +  " X = " + p.x + ", Y = " + p.y);
+        j+=1;
+   }*/
+   
    //update PVector
    for( float[] p : points ){  
      for( int i = 0; i < myTable.getColumnCount(); i++ ){
@@ -142,11 +163,11 @@ class parallelcoordinates extends Frame{
      
    }
    //Handle mouse click
-   /*
+  
    for( PVector p : myPVectorList ){
      fill( 200 );
      if( p == selected ) fill (255,0,0); 
-   }*/
+   }
    
    
   }
@@ -167,10 +188,12 @@ class parallelcoordinates extends Frame{
     float selDist = 5;
     println("mouse X = " + mouseX);
     println("mouse Y = " + mouseY);
-    float scaledMouseY = map( mouseY, rmin0,rmax0, v0+h-buffer,v0+buffer );
-    println("scaled mouse Y = " + scaledMouseY);
+    //float scaledMouseY = map( mouseY, rmin0, rmax0, v0+h-buffer, v0+buffer);
+    //println("scaled mouse Y = " + scaledMouseY);
     for( PVector p : myPVectorList ){
-      float d = dist( p.x,p.y, mouseX, scaledMouseY );
+      float d = dist( p.x,p.y, mouseX, mouseY );
+      println("X-pos = " + p.x + " Y-pos = " + p.y);
+      //println("You hit it! X Point pos = " + myScatterPoints.get(k).getXPos() + "," + myScatterPoints.get(k).getYPos()); 
       if( d < selDist ){
          selDist = d;
          selected = p;

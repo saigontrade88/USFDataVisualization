@@ -5,13 +5,13 @@ Frame myFrame = null;
 
 void setup(){
   size(1000,600);  
-  selectInput("Select a file to process:", "fileSelected");
+ // selectInput("Select a file to process:", "fileSelected");
   
   //myTable = loadTable( "srsatact.csv", "header" );
   
-  //myTable = loadTable( "ketchup.csv", "header" );
+  myTable = loadTable( "ketchup_2_records.csv", "header" );
   
-  //myFrame = new parallelcoordinates( myTable.getColumnTitle(0), myTable.getColumnTitle(1), myTable.getColumnTitle(2),myTable.getColumnTitle(3));
+  myFrame = new parallelcoordinates( myTable.getColumnTitle(0), myTable.getColumnTitle(1), myTable.getColumnTitle(2),myTable.getColumnTitle(3));
   
 }
 
@@ -24,7 +24,7 @@ void fileSelected(File selection) {
     println("User selected " + selection.getAbsolutePath());
     myTable = loadTable( selection.getAbsolutePath(), "header" );
     //myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-    myFrame = new parallelcoordinates( myTable.getColumnTitle(0), myTable.getColumnTitle(1), myTable.getColumnTitle(2),myTable.getColumnTitle(3)); //<>//
+    myFrame = new parallelcoordinates( myTable.getColumnTitle(0), myTable.getColumnTitle(1), myTable.getColumnTitle(2),myTable.getColumnTitle(3)); //<>// //<>//
     //myFrame = new splom( );
   }
 }
@@ -40,7 +40,7 @@ void draw(){
        myFrame.setPosition( 50, 50, width-100, height - 100 );
        myFrame.draw();
   }
-  //noLoop();
+  noLoop();
 }
 
 

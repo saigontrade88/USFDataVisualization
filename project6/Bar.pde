@@ -47,7 +47,20 @@ class Bar extends Frame {
     stroke(0);
     fill(255);
     
-    
+    String title;
+       
+       title = attr1 + "'s Distribution";
+       //Border of the textbox
+       
+       //rect( u0, v0, w, h );
+       fill(255);
+       
+       rect(u0, v0, w, 18);
+       
+           
+       this.drawTextOnScreen( (this.w)/2, 18/2,
+       0, 12, title);
+        
         
     //set position of the axes
     //Horizontal axis
@@ -67,7 +80,25 @@ class Bar extends Frame {
     axes[1].setPosition( u1, v1, 0, (v2 - v1));
 
     axes[0].draw();
+    
+     String axisLabel;
+       
+       axisLabel = "Students";
+       //Border of the textbox
+           
+       axes[0].drawTextOnScreen( w/2, +8,
+       0, 12, axisLabel);
+       
     axes[1].draw();
+    
+    axisLabel = attr1;
+       //Border of the textbox
+           
+       axes[1].drawTextOnScreen( -10, -h/2,
+       0, 12, axisLabel);
+       
+    //drawing  vertical tickmarks
+    drawAxisValue( binCount, u1, v1, rmin1, rmax1, v0+h-20, v0+20, "vertical");
     
     //Read the data
     
@@ -76,17 +107,7 @@ class Bar extends Frame {
     
     readData();
     
-       String title;
-       title = attr1 + " Distribution";
-       //Border of the textbox
        
-       //rect( u0, v0, w, h );
-       
-       rect(u0, v0, w, 18);
-           
-       this.drawTextOnScreen( (this.u0 + this.w)/2, 18/2,
-       0, 16, title);
-        
     /**  
      for (int i=0; i < markers.size(); i++) {
      println("Bar chart " + markers.get(i).toString());

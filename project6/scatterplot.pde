@@ -138,6 +138,7 @@ class Scatterplot extends Frame{
      ellipse( p.x, p.y, 10,10 ); 
    }
    //interaction: if the point is selected, visualize it with red ellipse
+   
    if( selectedMarker != null ){
      
      fill( 248, 151, 29);
@@ -172,7 +173,7 @@ class Scatterplot extends Frame{
   
   
   void mousePressed(){
-    float selDist = 5;
+    float selDist = 10;
     for( int i = 0; i < markers.size(); i++ ){
       TwoDMarker temp = markers.get(i);
       float d = dist( temp.getXPos(), temp.getYPos(), mouseX, mouseY );

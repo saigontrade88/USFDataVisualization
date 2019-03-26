@@ -73,7 +73,23 @@ class Line extends Frame {
     axes[1].setPosition( u1, v1, 0, (v2 - v1));
 
     axes[0].draw();
+    
+    String axisLabel;
+       
+       axisLabel = attr0;
+       //Border of the textbox
+           
+       axes[0].drawTextOnScreen( w/2, - 10,
+       0, 12, axisLabel);
+       
     axes[1].draw();
+    
+    axisLabel = attr1;
+       //Border of the textbox
+           
+       axes[1].drawTextOnScreen( -10, -h/2,
+       0, 12, axisLabel);
+
 
     //drawing horizontal tickmarks
     //To do: replace u1, v1 wih axis: xPos, yPos, width and length
@@ -102,6 +118,20 @@ class Line extends Frame {
      for (int i=0; i < markers.size(); i++) {
      println("Line chart " + markers.get(i).toString());
      }**/
+     
+     String title;
+       
+       title = attr0 + " versus " + attr1;
+       //Border of the textbox
+       
+       //rect( u0, v0, w, h );
+       fill(255);
+       
+       rect(u0, v0, w, 18);
+       
+           
+       this.drawTextOnScreen( (this.w)/2, 18/2,
+       0, 12, title);
      
     stroke(0);
     strokeWeight(1); //default
