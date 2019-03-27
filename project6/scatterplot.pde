@@ -56,14 +56,23 @@ class Scatterplot extends Frame{
    //update point positions
    
    //textAlign(CENTER);
+      
+   //text (attr0, u0 + w/2, v0 + h - 5);
    
-   textSize(8);
+   String title;
+       
+       title = attr0 + " versus " + attr1;
+       //Border of the textbox
+       
+       //rect( u0, v0, w, h );
+       fill(255);
+       
+       //rect(u0, v0, w, 18);
+       
+       textAlign(CENTER, CENTER);    
+       this.drawTextOnScreen( (this.w)/2, 18/2,
+       0, 12, title);
    
-   fill(0);
-   
-   text (attr0, u0 + w/2, v0 + h - 5);
-   
-   text (attr1, u0 + 5, v0 + h/2);
    
    //draw horizontal axis
     int u1 = (int)map( rmin0, rmin0, rmax0, u0+buffer,u0+w-buffer);
@@ -181,7 +190,7 @@ class Scatterplot extends Frame{
    //draw the borderline of the scatterplot sketch with black
    stroke(0);
    noFill();
-   rect( u0, v0, w, h );
+   //rect( u0, v0, w, h );
    
   }
   

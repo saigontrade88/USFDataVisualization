@@ -55,21 +55,21 @@ class Bar extends Frame {
        //rect( u0, v0, w, h );
        fill(255);
        
-       rect(u0, v0, w, 18);
+       //rect(u0, v0, w, 18);
        
-           
+       textAlign(CENTER, CENTER);   
        this.drawTextOnScreen( (this.w)/2, 18/2,
        0, 12, title);
         
         
     //set position of the axes
     //Horizontal axis
-    int u1 = (int)map( rmin0 - buffer, rmin0, rmax0, u0+20, u0+w-20 );
-    int u2 = (int)map( rmax0 + buffer, rmin0, rmax0, u0+20, u0+w-20 );
+    int u1 = (int)map( rmin0 , rmin0, rmax0, u0+20, u0+w-20 );
+    int u2 = (int)map( rmax0 , rmin0, rmax0, u0+20, u0+w-20 );
 
     //Vertical axis
-    int v1 = (int)map( rmin1 - buffer, rmin1, rmax1, v0+h-20, v0+20 );
-    int v2 = (int)map( rmax1 + buffer, rmin1, rmax1, v0+h-20, v0+20 );
+    int v1 = (int)map( rmin1 , rmin1, rmax1, v0+h-20, v0+20 );
+    int v2 = (int)map( rmax1 , rmin1, rmax1, v0+h-20, v0+20 );
     //println("axes[0] height = 0, width = max - min= " + (u2 - u1));
     
     //highlight the origin 
@@ -83,7 +83,7 @@ class Bar extends Frame {
     
      String axisLabel;
        
-       axisLabel = "Students";
+       axisLabel = "Each observation";
        //Border of the textbox
            
        axes[0].drawTextOnScreen( w/2, +8,
@@ -98,6 +98,9 @@ class Bar extends Frame {
        0, 12, axisLabel);
        
     //drawing  vertical tickmarks
+    
+   // drawAxisValue( binCount, u1, v1, rmin1, rmax1, v0+h-20, v0+20, "vertical");
+    
     drawAxisValue( binCount, u1, v1, rmin1, rmax1, v0+h-20, v0+20, "vertical");
     
     //Read the data
@@ -134,7 +137,7 @@ class Bar extends Frame {
     //draw the borderline of the scatterplot sketch with black
      stroke(0);
      noFill();
-     rect( u0, v0, w, h );
+    // rect( u0, v0, w, h );
     
     
   }
@@ -163,12 +166,12 @@ class Bar extends Frame {
   void drawBar(){
       //println(markers.size());
      //println("Inside drawBar function " + myTable.getRowCount());
-     float rectWidth = (axes[0].getWidth() - 40)/myTable.getRowCount();
+     float rectWidth = (rmax1 - rmin1)/myTable.getRowCount();
      
      for ( int i = 0; i < myTable.getRowCount(); i++) {
          fill(80, 80, 100);
          //float xPos =  map(i, 0, myTable.getRowCount(), u0+20, u0+w-20);
-         fill(255);
+         //fill(255);
          //println("Bar chart, yPos = " + markers.get(i).getYPos());
          //ellipse(markers.get(i).getXPos(), markers.get(i).getYPos(), 10, 10);
          //if( selected ) fill(255,0,0);

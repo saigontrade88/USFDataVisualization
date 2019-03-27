@@ -6,7 +6,12 @@ class PCP extends Frame {
     
    PCP( ){
      for( int i = 0; i < myTable.getColumnCount(); i++ ){
-       axes.add( new PCPAxis( myTable.getColumnTitle(i) ) );
+       //Remove categorical variable
+       if(!myTable.getColumnTitle(i).equals("Class")){
+         //boolean temp = trim(myTable.getColumnTitle(i)) != "Class";
+         //println(myTable.getColumnTitle(i));
+         axes.add( new PCPAxis( myTable.getColumnTitle(i) ) );
+       }
      }
    }
 
@@ -39,7 +44,8 @@ class PCP extends Frame {
        
        //rect( u0, v0, w, h );
        fill(255);   
-           
+       
+       textAlign(CENTER, CENTER);   
        this.drawTextOnScreen(w/2, 18/2,
        0, 12, title);
        
@@ -93,7 +99,7 @@ class PCP extends Frame {
       //draw the borderline of the scatterplot sketch with black
      stroke(0);
      noFill();
-     rect( u0, v0, w, h );
+    // rect( u0, v0, w, h );
    }
    
    //End the draw function
@@ -159,7 +165,7 @@ class PCPAxis extends Frame {
       futU = u0 = mouseX;
     }
     //lerp function: linear interpolation, animation: easing motion
-    u0 = (int) lerp( u0, futU, 0.05f);
+    u0 = (int) lerp( u0, futU, 0.2f);
     
     textSize(10);
    

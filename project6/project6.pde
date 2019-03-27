@@ -8,7 +8,7 @@ Frame myLinechart = null;
 Frame myBarchart = null;
 Frame myPCP = null;
 
-String fileName ="srsatact";
+String fileName;
 
 //int selectedPoint = -1;
 HashSet<Integer> selectedPoints = new HashSet<Integer>();
@@ -25,16 +25,18 @@ float THRESHOLD_HIGH_ACT = 10;
 
 void setup(){
    size(1200,700);  
-  //selectInput("Select a file to process:", "fileSelected");
+   selectInput("Select a file to process:", "fileSelected");
+  /** Development Purpose
    myTable = loadTable( "srsatact.csv", "header" );
    //myTable = loadTable( "srsatact_cut.csv", "header" );
-  // myTable = loadTable( "iris.csv", "header" );
+   myTable = loadTable( "iris.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
    myPCP = new PCP( );
    myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    mySplom = new splom( );
    myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+   **/
     
 }
 
@@ -46,10 +48,15 @@ void fileSelected(File selection) {
   } else {
     println("User selected " + selection.getAbsolutePath());
     fileName = selection.getName();
+    print(fileName);
     myTable = loadTable( selection.getAbsolutePath(), "header" );
-    //myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-    myFrame = new splom( );
-   // myFrame = new PCP( );
+    myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+   myFrame = new splom( );
+   myPCP = new PCP( );
+   myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+   mySplom = new splom( );
+   myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
   }
 }
 
@@ -64,7 +71,7 @@ void draw(){
   if( myFrame != null ){
        //myFrame.setPosition( 100, 100, (width - 100)/2, height - 100);
        //myFrame.draw();
-       
+       //println("Inside myFrame");
        int buffer = 100;
        
        int numbUnitWidth = 4;
@@ -75,10 +82,10 @@ void draw(){
        
        //draw a function for title
        String title;
-       if(fileName == "srsatact")
+       if(fileName.equals("srsatact.csv"))
            title ="Predicting success of all Calvin College 2004 seniors";
        else   
-           title ="Predicting the ketchup price";
+           title ="Predicting analysis of IRIS data set";
        //Border of the textbox
        //rect(xStartPos, 0, width - buffer, yStartPos - 2);
        textAlign(CENTER,CENTER);    
@@ -117,27 +124,26 @@ void draw(){
        
        //draw a function for title
        String ins;
-       ins ="Interactions: Select a point in the Scatterplot to view its details.\n"
-       + "Then the data point is highlighted it in all other views.";
+       ins ="*Interactions:\n - Select a point in the Scatterplot to view its details.\n"
+       + "    Then the data point is highlighted it in all other views."
+       + " User can also swap axes in PCP.\n";
        //Border of the textbox
        //rect(myScatterplot.getXPos(),  myPCP.getYPos() + myPCP.getHeight(), 
        //myScatterplot.getWidth(), buffer);
        
        textAlign(LEFT, CENTER);
-       myFrame.drawTextOnScreen(myScatterplot.getXPos() + 5 , myPCP.getYPos() + myPCP.getHeight() + buffer/4,
+       myFrame.drawTextOnScreen(myScatterplot.getXPos() + 5 , myPCP.getYPos() + myPCP.getHeight() + buffer/2,
        0, 12, ins);
        
        //rect(myLinechart.getXPos(),  myLinechart.getYPos() + myLinechart.getHeight(), 
        //mySplom.getWidth(), buffer);
        
-       ins ="Interactions: Select a point in the Scatterplot to view its details.\n"
-       + "Then the data point is highlighted it in all other views.";
+       ins ="*Visual Encoding:\n - In Scatterplot, a colored star means your interested point.\n"
+       + "E.g: In student dataset, the star means your performance.";
        
        textAlign(LEFT, CENTER);
-       myFrame.drawTextOnScreen(myLinechart.getXPos() + 5,  myLinechart.getYPos() + myLinechart.getHeight() + buffer/4,
+       myFrame.drawTextOnScreen(myLinechart.getXPos() + 5,  myLinechart.getYPos() + myLinechart.getHeight() + buffer/3,
        0, 12, ins);
-       
-       
        
   }
   //noLoop();
@@ -162,7 +168,7 @@ void mouseReleased(){
 }
 
 void mouseMoved(){
-  myScatterplot.mouseMoved();
+  //myScatterplot.mouseMoved();
 }
 
 
@@ -214,7 +220,7 @@ abstract class Frame {
     fill(50);
     stroke(0,0,0);
     //translate(x,y);
-    rotate(radians(rotate));
+    rotate(rotate);
     //textAlign(CENTER,CENTER);
     text(text, u0 + x, v0 + y);
     

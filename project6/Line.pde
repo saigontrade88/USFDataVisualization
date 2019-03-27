@@ -57,12 +57,12 @@ class Line extends Frame {
     
     //set position of the axes
     //Horizontal axis
-    int u1 = (int)map( rmin0 - buffer, rmin0, rmax0, u0+20, u0+w-20 );
-    int u2 = (int)map( rmax0 + buffer, rmin0, rmax0, u0+20, u0+w-20 );
+    int u1 = (int)map( rmin0 , rmin0, rmax0, u0+20, u0+w-20 );
+    int u2 = (int)map( rmax0 , rmin0, rmax0, u0+20, u0+w-20 );
 
     //Vertical axis
-    int v1 = (int)map( rmin1 - buffer, rmin1, rmax1, v0+h-20, v0+20 );
-    int v2 = (int)map( rmax1 + buffer, rmin1, rmax1, v0+h-20, v0+20 );
+    int v1 = (int)map( rmin1 , rmin1, rmax1, v0+h-20, v0+20 );
+    int v2 = (int)map( rmax1 , rmin1, rmax1, v0+h-20, v0+20 );
     //println("axes[0] height = 0, width = max - min= " + (u2 - u1));
     
     //highlight the origin 
@@ -127,9 +127,9 @@ class Line extends Frame {
        //rect( u0, v0, w, h );
        fill(255);
        
-       rect(u0, v0, w, 18);
+       //rect(u0, v0, w, 18);
        
-           
+       textAlign(CENTER, CENTER);   
        this.drawTextOnScreen( (this.w)/2, 18/2,
        0, 12, title);
      
@@ -177,7 +177,7 @@ class Line extends Frame {
     //draw the borderline of the scatterplot sketch with black
      stroke(0);
      noFill();
-     rect( u0, v0, w, h );
+    // rect( u0, v0, w, h );
   }
 
 
@@ -206,17 +206,17 @@ void drawAxisValue(int binCount, int xOrigXPos, int yOrigYPos,
 float minVal, float maxVal, 
 int startPos, int stopPos, String direction){
     textSize(8);
-    int scale_unit = (int)((maxVal - minVal)/binCount);
+    float scale_unit = ((maxVal - minVal)/binCount);
     
     //draw the tick marks
     for (int i = 0; i <= binCount; i++) {
       //tick mark's y position
-      int tickMarkPos;
+      float tickMarkPos;
       //tick mark's actual value
       float tickMark = minVal + i*scale_unit;
-      tickMarkPos = (int)map(tickMark, minVal, maxVal, startPos, stopPos);
+      tickMarkPos = map(tickMark, minVal, maxVal, startPos, stopPos);
       //println("tickMark = " + tickMark + " tickMark_yPos = " + xPos);
-      String num = String.format ("%,.0f", tickMark);
+      String num = String.format ("%,.02f", tickMark);
       if(direction == "horizontal"){
           text (num, tickMarkPos, yOrigYPos + 5);
           line( tickMarkPos, yOrigYPos - 5, tickMarkPos, yOrigYPos + 5);
