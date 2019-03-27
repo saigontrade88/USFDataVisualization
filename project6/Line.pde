@@ -205,7 +205,7 @@ class Line extends Frame {
 void drawAxisValue(int binCount, int xOrigXPos, int yOrigYPos, 
 float minVal, float maxVal, 
 int startPos, int stopPos, String direction){
-    
+    textSize(8);
     int scale_unit = (int)((maxVal - minVal)/binCount);
     
     //draw the tick marks
@@ -216,14 +216,14 @@ int startPos, int stopPos, String direction){
       float tickMark = minVal + i*scale_unit;
       tickMarkPos = (int)map(tickMark, minVal, maxVal, startPos, stopPos);
       //println("tickMark = " + tickMark + " tickMark_yPos = " + xPos);
-      String num = String.format ("%,.2f", tickMark);
+      String num = String.format ("%,.0f", tickMark);
       if(direction == "horizontal"){
-          text (num, tickMarkPos, yOrigYPos + 10);
-          line( tickMarkPos, yOrigYPos - 10, tickMarkPos, yOrigYPos + 10);
+          text (num, tickMarkPos, yOrigYPos + 5);
+          line( tickMarkPos, yOrigYPos - 5, tickMarkPos, yOrigYPos + 5);
       }
       else{
-          text (num, xOrigXPos - 10, tickMarkPos);
-          line( xOrigXPos - 10, tickMarkPos, xOrigXPos + 10, 
+          text (num, xOrigXPos - 10, tickMarkPos - 4);
+          line( xOrigXPos - 5, tickMarkPos, xOrigXPos + 5, 
           tickMarkPos);
       }
       

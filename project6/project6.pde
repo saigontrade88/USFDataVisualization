@@ -24,8 +24,8 @@ float THRESHOLD_HIGH_ACT = 10;
 void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
-   myTable = loadTable( "srsatact.csv", "header" );
-   //myTable = loadTable( "srsatact_cut.csv", "header" );
+  // myTable = loadTable( "srsatact.csv", "header" );
+   myTable = loadTable( "srsatact_cut.csv", "header" );
    //myTable = loadTable( "ketchup.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
@@ -74,8 +74,8 @@ void draw(){
        String title;
        title ="Predicting success of all Calvin College 2004 seniors";
        //Border of the textbox
-       rect(xStartPos, 0, width - buffer, yStartPos - 2);
-           
+       //rect(xStartPos, 0, width - buffer, yStartPos - 2);
+       textAlign(CENTER,CENTER);    
        myFrame.drawTextOnScreen((width - buffer)/2, (yStartPos - 2)/2,
        0, 16, title);
        
@@ -108,6 +108,30 @@ void draw(){
        myScatterplot.getWidth()/2, 
        myPCP.getHeight());
        myBarchart.draw();
+       
+       //draw a function for title
+       String ins;
+       ins ="Interactions: Select a point in the Scatterplot to view its details.\n"
+       + "Then the data point is highlighted it in all other views.";
+       //Border of the textbox
+       //rect(myScatterplot.getXPos(),  myPCP.getYPos() + myPCP.getHeight(), 
+       //myScatterplot.getWidth(), buffer);
+       
+       textAlign(LEFT, CENTER);
+       myFrame.drawTextOnScreen(myScatterplot.getXPos() + 5 , myPCP.getYPos() + myPCP.getHeight() + buffer/4,
+       0, 12, ins);
+       
+       //rect(myLinechart.getXPos(),  myLinechart.getYPos() + myLinechart.getHeight(), 
+       //mySplom.getWidth(), buffer);
+       
+       ins ="Interactions: Select a point in the Scatterplot to view its details.\n"
+       + "Then the data point is highlighted it in all other views.";
+       
+       textAlign(LEFT, CENTER);
+       myFrame.drawTextOnScreen(myLinechart.getXPos() + 5,  myLinechart.getYPos() + myLinechart.getHeight() + buffer/4,
+       0, 12, ins);
+       
+       
        
   }
   //noLoop();
@@ -181,11 +205,11 @@ abstract class Frame {
     pushMatrix();
     
     textSize(textSize);
-    fill(0,51,0);
+    fill(50);
     stroke(0,0,0);
     //translate(x,y);
     rotate(radians(rotate));
-    textAlign(CENTER,CENTER);
+    //textAlign(CENTER,CENTER);
     text(text, u0 + x, v0 + y);
     
     popMatrix();
