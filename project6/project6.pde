@@ -8,6 +8,8 @@ Frame myLinechart = null;
 Frame myBarchart = null;
 Frame myPCP = null;
 
+String fileName ="srsatact";
+
 //int selectedPoint = -1;
 HashSet<Integer> selectedPoints = new HashSet<Integer>();
 
@@ -24,9 +26,9 @@ float THRESHOLD_HIGH_ACT = 10;
 void setup(){
    size(1200,700);  
   //selectInput("Select a file to process:", "fileSelected");
-  // myTable = loadTable( "srsatact.csv", "header" );
-   myTable = loadTable( "srsatact_cut.csv", "header" );
-   //myTable = loadTable( "ketchup.csv", "header" );
+   myTable = loadTable( "srsatact.csv", "header" );
+   //myTable = loadTable( "srsatact_cut.csv", "header" );
+  // myTable = loadTable( "iris.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    myFrame = new splom( );
    myPCP = new PCP( );
@@ -43,6 +45,7 @@ void fileSelected(File selection) {
     selectInput("Select a file to process:", "fileSelected");
   } else {
     println("User selected " + selection.getAbsolutePath());
+    fileName = selection.getName();
     myTable = loadTable( selection.getAbsolutePath(), "header" );
     //myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
     myFrame = new splom( );
@@ -72,7 +75,10 @@ void draw(){
        
        //draw a function for title
        String title;
-       title ="Predicting success of all Calvin College 2004 seniors";
+       if(fileName == "srsatact")
+           title ="Predicting success of all Calvin College 2004 seniors";
+       else   
+           title ="Predicting the ketchup price";
        //Border of the textbox
        //rect(xStartPos, 0, width - buffer, yStartPos - 2);
        textAlign(CENTER,CENTER);    

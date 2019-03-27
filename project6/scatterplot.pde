@@ -114,9 +114,9 @@ class Scatterplot extends Frame{
    for( int i = 0; i < markers.size(); i++ ){
      TwoDMarker p = markers.get(i);
      TwoDPoint temp = new TwoDPoint(markers.get(i).getTwoDPoint());
-     //fill( 200 );
+     fill( 200 );
      if( selectedPoints.contains(i) ) fill( 0,255,0);
-     ellipse( p.getXPos(), p.getYPos(), 10,10 ); 
+     ellipse( p.getXPos(), p.getYPos(), 7, 7); 
      //temp.colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, 
      //THRESHOLD_HIGH_SATM,
      //THRESHOLD_INTERMEDIATE_SATV,
@@ -129,7 +129,16 @@ class Scatterplot extends Frame{
       ellipse( selectedMarker.getXPos(), selectedMarker.getYPos(), 10, 10 );
       textSize(12);
       rectMode(CORNER);
-      fill(0, 0, 0);
+      fill(255); // Set fill to white to draw background rectangle
+      pushMatrix();
+      
+      //(0,0) - the origin point
+      translate(selectedMarker.getXPos(), selectedMarker.getYPos());
+      rect(3, -18, textWidth(pop), 15);        // Draw background rectangle
+      fill(0); // Reset fill
+       
+      popMatrix();
+      
       textAlign(LEFT, TOP);
       text(pop, selectedMarker.getXPos() + 3, selectedMarker.getYPos() -18);
     }
