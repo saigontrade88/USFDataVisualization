@@ -2,22 +2,28 @@
 
 class splom extends Frame {
   Scatterplot[][] scp;
+  Histogram[] hst;
 
   splom() {
     scp = new Scatterplot[myTable.getColumnCount()][myTable.getColumnCount()];
+    hst = new Histogram[myTable.getColumnCount()];
 
     for ( int i = 0; i < scp.length; i++ ) {
+      //Remove the categorical variable
       if (!myTable.getColumnTitle(i).equals("Class")) {
         for (int j = 0; j < scp.length; j++ ) {
-          if ( i < j) {
-            //Remove the categorical variable
-            if (!myTable.getColumnTitle(j).equals("Class")) {
+          //Remove the categorical variable
+          if (!myTable.getColumnTitle(j).equals("Class")) {
+            if ( i > j) {        
               scp[i][j] = new Scatterplot( myTable.getColumnTitle(i), myTable.getColumnTitle(j) );
-              //println("(i,j)" + "(" + i + "," + j +")");
+            } else if (i==j) {
+              hst[j] = new Histogram(myTable.getColumnTitle(j), 10);
+            } else {
+              scp[i][j] = new Scatterplot( myTable.getColumnTitle(i), myTable.getColumnTitle(j) );
+              ;
             }
-          } else
-            scp[i][j] = null;
-        }
+          }
+        }//End of the j loop
       }
     }
   }
@@ -37,15 +43,55 @@ class splom extends Frame {
       0, 12, title);
 
     for ( int i = 0; i < scp.length; i++ ) {
-      for (int j = 0; j < scp.length; j++ ) {
-        float x = map( i, 0, scp.length, u0, u0+w );
-        float y = map( j, 0, scp.length, v0, v0+h );
-        if ( scp[i][j] != null ) {
-          scp[i][j].setPosition( (int)x, (int)y, w/(scp.length), h/(scp.length) );
-          scp[i][j].draw();
-        }
+      if (!myTable.getColumnTitle(i).equals("Class")) {
+        float[] data0 = myTable.getFloatColumn(myTable.getColumnTitle(i));
+        for (int j = 0; j < scp.length; j++ ) {
+          if (!myTable.getColumnTitle(j).equals("Class")) {
+            float[] data1 = myTable.getFloatColumn(myTable.getColumnTitle(j));
+
+            float x = map( i, 0, scp.length, u0, u0+w );
+            float y = map( j, 0, scp.length, v0, v0+h );
+            if ( i > j ) {
+              scp[i][j].setPosition( (int)x, (int)y, w/(scp.length), h/(scp.length) );
+              //println("(i,j)" + "(" + i + "," + j +")");
+
+              // float[] data1 = myTable.getFloatColumn(myTable.getColumnTitle(j));
+              float corr = correlation(data0, data1);
+
+              String strCorr = String.format ("%,.03f", corr);
+
+              //println(myTable.getColumnTitle(i) + "vs" + myTable.getColumnTitle(j) + "\n");
+              //println("Correlation = " + corr);
+
+              scp[i][j].draw();
+
+              scp[i][j].drawTextOnScreen( scp[i][j].getWidth()/2, scp[i][j].h - 20, 0, 12, strCorr);
+            } else if (i==j) {
+              hst[j].setPosition( (int)x, (int)y, w/(scp.length), h/(scp.length) );
+              hst[j].draw();
+            } else {
+
+              scp[i][j].setPosition( (int)x, (int)y, w/(scp.length), h/(scp.length) );
+              //println("(i,j)" + "(" + i + "," + j +")");
+
+              //float[] data1 = myTable.getFloatColumn(myTable.getColumnTitle(j));
+              float corr = SPC(data0, data1);
+
+              String strCorr = String.format ("%,.03f", corr);
+
+              //println(myTable.getColumnTitle(i) + "vs" + myTable.getColumnTitle(j) + "\n");
+              //println("Correlation = " + corr);
+
+              scp[i][j].colorDetermineCorrelation(corr, 0.5, 0.6);
+
+              scp[i][j].draw();
+
+              scp[i][j].drawTextOnScreen( scp[i][j].getWidth()/2, scp[i][j].h - 20, 0, 12, strCorr);
+            }
+          }
+        }//End of the inner loop
       }
-    }
+    } //End of the outer loop
     //draw the borderline of the scatterplot sketch with black
 
     stroke(0);
@@ -53,6 +99,8 @@ class splom extends Frame {
     //rect( u0, v0, w, h );
   }
   //End the draw function
+
+
   void mousePressed() {
     for ( int i = 0; i < scp.length; i++ ) {
       for (int j = 0; j < scp.length; j++ ) {

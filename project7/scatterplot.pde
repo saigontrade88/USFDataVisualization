@@ -50,8 +50,10 @@ class Scatterplot extends Frame{
   
   void draw(){
     
-    stroke(0);
-    fill(255);
+    //stroke(0);
+    rect( u0, v0, w, h );
+    
+    //fill(255);
    
    //update point positions
    
@@ -65,13 +67,13 @@ class Scatterplot extends Frame{
        //Border of the textbox
        
        //rect( u0, v0, w, h );
-       fill(255);
+       //fill(255);
        
        //rect(u0, v0, w, 18);
        
        textAlign(CENTER, CENTER);    
        this.drawTextOnScreen( (this.w)/2, 18/2,
-       0, 12, title);
+       0, 8, title);
    
    
    //draw horizontal axis
@@ -85,7 +87,7 @@ class Scatterplot extends Frame{
     
     //highlight the origin 
     fill( 255, 0, 0);
-    ellipse( u1 - buffer/2, v1 + buffer/2, 10, 10 );
+    ellipse( u1 - buffer/2, v1 + buffer/2, 0.02 * this.getWidth(), 0.02 * this.getWidth() );
 
     axes[0].setPosition( u1 - buffer/2, v1 + buffer/2, (u2 - u1) + buffer, 0);
     axes[1].setPosition( u1 - buffer/2, v1 + buffer/2, 0, (v2 - v1) - buffer);
@@ -117,19 +119,19 @@ class Scatterplot extends Frame{
    /*Sets the color used to draw lines and borders around shapes. 
     This color is either specified in terms of the RGB or HSB color depending on the current colorMode(). 
    */
-   stroke(0);
+   noStroke();
    strokeWeight(1); //default
    //for( PVector p : points ){
    for( int i = 0; i < markers.size(); i++ ){
      TwoDMarker p = markers.get(i);
      TwoDPoint temp = new TwoDPoint(markers.get(i).getTwoDPoint());
-     fill( 200 );
+     
+     fill(0,0,255,100);
+     
      if( selectedPoints.contains(i) ) fill( 0,255,0);
-     ellipse( p.getXPos(), p.getYPos(), 7, 7); 
-     //temp.colorDetermineXVal(THRESHOLD_INTERMEDIATE_SATM, 
-     //THRESHOLD_HIGH_SATM,
-     //THRESHOLD_INTERMEDIATE_SATV,
-     //THRESHOLD_HIGH_SATV);
+     ellipse( p.getXPos(), p.getYPos(), 0.01 * this.getWidth(), 0.01 * this.getWidth()); 
+     
+     fill(255);
      
    }
    //interaction: if the point is selected, pop up an information window
@@ -139,6 +141,7 @@ class Scatterplot extends Frame{
       textSize(12);
       rectMode(CORNER);
       fill(255); // Set fill to white to draw background rectangle
+      
       pushMatrix();
       
       //(0,0) - the origin point
@@ -182,6 +185,8 @@ class Scatterplot extends Frame{
       
       line(selectedMarker.getXPos(), selectedMarker.getYPos(),
       selectedMarker.getXPos(), v1 + buffer/2);
+      
+      fill(255);
      
    }
    
@@ -193,7 +198,26 @@ class Scatterplot extends Frame{
    //rect( u0, v0, w, h );
    
   }
-  
+  //End the draw() function
+  private void colorDetermineCorrelation(float corr, float THRESHOLD_INTERMEDIATE, float THRESHOLD_HIGH) {
+    //Source: http://colorbrewer2.org
+     
+    int color1 = color(229,245,249);
+    int color2 = color(153,216,201);
+    int color3 = color(44,162,95);
+    if( corr <=THRESHOLD_INTERMEDIATE)
+    //color1
+        fill(color1);
+    else if((corr >THRESHOLD_INTERMEDIATE) 
+    & (corr<=THRESHOLD_HIGH))
+    //color
+        fill(color2);  
+    else if((corr>THRESHOLD_HIGH))
+    //red
+        fill(color3);
+         
+  }
+  //End the color encoding function
   
   void mousePressed(){
     float selDist = 10;

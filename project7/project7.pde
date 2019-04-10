@@ -28,17 +28,18 @@ void setup(){
    size(1200,700);  
    //selectInput("Select a file to process:", "fileSelected");
   /** Development Purpose **/
-   //myTable = loadTable( "srsatact.csv", "header" );
+  // myTable = loadTable( "srsatact.csv", "header" );
    //myTable = loadTable( "srsatact_cut.csv", "header" );
-   myTable = loadTable( "srsatact_2_rec.csv", "header" );
-   //myTable = loadTable( "iris.csv", "header" );
+   //myTable = loadTable( "srsatact_2_rec.csv", "header" );
+   myTable = loadTable( "iris.csv", "header" );
+   //myTable = loadTable( "iris - Copy.csv", "header" );
    myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-   //myFrame = new splom( );
-   myPCP = new PCP( );
-   myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-   //mySplom = new splom( );
-   myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-   myHistogram = new Histogram(myTable.getColumnTitle(0), 10);
+   myFrame = new splom( );
+   //myPCP = new PCP( );
+   //myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+   mySplom = new splom( );
+   //myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+   //myHistogram = new Histogram(myTable.getColumnTitle(1), 10);
     
 }
 
@@ -101,27 +102,15 @@ void draw(){
        
        //Parallel coordinate based on Scatterplot position
        
-       myPCP.setPosition(xStartPos, myScatterplot.getYPos() + myScatterplot.getHeight(), 
-       myScatterplot.getWidth(), myScatterplot.getHeight() - buffer);
-       myPCP.draw();
        
        //Splom based on Scatterplot position
        
-       myHistogram.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
+       mySplom.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
        (numbUnitWidth - widthFactor)*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
-       myHistogram.draw();
+       mySplom.draw();
        
-       //Line chart based on Scatterplot position
+      
        
-       myLinechart.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(), 
-       myScatterplot.getWidth()/2, myPCP.getHeight());
-       myLinechart.draw();
-       
-       //Bar chart based on line chart position
-       myBarchart.setPosition(myLinechart.getXPos() + myLinechart.getWidth(), myScatterplot.getYPos() + myScatterplot.getHeight(),
-       myScatterplot.getWidth()/2, 
-       myPCP.getHeight());
-       myBarchart.draw();
        
       // myHistogram.draw();
        
@@ -157,20 +146,20 @@ void draw(){
 
 void mousePressed(){
   //myFrame.mousePressed();
-  myHistogram.mousePressed();
+  //myHistogram.mousePressed();
   myScatterplot.mousePressed();
-  myLinechart.mousePressed();
-  myBarchart.mousePressed();
-  myPCP.mousePressed();
+  //myLinechart.mousePressed();
+  //myBarchart.mousePressed();
+  
 }
 
 
 void mouseReleased(){
-  myHistogram.mouseReleased();
+  //myHistogram.mouseReleased();
   myScatterplot.mouseReleased();
-  myLinechart.mouseReleased();
-  myBarchart.mouseReleased();
-  myPCP.mouseReleased();
+  //myLinechart.mouseReleased();
+  //myBarchart.mouseReleased();
+  
 }
 
 void mouseMoved(){
@@ -223,12 +212,13 @@ abstract class Frame {
     pushMatrix();
     
     textSize(textSize);
-    fill(50);
+    fill(0);
     stroke(0,0,0);
     //translate(x,y);
     rotate(rotate);
     //textAlign(CENTER,CENTER);
     text(text, u0 + x, v0 + y);
+    fill(255);//reset to the white background
     
     popMatrix();
     

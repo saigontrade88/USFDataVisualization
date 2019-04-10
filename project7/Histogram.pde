@@ -1,7 +1,7 @@
 class Histogram extends Frame {
   String attr0;
   float [] data0;
-  float rmin0, rmax0;
+  float rmin0, rmax0, rmean0, rsd0;
   int numBins; //10-15 bins is a good rule of thumb
   //Axes
   Axis[] axes = new Axis[2];
@@ -49,10 +49,80 @@ class Histogram extends Frame {
     rmin0 = min(data0);
     rmax0 = max(data0);
 
-    //rmin1 = min(data1);
-    //rmax1 = max(data1);
-  }
+    //calculate the mean
+    rmean0 =  mean(data0);
 
+    //System.out.println(rmean0+"\n");
+
+    //calculate the standard deviation based on the entire given data
+    rsd0 = SD(data0, rmean0); 
+    //System.out.println(rsd0 + "\n");
+    
+    /** Cross check the pdf function
+    float []inputArray = {29, 45, 48, 50, 62, 78};
+    
+    for(int i=0; i < inputArray.length; i++){
+        float pdf = gaussian_density(inputArray[i], 50, 10);
+        System.out.println(inputArray[i] + "\t" + pdf);
+    }**/
+     
+  }  
+  /**
+  * Returns the probability density function value f(x) of the Gaussian distribution
+  * @param mu represents a population mean
+  * @param sigma is the standard deviation of the distribution
+  * @param x is the data value
+  * @return the Gaussian probability density function
+  */
+  float gaussian_density(float x, float mu, float sigma){
+    return (1/sqrt(2* PI * sq(sigma))) * exp((-1) * sq(x - mu) / (2 * sq(sigma)));
+  }
+  
+
+  void plot_gaussian(){
+    smooth();
+    noStroke();
+    fill(255);
+    
+    Arrays.sort(data0);
+    
+    float[] gaussianArray = new float[data0.length];
+    
+    for(int i =0; i < data0.length; i++)
+        gaussianArray[i] = gaussian_density(data0[i], rmean0, rsd0);
+    
+    float gaussianMin = min(gaussianArray);
+    float gaussianMax = max(gaussianArray);
+    
+    //Encode and visual the data points with a bell curve
+    for (float f : data0){
+          
+      float gaussian = gaussian_density(f, rmean0, rsd0);
+      float x = map(f, rmin0, rmax0, u0+buffer, u0+w-buffer);
+      float y = map(gaussian, gaussianMin, gaussianMax, this.v0+this.h-buffer, this.v0+buffer);
+      
+      //System.out.println(f + "\t" + gaussian + "\t" +  y); 
+      
+      fill(255, 165, 0);
+      ellipse(x, y, 0.02 * this.getWidth(), 0.02 * this.getWidth());
+      //vertex(x, y);
+    
+    }
+    
+    
+    //Encode and visual the mean with a line shape
+    float gaussianMean = gaussian_density(rmean0, rmean0, rsd0);
+    float x = map(rmean0, rmin0, rmax0, u0+buffer, u0+w-buffer);
+    float y = map(gaussianMean, gaussianMin, gaussianMax, this.v0 + this.h-buffer, this.v0 + buffer);
+   
+    strokeWeight(4);
+    fill(255, 0, 255);
+    ellipse(x, y, 4, 4);
+    line(x, y, x, this.v0 + this.h-buffer);
+    strokeWeight(1);
+    //popMatrix();
+
+  }
   int buffer = 20;
   //Implement the inherited method from Frame class 
   void draw() {
@@ -62,13 +132,13 @@ class Histogram extends Frame {
 
     String title;
 
-    title =  "Distribution of " + attr0 + "'s Values";
+    title =  attr0;
 
     textAlign(CENTER, CENTER);    
     this.drawTextOnScreen( (this.w)/2, 18/2, 
-      0, 12, title);
-      
-      readData();
+      0, 8, title);
+
+    readData();
 
     //draw horizontal axis
     int u1 = (int)map( 0, 0, numBins - 1, u0+buffer, u0+w-buffer);
@@ -78,33 +148,19 @@ class Histogram extends Frame {
     int v1 = (int)map( 0, 0, maxEntry.getValue(), v0+h-buffer, v0+buffer );
     int v2 = (int)map( maxEntry.getValue(), 0, maxEntry.getValue(), v0+h-buffer, v0+buffer );
 
-   // drawAxisValue( numBins, u1, v1, 0, maxEntry.getValue(), v0+h-20, v0+20, "vertical");
+    // drawAxisValue( numBins, u1, v1, 0, maxEntry.getValue(), v0+h-20, v0+20, "vertical");
 
     //highlight the origin 
     fill( 255, 0, 0);
-    ellipse( u1 - buffer/2, v1, 10, 10 );
+    ellipse( u1 - buffer/2, v1 + buffer/2 , 0.02 * this.getWidth(), 0.02 * this.getWidth());
 
-    axes[0].setPosition( u1 - buffer/2, v1, (u2 - u1) + buffer, 0);
-    axes[1].setPosition( u1 - buffer/2, v1, 0, (v2 - v1) - buffer);
+    axes[0].setPosition( u1 - buffer/2, v1 + buffer/2, (u2 - u1) + buffer, 0);
+    axes[1].setPosition( u1 - buffer/2, v1 + buffer/2, 0, (v2 - v1) - buffer);
 
     axes[0].draw();
 
-    String axisLabel;
-
-    axisLabel = "Bins";
-    //Border of the textbox
-
-    axes[0].drawTextOnScreen( w/2, +8, 
-      0, 12, axisLabel);
-
     axes[1].draw();
-
-    axisLabel = "Frequency";
-    //Border of the textbox
-
-    axes[1].drawTextOnScreen( 0, -h+10, 
-      0, 12, axisLabel);
-
+    
     drawBar();
 
     //Interaction: if the bar is selected then paint it with green
@@ -114,16 +170,18 @@ class Histogram extends Frame {
       float rectWidth = (w- 2*buffer)/(numBins);
 
       System.out.println(i + "\n");
-      
+
       TwoDMarker m = markers.get(i);
-      
-      
+
+
       fill(0, 255, 0);
       //ellipse(m.getXPos(), m.getYPos(), 10, 10);
       //if( selected ) fill(255,0,0);
-     rect(m.getXPos(), m.getYPos(),
-         rectWidth, + axes[1].getYPos() - m.getYPos());
+      rect(m.getXPos(), m.getYPos(), 
+        rectWidth, + axes[1].getYPos() - m.getYPos());
     }
+    
+    plot_gaussian();
 
     //draw the borderline of the scatterplot sketch with black
     stroke(0);
@@ -176,21 +234,22 @@ class Histogram extends Frame {
         //System.out.println("Test x " + data0[i] + " \t" + x + "\t" + xPos );
         float yPos = map( binMap.get(x), 0, maxEntry.getValue(), v0+h-buffer, v0+buffer );
         //System.out.println("Test y " + data0[i] + " \t" + binMap.get(x)  + "\t" + yPos );
-        
+
         fill(0, 255, 0);
         //ellipse(xPos, yPos, 10, 10);
-        
+
         TwoDMarker tempMarker = new TwoDMarker(tempPoint, xPos, yPos);
         markers.add(tempMarker);
       }
     }
 
     /** - test marker list **/
+    /**
     for ( int i = 0; i < markers.size(); i++ ) {
       TwoDMarker p = markers.get(i);
       TwoDPoint temp = new TwoDPoint(markers.get(i).getTwoDPoint());
       System.out.println("Test maker list " + temp.toString() + "\t" + p.getXPos() + "\t" + p.getYPos());
-    }
+    }**/
 
     /** - test HashMap
      //print all values in the binMap
@@ -209,7 +268,7 @@ class Histogram extends Frame {
     float rectWidth = (w- 2*buffer)/(numBins);
 
     for (Integer myBin : binMap.keySet()) {
-      fill(80, 80, 100);
+      fill(0,0,255,100);
       float xPos =  map(myBin, 0, numBins - 1, u0+buffer, u0+w-buffer);
       float yPos =  map(binMap.get(myBin), 0, maxEntry.getValue(), v0+h-buffer, v0+buffer );
       //fill(255);
@@ -220,7 +279,8 @@ class Histogram extends Frame {
       rect(xPos, yPos, 
         rectWidth, + axes[1].getYPos() - yPos);
 
-
+      //draw the data label
+      /**
       pushMatrix();
       //draw the data label
       textSize(16);
@@ -230,7 +290,7 @@ class Histogram extends Frame {
       //rotate(rotate);
       textAlign(CENTER, CENTER);
       text(binMap.get(myBin), (rectWidth)/2, -5);
-      popMatrix();
+      popMatrix();**/
     }
   }
   //End method draw histogram
