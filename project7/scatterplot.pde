@@ -200,11 +200,11 @@ class Scatterplot extends Frame{
   }
   //End the draw() function
   private void colorDetermineCorrelation(float corr, float THRESHOLD_INTERMEDIATE, float THRESHOLD_HIGH) {
-    //Source: http://colorbrewer2.org
+    //Source: http://colorbrewer2.org/?type=sequential&scheme=Blues&n=3
      
-    int color1 = color(229,245,249);
-    int color2 = color(153,216,201);
-    int color3 = color(44,162,95);
+    int color1 = color(222,235,247);
+    int color2 = color(158,202,225);
+    int color3 = color(49,130,189);
     if( corr <=THRESHOLD_INTERMEDIATE)
     //color1
         fill(color1);

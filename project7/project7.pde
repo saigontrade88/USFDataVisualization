@@ -118,8 +118,7 @@ void draw(){
        //draw a function for title
        String ins;
        ins ="*Interactions:\n - Select a point in the Scatterplot to view its details.\n"
-       + "    Then the data point is highlighted it in all other views."
-       + " User can also swap axes in PCP.\n";
+       + "    Then the data point is highlighted it in all other views." + "\n";
        //Border of the textbox
        //rect(myScatterplot.getXPos(),  myPCP.getYPos() + myPCP.getHeight(), 
        //myScatterplot.getWidth(), buffer);
@@ -131,12 +130,21 @@ void draw(){
        //rect(myLinechart.getXPos(),  myLinechart.getYPos() + myLinechart.getHeight(), 
        //mySplom.getWidth(), buffer);
        
+       //Instructions for visual encoding:
+       
        ins ="*Visual Encoding:\n - In Scatterplot, a colored star means your interested point.\n"
-       + "E.g: In student dataset, the star means your performance.";
+       + "E.g: In student dataset, the star means your performance."
+       + "- In Scatterplot matrix, the main diagram has the histogram of all attributes." + "\n"
+       + "- The upper triangle is annotated with Pearson correlation coefficient(PCC)." + "\n"
+       + "- The lower triangle is annotated with Spearman Rank Correlation(SRC)." + "\n";
        
        textAlign(LEFT, CENTER);
       // myFrame.drawTextOnScreen(myLinechart.getXPos() + 5,  myLinechart.getYPos() + myLinechart.getHeight() + buffer/3,
       // 0, 12, ins);
+      
+      //Instructions for visual color encoding:
+      //LIGHTSTEELBLUE, LIGHTBLUE, DEEPSKYBLUE and provide the single hue
+      // Source: http://colorbrewer2.org/?type=sequential&scheme=Blues&n=3
        
        
   }
