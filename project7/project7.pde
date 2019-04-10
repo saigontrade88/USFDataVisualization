@@ -120,7 +120,7 @@ void draw(){
        + "    Then the data point is highlighted it in all other views." + "\n"
        + "*Secondary encoding: In Scatterplot matrix, the diagonal histograms:" + "\n"
        + "    An orange bell curve represents the normal distribution of an attribute"+ "\n"
-       + "    The pink line shows the mean value";
+       + "    The black line shows the mean value, but has issues.";
        //Border of the textbox
       // rect(myScatterplot.getXPos(),  myScatterplot.getYPos() + myScatterplot.getHeight(), 
        //myScatterplot.getWidth(), buffer);

@@ -114,11 +114,13 @@ class Histogram extends Frame {
     float gaussianMean = gaussian_density(rmean0, rmean0, rsd0);
     float x = map(rmean0, rmin0, rmax0, u0+buffer, u0+w-buffer);
     float y = map(gaussianMean, gaussianMin, gaussianMax, this.v0 + this.h-buffer, this.v0 + buffer);
-   
-    strokeWeight(4);
+    
+    stroke(0);
+    strokeWeight(2);
     fill(255, 0, 255);
     ellipse(x, y, 4, 4);
     line(x, y, x, this.v0 + this.h-buffer);
+    fill(255);
     strokeWeight(1);
     //popMatrix();
 
