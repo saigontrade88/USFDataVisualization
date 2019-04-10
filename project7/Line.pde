@@ -267,6 +267,26 @@ class TwoDMarker {
     return d;
   }
   
+  /**  Add an additional visual channel in the scatterplot. 
+  *  Traditional scatterplots represent 2 variables each by position. 
+  *  The color intensity of points in the scatter plots represent the number of students
+  *  the greater the number of students at a point, the darker the point
+  *  In details, this method uses color brightness or intensity to represent a 3rd variable.
+  *  @Param: numSamePoints: number of points having the same actual values both x and y
+  *  minNumSamePoints: minimum, but actually 0
+  *  maxNumSamePoints: maximum number of numSamePoints variable
+  **/
+  
+  private void transparencyDetermineDensity(float numSamePoints, 
+  float minNumSamePoints, float maxNumSamePoints) {
+    //Source: http://colorbrewer2.org
+    
+    int transLevel = (int) map(numSamePoints, minNumSamePoints, maxNumSamePoints, 0, 255);
+    
+    //RGB color with the transperancy level
+    fill(0,0,100, transLevel);
+         
+  }
 
   float distanceTo(TwoDMarker b) {
     return dist(getXPos(), getYPos(), b.getXPos(), b.getYPos());
