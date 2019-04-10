@@ -81,17 +81,21 @@ void draw(){
        int numbUnitLength = 4;
        
        int widthFactor = 2;
-       int heightFactor = 2;
+       int heightFactor = 3;
        
        //draw a function for title
        String title;
-       
+       if(fileName.equals("srsatact.csv"))
            title ="Predicting success of all Calvin College 2004 seniors";
-        
+       else   
            title ="Predicting analysis of IRIS data set";
        //Border of the textbox
        //rect(xStartPos, 0, width - buffer, yStartPos - 2);
+       textAlign(CENTER,CENTER);
+       
        textAlign(CENTER,CENTER);    
+       myFrame.drawTextOnScreen((width - buffer)/2, (yStartPos - 2)/2,
+       0, 16, title);
       
        
        //Vertical direction
@@ -108,24 +112,22 @@ void draw(){
        mySplom.setPosition(myScatterplot.getXPos() + myScatterplot.getWidth(), yStartPos, 
        (numbUnitWidth - widthFactor)*(width - buffer)/numbUnitWidth, heightFactor*height/numbUnitLength);
        mySplom.draw();
-       
-      
-       
-       
-      // myHistogram.draw();
-       
-       
+         
+         
        //draw a function for title
        String ins;
-       ins ="*Interactions:\n - Select a point in the Scatterplot to view its details.\n"
-       + "    Then the data point is highlighted it in all other views." + "\n";
+       ins ="\n*Interactions:\n - Select a point in the Scatterplot to view its details.\n"
+       + "    Then the data point is highlighted it in all other views." + "\n"
+       + "*Secondary encoding: In Scatterplot matrix, the diagonal histograms:" + "\n"
+       + "    An orange bell curve represents the normal distribution of an attribute"+ "\n"
+       + "    The pink line shows the mean value";
        //Border of the textbox
-       //rect(myScatterplot.getXPos(),  myPCP.getYPos() + myPCP.getHeight(), 
+      // rect(myScatterplot.getXPos(),  myScatterplot.getYPos() + myScatterplot.getHeight(), 
        //myScatterplot.getWidth(), buffer);
        
        textAlign(LEFT, CENTER);
-       //myFrame.drawTextOnScreen(myScatterplot.getXPos() + 5 , myPCP.getYPos() + myPCP.getHeight() + buffer/2,
-       //0, 12, ins);
+       myFrame.drawTextOnScreen(myScatterplot.getXPos() + 5 , myScatterplot.getYPos() + myScatterplot.getHeight() + buffer/2,
+       0, 11, ins);
        
        //rect(myLinechart.getXPos(),  myLinechart.getYPos() + myLinechart.getHeight(), 
        //mySplom.getWidth(), buffer);
@@ -133,20 +135,27 @@ void draw(){
        //Instructions for visual encoding:
        
        ins ="*Visual Encoding:\n - In Scatterplot, a colored star means your interested point.\n"
-       + "E.g: In student dataset, the star means your performance."
-       + "- In Scatterplot matrix, the main diagram has the histogram of all attributes." + "\n"
+       + "E.g: In student dataset, the star means your performance." + "\n"
+       + "- In Scatterplot matrix, the diagnonal has the histogram of all attributes." + "\n"
        + "- The upper triangle is annotated with Pearson correlation coefficient(PCC)." + "\n"
-       + "- The lower triangle is annotated with Spearman Rank Correlation(SRC)." + "\n";
+       + "- The lower triangle is annotated with Spearman Rank Correlation(SRC)." + "\n"
+       + "*Legends: - In Scatterplot matrix, the lower triangle. Light steel blue means correlation values(r) <= 0.5 "+ "\n"
+       + "- Light blue:  0.5 < r <= 0.6" + ". Deep sky blue: r > 0.6" + " .Note: The thresolds are for illustration purpose.";
        
        textAlign(LEFT, CENTER);
-      // myFrame.drawTextOnScreen(myLinechart.getXPos() + 5,  myLinechart.getYPos() + myLinechart.getHeight() + buffer/3,
-      // 0, 12, ins);
+       
+       //rect(mySplom.getXPos(),  mySplom.getYPos() + mySplom.getHeight(), 
+       //mySplom.getWidth(), 1.35*buffer);
+       
+       myFrame.drawTextOnScreen(mySplom.getXPos() + 5,  mySplom.getYPos() + mySplom.getHeight() + 0.75*buffer,
+       0, 10, ins);
       
       //Instructions for visual color encoding:
       //LIGHTSTEELBLUE, LIGHTBLUE, DEEPSKYBLUE and provide the single hue
       // Source: http://colorbrewer2.org/?type=sequential&scheme=Blues&n=3
-       
-       
+      
+      
+          
   }
   //noLoop();
 }
