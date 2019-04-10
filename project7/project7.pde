@@ -26,8 +26,8 @@ float THRESHOLD_HIGH_ACT = 10;
 
 void setup(){
    size(1200,700);  
-   //selectInput("Select a file to process:", "fileSelected");
-  /** Development Purpose **/
+   selectInput("Select a file to process:", "fileSelected");
+  /** Development Purpose 
   // myTable = loadTable( "srsatact.csv", "header" );
    //myTable = loadTable( "srsatact_cut.csv", "header" );
    //myTable = loadTable( "srsatact_2_rec.csv", "header" );
@@ -40,7 +40,7 @@ void setup(){
    mySplom = new splom( );
    //myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
    //myHistogram = new Histogram(myTable.getColumnTitle(1), 10);
-    
+   **/
 }
 
 
@@ -55,11 +55,11 @@ void fileSelected(File selection) {
     myTable = loadTable( selection.getAbsolutePath(), "header" );
     myFrame = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
     myScatterplot = new Scatterplot( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-   myFrame = new splom( );
-   myPCP = new PCP( );
-   myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
-   mySplom = new splom( );
-   myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+    myFrame = new splom( );
+    myPCP = new PCP( );
+    myLinechart = new Line( myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
+    mySplom = new splom( );
+    myBarchart =  new Bar(myTable.getColumnTitle(0), myTable.getColumnTitle(1) );
   }
 }
 
