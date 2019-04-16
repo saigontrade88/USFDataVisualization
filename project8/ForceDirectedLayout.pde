@@ -47,30 +47,27 @@ class ForceDirectedLayout extends Frame {
       int vertX = (int) v.getPosition().x;
       int vertY = (int) v.getPosition().y;
       
-      System.out.println(vertX + "\t" + vertY + "\n");
+      //System.out.println(vertX + "\t" + vertY + "\n");
       
       ellipse(vertX, vertY, 5, 5);
     }
     
     for ( GraphEdge e : edges ) {
       
-      System.out.println("Draw function" + e.v0.getPosition().x + "\n");
-      System.out.println("Draw function" + e.v0.getPosition().y + "\n");
+     // System.out.println("Draw function" + e.v0.getPosition().x + "\n");
+     // System.out.println("Draw function" + e.v0.getPosition().y + "\n");
       
-      System.out.println("Draw function" + e.v1.getPosition().x + "\n");
-      System.out.println("Draw function" + e.v1.getPosition().y + "\n");
-      
-      
-      
+     // System.out.println("Draw function" + e.v1.getPosition().x + "\n");
+     // System.out.println("Draw function" + e.v1.getPosition().y + "\n");      
       float vertSrcX =  e.v0.getPosition().x;
       float vertSrcY =  e.v0.getPosition().y;
       
       float vertDestX =  e.v1.getPosition().x;
       float vertDestY =  e.v1.getPosition().y;
       
-      System.out.println(vertSrcX + "\t" + vertSrcY + "\n");
+      //System.out.println(vertSrcX + "\t" + vertSrcY + "\n");
       
-      System.out.println(vertDestX + "\t" + vertDestY + "\n");
+      //System.out.println(vertDestX + "\t" + vertDestY + "\n");
       
       line(vertSrcX, vertSrcY, vertDestX, vertDestY);
     }

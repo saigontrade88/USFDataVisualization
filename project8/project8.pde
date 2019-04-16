@@ -1,4 +1,4 @@
-
+import java.util.*;
 
 Frame myFrame = null;
 // The files containing character coappearence in Victor Hugo’s Les Mis´erables
@@ -16,7 +16,7 @@ void setup() {
   // TODO: PUT CODE IN TO LOAD THE GRAPH
   // Reading in Node in the graph are characters. 
   // Edge in the graph signify characters appearing in the same chapter of the novel
-  JSONObject characterFile = loadJSONObject("miserables.json");
+  JSONObject characterFile = loadJSONObject("miserables_small.json");
   JSONArray charaters = characterFile.getJSONArray("nodes");
   JSONArray coAppearanceNum = characterFile.getJSONArray("links");
 
@@ -26,15 +26,16 @@ void setup() {
 
   verts.add(new GraphVertex(id, group, width/2, height/2));
 
-
+  Random rand = new Random();
+  
   for (int i = 1; i < charaters.size(); i++) {
 
     myCharacter = charaters.getJSONObject(i);
     id = myCharacter.getString("id");
     group = myCharacter.getInt("group");
 
-    int x = (int) map(i, 1, charaters.size(), 10, width);
-    int y = (int) map(i, 1, charaters.size(), 10, height);
+    int x = (int) rand.nextInt(width);
+    int y = (int) rand.nextInt(height);
 
     verts.add(new GraphVertex(id, group, x, y));
   }
@@ -42,7 +43,7 @@ void setup() {
   System.out.println("Number of vertices" + verts.size() + "\n");
   //coAppearanceNum.size()
   
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < coAppearanceNum.size(); i++) {
 
     JSONObject myEdge = coAppearanceNum.getJSONObject(i);
     String srcVertString = myEdge.getString("source");
@@ -60,13 +61,13 @@ void setup() {
     //Find the source vertext in the vertex list
     for (int j = 0; j < verts.size(); j++) {
       //System.out.println("Character name= " + verts.get(j).getID() + "\n");
-      System.out.println(srcVertString + "\n");
-      System.out.println(verts.get(j).getID().equals(srcVertString));
+      //System.out.println(srcVertString + "\n");
+      //System.out.println(verts.get(j).getID().equals(srcVertString));
       if (verts.get(j).getID().equals(srcVertString)) {
         mySrcVert =  new GraphVertex(verts.get(j).getID(), verts.get(j).group, verts.get(j).getPosition().x, verts.get(j).getPosition().y);
       } else {
-        System.out.println(verts.get(j).getID());
-        System.out.println("Can't find the corresponding vertex");
+        //System.out.println(verts.get(j).getID());
+        //System.out.println("Can't find the corresponding vertex");
       }
     }
 
@@ -77,18 +78,17 @@ void setup() {
       if (verts.get(j).getID().equals(destVertString)) {
         myDestVert =  new GraphVertex(verts.get(j).getID(), verts.get(j).group, verts.get(j).getPosition().x, verts.get(j).getPosition().y);
       } else {
-        System.out.println(verts.get(j).getID());
-        System.out.println("Can't find the corresponding vertex");
+        //System.out.println(verts.get(j).getID());
+        //System.out.println("Can't find the corresponding vertex");
         //return;
       }
     }
 
     //Add to the edge list
     edges.add(new GraphEdge( mySrcVert, myDestVert, _weight));
-    
-    System.out.println("Number of edges " + edges.size() + "\n");
-    
+      
   }//Loop over each edge
+  
   System.out.println("Number of edges " + edges.size() + "\n");
 
   myFrame = new ForceDirectedLayout( verts, edges );
@@ -120,7 +120,7 @@ void draw() {
   if ( myFrame != null ) {
     myFrame.setPosition( 0, 0, width, height );
     myFrame.draw();
-    noLoop();
+    //noLoop();
   }
 }
 
