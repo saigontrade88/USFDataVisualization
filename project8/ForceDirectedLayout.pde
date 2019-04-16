@@ -42,6 +42,15 @@ class ForceDirectedLayout extends Frame {
     update(); // don't modify this line
     
     // TODO: ADD CODE TO DRAW THE GRAPH
+    for ( GraphVertex v : verts ) {
+      
+      int vertX = (int) v.getPosition().x;
+      int vertY = (int) v.getPosition().y;
+      
+      System.out.println(vertX + "\t" + vertY + "\n");
+      
+      ellipse(vertX, vertY, 5, 5);
+    }
     
   }
 
