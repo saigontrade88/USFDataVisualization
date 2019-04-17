@@ -27,15 +27,28 @@ class ForceDirectedLayout extends Frame {
   void applyRepulsiveForce( GraphVertex v0, GraphVertex v1 ) {
     // TODO: PUT CODE IN HERE TO CALCULATE (AND APPLY) A REPULSIVE FORCE
     
-    // v0.addForce( ... );
+     //  v0.addForce( ... );
     // v1.addForce( ... );
+    
+    float d = (v0.getPosition()).dist(v1.getPosition());
+  
+    float repulsiveFrc = REPULSE_SCALE * ( v0.mass * v1.mass ) / sq(d);
+    
+    v0.addForce( repulsiveFrc, 0 );
+    v1.addForce( -repulsiveFrc, 0 );
+    
   }
 
   void applySpringForce( GraphEdge edge ) {
     // TODO: PUT CODE IN HERE TO CALCULATE (AND APPLY) A SPRING FORCE
     
-    // edge.v0.addForce( ... );
-    // edge.v1.addForce( ... );
+    
+    float d = (edge.v0.getPosition()).dist(edge.v1.getPosition());
+    
+    float springForce =  SPRING_SCALE * max(0, d - RESTING_LENGTH);
+     edge.v0.addForce( springForce, 0 );
+     edge.v1.addForce( springForce, 0 );
+    
   }
 
   void draw() {
@@ -49,16 +62,11 @@ class ForceDirectedLayout extends Frame {
       
       //System.out.println(vertX + "\t" + vertY + "\n");
       
-      ellipse(vertX, vertY, 5, 5);
+      ellipse(vertX, vertY, v.getDiameter(), v.getDiameter());
     }
     
     for ( GraphEdge e : edges ) {
-      
-     // System.out.println("Draw function" + e.v0.getPosition().x + "\n");
-     // System.out.println("Draw function" + e.v0.getPosition().y + "\n");
-      
-     // System.out.println("Draw function" + e.v1.getPosition().x + "\n");
-     // System.out.println("Draw function" + e.v1.getPosition().y + "\n");      
+           
       float vertSrcX =  e.v0.getPosition().x;
       float vertSrcY =  e.v0.getPosition().y;
       
