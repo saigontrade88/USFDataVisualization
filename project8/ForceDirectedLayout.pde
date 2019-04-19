@@ -30,24 +30,49 @@ class ForceDirectedLayout extends Frame {
      //  v0.addForce( ... );
     // v1.addForce( ... );
     
+    // the direction of the repulsive force that vertex 0 exerts on vertex 1
+    // sub means v1 - v0
+    PVector unitVect = PVector.sub(v1.getPosition(), v0.getPosition());
+    
+    // Normalize and scale the force vector to 1 distance unit so only direction matters.
+    unitVect.normalize();
+          
     float d = (v0.getPosition()).dist(v1.getPosition());
-  
+    
+    // Limiting the distance to eliminate "extreme" results
+    // for very close or very far objects
+    //d = constrain(d, 5, 25);
+    
     float repulsiveFrc = REPULSE_SCALE * ( v0.mass * v1.mass ) / sq(d);
+     
+    //v1 exerts force on v0 so added the repulsive force to the current positions of v0
+    v0.addForce(repulsiveFrc * (-unitVect.x), repulsiveFrc * (-unitVect.y));
     
-    v0.addForce( repulsiveFrc, 0 );
-    v1.addForce( -repulsiveFrc, 0 );
-    
+    v1.addForce(repulsiveFrc * (+unitVect.x), repulsiveFrc * (+unitVect.y));
+       
   }
 
   void applySpringForce( GraphEdge edge ) {
     // TODO: PUT CODE IN HERE TO CALCULATE (AND APPLY) A SPRING FORCE
     
+    // the direction of the attractive force that vertex 0 exerts on vertex 1
+    // sub means v1 - v0
+    PVector unitVect = PVector.sub(edge.v1.getPosition(), edge.v0.getPosition());
     
+    // Normalize and scale the force vector to 1 distance unit so only direction matters.
+    unitVect.normalize();
+    
+    // determine the distance
     float d = (edge.v0.getPosition()).dist(edge.v1.getPosition());
     
+    // determin the force magnitude
     float springForce =  SPRING_SCALE * max(0, d - RESTING_LENGTH);
-     edge.v0.addForce( springForce, 0 );
-     edge.v1.addForce( springForce, 0 );
+    
+    //println(springForce);
+    //v1 exerts force on v0 so added the attractive force to the current positions of v0
+    edge.v0.addForce( springForce * (unitVect.x), springForce * (unitVect.y) );
+    // 
+    edge.v1.addForce( springForce * (-unitVect.x), springForce * (-unitVect.y) );
     
   }
 
@@ -62,7 +87,7 @@ class ForceDirectedLayout extends Frame {
       
       //System.out.println(vertX + "\t" + vertY + "\n");
       
-      ellipse(vertX, vertY, v.getDiameter(), v.getDiameter());
+      ellipse(vertX, vertY, 8, 8);
     }
     
     for ( GraphEdge e : edges ) {
