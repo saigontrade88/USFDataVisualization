@@ -4,9 +4,9 @@
 class ForceDirectedLayout extends Frame {
   
   
-  float RESTING_LENGTH = 10.0f;   // update this value, 10.0f, 0.1f, 0.05f
+  float RESTING_LENGTH = 20.0f;   // update this value, 10.0f, 0.1f, 0.05f
   float SPRING_SCALE   = 0.0075f; // update this value,  0.0075f, 20.0f
-  float REPULSE_SCALE  = 400.0f;  // update this value, 400.0f
+  float REPULSE_SCALE  = 200.0f;  // update this value, 400.0f
 
   float TIME_STEP      = 0.5f;    // probably don't need to update this
 
@@ -30,6 +30,9 @@ class ForceDirectedLayout extends Frame {
      //  v0.addForce( ... );
     // v1.addForce( ... );
     
+    checkVertex(v0);
+    
+    checkVertex(v1);
     
     // the direction of the repulsive force that vertex 0 exerts on vertex 1
     // sub means v1 - v0
@@ -42,7 +45,7 @@ class ForceDirectedLayout extends Frame {
     
     // Limiting the distance to eliminate "extreme" results
     // for very close or very far objects
-    d = constrain(d, 5, 25);
+    //d = constrain(d, 5, 25);
     
     
     float repulsiveFrc = REPULSE_SCALE * ( v0.mass * v1.mass ) / sq(d);
@@ -84,11 +87,13 @@ class ForceDirectedLayout extends Frame {
     float yPos = v0.getPosition().y;
     
     if(xPos < 0 || xPos > width){
-        v0.setPosition(0, yPos);
+        float _xPos = constrain(xPos, 0, width);
+        v0.setPosition(_xPos, yPos);
     }
     
     if(yPos < 0 || yPos > height){
-        v0.setPosition(xPos, 0);
+        float _yPos = constrain(yPos, 0, width);
+        v0.setPosition(xPos, _yPos);
     }
     
   }
