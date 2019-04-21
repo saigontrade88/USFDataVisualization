@@ -64,7 +64,7 @@ void setup() {
       //System.out.println(srcVertString + "\n");
       //System.out.println(verts.get(j).getID().equals(srcVertString));
       if (verts.get(j).getID().equals(srcVertString)) {
-        mySrcVert =  new GraphVertex(verts.get(j).getID(), verts.get(j).group, verts.get(j).getPosition().x, verts.get(j).getPosition().y);
+        mySrcVert =  verts.get(j);
       } else {
         //System.out.println(verts.get(j).getID());
         //System.out.println("Can't find the corresponding vertex");
@@ -76,7 +76,7 @@ void setup() {
       //System.out.println("Character name= " + verts.get(j).getID() + "\n");
       //System.out.println("Character name= " + verts.get(j).getID() + "\n");
       if (verts.get(j).getID().equals(destVertString)) {
-        myDestVert =  new GraphVertex(verts.get(j).getID(), verts.get(j).group, verts.get(j).getPosition().x, verts.get(j).getPosition().y);
+        myDestVert =  verts.get(j);
       } else {
         //System.out.println(verts.get(j).getID());
         //System.out.println("Can't find the corresponding vertex");

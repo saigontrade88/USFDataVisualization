@@ -123,7 +123,7 @@ class ForceDirectedLayout extends Frame {
     display();
     
     for ( GraphEdge e : edges ) {
-        checkEdge(e, 10);
+        checkEdge(e, 5);
     }
     
     
