@@ -1,5 +1,5 @@
 // most modification should occur in this file
-
+int clickBuffer = 20;
 
 class ForceDirectedLayout extends Frame {
   
@@ -157,10 +157,21 @@ class ForceDirectedLayout extends Frame {
       line(vertSrcX, vertSrcY, vertDestX, vertDestY);
     }
   }
-
+  
+  boolean mouseInside(GraphVertex v){
+    PVector m = new PVector(mouseX, mouseY);
+     return abs(v.getPosition().dist(m)) < clickBuffer; 
+  }
 
   void mousePressed() { 
     // TODO: ADD SOME INTERACTION CODE
+    //Interaction: print ID 
+     for ( GraphVertex v : verts ){
+         if(mouseInside(v)){
+             selected = v;
+             println(selected.getID());
+         }
+     }
 
   }
 
@@ -168,6 +179,8 @@ class ForceDirectedLayout extends Frame {
     // TODO: ADD SOME INTERACTION CODE
 
   }
+  
+  
 
 
 

@@ -14,6 +14,10 @@ public class GraphVertex {
   float mass = 1;
   float diam = 1;
   int group;
+  
+  //mouse hovering interaction
+  int clickBuffer = 20;
+  boolean selected = false;
 
   public GraphVertex( String _id, int _group, float _x, float _y ){
     id = _id;
@@ -61,6 +65,9 @@ public class GraphVertex {
 
     setPosition( x, y );
       
-  }  
+  } 
+  
+  
+  
 
 }
