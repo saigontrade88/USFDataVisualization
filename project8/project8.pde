@@ -99,7 +99,7 @@ void setup() {
   for ( GraphEdge e : edges ) {
     GraphVertex cur = e.v0;
     String curId = cur.getID();
-    println(curId);
+    //println(curId);
     if (!outdegreeMap.containsKey(curId)) {
       outdegreeMap.put(curId, 1);
     } else {
