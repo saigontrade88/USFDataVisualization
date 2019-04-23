@@ -94,7 +94,7 @@ void setup() {
   System.out.println("Number of edges " + edges.size() + "\n");
 
   //create HashMap to count the source vertex occurrences
-    outdegreeMap = new HashMap<String, Integer>();
+  outdegreeMap = new HashMap<String, Integer>();
 
   for ( GraphEdge e : edges ) {
     GraphVertex cur = e.v0;
@@ -106,90 +106,105 @@ void setup() {
       outdegreeMap.put(curId, outdegreeMap.get(curId) + 1);
     }
   }
-   //Test Who Valjean talks to
-   /**
+  //Test Who Valjean talks to
+  /**
    int counter = 0;
    for (int j = 0; j < edges.size(); j++) {
-     if (edges.get(j).v0.getID().equals("Valjean")) {
-        println("Valjean talks to " + "\t" + edges.get(j).v1.getID());
-        counter += 1;
-        if(counter > outdegreeMap.get("Valjean")){
-          println("break at " + j);
-          break;
-        }
-      }
-       
-   }*/
+   if (edges.get(j).v0.getID().equals("Valjean")) {
+   println("Valjean talks to " + "\t" + edges.get(j).v1.getID());
+   counter += 1;
+   if(counter > outdegreeMap.get("Valjean")){
+   println("break at " + j);
+   break;
+   }
+   }
    
-    /*
+   }*/
+
+  /*
     for (String s : outdegreeMap.keySet()) {
-      System.out.println(s + "\t" + outdegreeMap.get(s));
-    }*/
-  
+   System.out.println(s + "\t" + outdegreeMap.get(s));
+   }*/
+
+  myFrame = new ForceDirectedLayout( verts, edges );
+}// End setup method
+
+void fileSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+    selectInput("Select a file to process:", "fileSelected");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+
+    ArrayList<GraphVertex> verts = new ArrayList<GraphVertex>();
+    ArrayList<GraphEdge>   edges = new ArrayList<GraphEdge>();
+
+
+    // TODO: PUT CODE IN TO LOAD THE GRAPH
+    // Reading in Node in the graph are characters. 
+    // Edge in the graph signify characters appearing in the same chapter of the novel
+
     myFrame = new ForceDirectedLayout( verts, edges );
-    
-  }// End setup method
-
-  void fileSelected(File selection) {
-    if (selection == null) {
-      println("Window was closed or the user hit cancel.");
-      selectInput("Select a file to process:", "fileSelected");
-    } else {
-      println("User selected " + selection.getAbsolutePath());
-
-      ArrayList<GraphVertex> verts = new ArrayList<GraphVertex>();
-      ArrayList<GraphEdge>   edges = new ArrayList<GraphEdge>();
-
-
-      // TODO: PUT CODE IN TO LOAD THE GRAPH
-      // Reading in Node in the graph are characters. 
-      // Edge in the graph signify characters appearing in the same chapter of the novel
-
-      myFrame = new ForceDirectedLayout( verts, edges );
-    }
   }
-  
-  void draw() {
-    background( 255 );
+}
 
-    if ( myFrame != null ) {
-      myFrame.setPosition( 0, 0, width, height );
-      myFrame.draw();
-      //noLoop();
-    }
+void draw() {
+  background( 255 );
+
+  if ( myFrame != null ) {
+    myFrame.setPosition( 0, 0, width, height );
+    myFrame.draw();
+    //noLoop();
   }
-  
- 
-    
+}
 
+
+
+
+
+void mousePressed() {
+  myFrame.mousePressed();
+}
+
+void mouseReleased() {
+  myFrame.mouseReleased();
+}
+
+abstract class Frame {
+
+  int u0, v0, w, h;
+  int clickBuffer = 2;
+  void setPosition( int u0, int v0, int w, int h ) {
+    this.u0 = u0;
+    this.v0 = v0;
+    this.w = w;
+    this.h = h;
+  }
+
+  abstract void draw();
 
   void mousePressed() {
-    myFrame.mousePressed();
   }
-
   void mouseReleased() {
-    myFrame.mouseReleased();
   }
 
-  abstract class Frame {
-
-    int u0, v0, w, h;
-    int clickBuffer = 2;
-    void setPosition( int u0, int v0, int w, int h ) {
-      this.u0 = u0;
-      this.v0 = v0;
-      this.w = w;
-      this.h = h;
-    }
-
-    abstract void draw();
-
-    void mousePressed() {
-    }
-    void mouseReleased() {
-    }
-
-    boolean mouseInside() {
-      return (u0-clickBuffer < mouseX) && (u0+w+clickBuffer)>mouseX && (v0-clickBuffer)< mouseY && (v0+h+clickBuffer)>mouseY;
-    }
+  boolean mouseInside() {
+    return (u0-clickBuffer < mouseX) && (u0+w+clickBuffer)>mouseX && (v0-clickBuffer)< mouseY && (v0+h+clickBuffer)>mouseY;
   }
+  void drawTextOnScreen(float x, float y, float rotate, int textSize, String text)
+  {
+    pushMatrix();
+
+    textSize(textSize);
+    fill(0);
+    stroke(0, 0, 0);
+    //translate(x,y);
+    rotate(rotate);
+    //textAlign(CENTER,CENTER);
+    text(text, u0 + x, v0 + y);
+    fill(255);//reset to the white background
+
+    popMatrix();
+  }
+  //End method draw text on screen
+}

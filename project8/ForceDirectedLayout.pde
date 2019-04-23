@@ -126,6 +126,27 @@ class ForceDirectedLayout extends Frame {
 
     //Interaction: fill adjacency vertex
     if (selected != null ) {
+      
+      String pop = selected.getID();
+      textSize(12);
+      rectMode(CORNER);
+      fill(255); // Set fill to white to draw background rectangle
+      
+      pushMatrix();
+      
+      //(0,0) - the origin point
+      translate(selected.getPosition().x, selected.getPosition().y);
+      rect(3, -18, textWidth(pop), 15);
+      
+      // Draw background rectangle
+      fill(0); // Reset fill
+      //text(pop, selected.getPosition().x + 3, selected.getPosition().y -18);
+       
+      popMatrix();
+      
+      textAlign(LEFT, TOP);
+      text(pop, selected.getPosition().x + 3, selected.getPosition().y -18);
+      
       //loop through the edge list
 
       for (int j = 0; j < edges.size(); j++) {
