@@ -24,7 +24,7 @@ class ForceDirectedLayout extends Frame {
   ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges ) {
     verts = _verts;
     edges = _edges;
-    selectedEdges = new ArrayList<GraphEdge>();
+    //selectedEdges = new ArrayList<GraphEdge>();
   }
 
   void applyRepulsiveForce( GraphVertex v0, GraphVertex v1 ) {
@@ -127,7 +127,7 @@ class ForceDirectedLayout extends Frame {
     //Interaction: fill adjacency vertex
     if (selected != null ) {
       //loop through the edge list
-      
+
       for (int j = 0; j < edges.size(); j++) {
         if (edges.get(j).v0.getID().equals(selected.getID()) == false) {
           //Redraw
@@ -146,45 +146,41 @@ class ForceDirectedLayout extends Frame {
           fill(0);// return black
           stroke(0);// return black
         }
-        //If the selected vertex is found, then build its edge list
-        else {          
-          selectedEdges.add(new GraphEdge( selected, edges.get(j).v1, edges.get(j).weight));
-        }
-      }
+      } // End if loop through the edge list
     }// End if the vertex is selected
-    
-    //Redraw the selected edge list
-  for ( GraphEdge e : selectedEdges ) {
+    //Draw the adjacency list of the selected vertex
+    if (selectedEdges != null ) {
+      //Redraw the selected edge list
+      for ( GraphEdge e : selectedEdges ) {
 
-      float vertSrcX =  e.v0.getPosition().x;
-      float vertSrcY =  e.v0.getPosition().y;
+        float vertSrcX =  e.v0.getPosition().x;
+        float vertSrcY =  e.v0.getPosition().y;
 
-      float vertDestX =  e.v1.getPosition().x;
-      float vertDestY =  e.v1.getPosition().y;
+        float vertDestX =  e.v1.getPosition().x;
+        float vertDestY =  e.v1.getPosition().y;
 
-      //System.out.println(vertSrcX + "\t" + vertSrcY + "\n");
+        //System.out.println(vertSrcX + "\t" + vertSrcY + "\n");
 
-      //System.out.println(vertDestX + "\t" + vertDestY + "\n");
-      
-      //solve the bigger case, deemphasize by coloring blue
-      fill(255, 0, 0);
-          //redraw the source, destination vertexes and the conneccting edge
-          ellipse(e.v0.getPosition().x, e.v0.getPosition().y, 8, 8);
-          ellipse(e.v1.getPosition().x, e.v1.getPosition().y, 8, 8);
+        //System.out.println(vertDestX + "\t" + vertDestY + "\n");
 
-      stroke(255, 0, 0);
+        //solve the bigger case, deemphasize by coloring blue
+        fill(255, 0, 0);
+        //redraw the source, destination vertexes and the conneccting edge
+        ellipse(e.v0.getPosition().x, e.v0.getPosition().y, 8, 8);
+        ellipse(e.v1.getPosition().x, e.v1.getPosition().y, 8, 8);
 
-      line(vertSrcX, vertSrcY, vertDestX, vertDestY);
-      
-      fill(0);// return black
-      stroke(0);// return black
-   }
-  //End redraw the selected edge list
-  
+        stroke(255, 0, 0);
+
+        line(vertSrcX, vertSrcY, vertDestX, vertDestY);
+
+        fill(0);// return black
+        stroke(0);// return black
+      } //End redraw the selected edge list
+    } //End if check the selected edge list is not null
   }//End function draw
-  
-  
- 
+
+
+
   void display() {
     for ( GraphVertex v : verts ) {
 
@@ -224,10 +220,15 @@ class ForceDirectedLayout extends Frame {
     for ( GraphVertex v : verts ) {
       if (mouseInside(v)) {
         //reset the selected edge list
-        //selectedEdges = null;
+        selectedEdges = new ArrayList<GraphEdge>();
         selected = v;
         //println(selected.getID(), selected.group );
-        
+        //Build the adjacency list of the selected edge above
+        for (int j = 0; j < edges.size(); j++) {
+          if (edges.get(j).v0.getID().equals(selected.getID()) == true) {     
+            selectedEdges.add(edges.get(j));
+          }
+        }
       }
     }
   }//end mousePressed
