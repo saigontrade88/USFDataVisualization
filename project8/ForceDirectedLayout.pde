@@ -127,25 +127,7 @@ class ForceDirectedLayout extends Frame {
     //Interaction: fill adjacency vertex
     if (selected != null ) {
       
-      String pop = selected.getID();
-      textSize(12);
-      rectMode(CORNER);
-      fill(255); // Set fill to white to draw background rectangle
-      
-      pushMatrix();
-      
-      //(0,0) - the origin point
-      translate(selected.getPosition().x, selected.getPosition().y);
-      rect(3, -18, textWidth(pop), 15);
-      
-      // Draw background rectangle
-      fill(0); // Reset fill
-      //text(pop, selected.getPosition().x + 3, selected.getPosition().y -18);
-       
-      popMatrix();
-      
-      textAlign(LEFT, TOP);
-      text(pop, selected.getPosition().x + 3, selected.getPosition().y -18);
+      selected.display();
       
       //loop through the edge list
 
@@ -155,16 +137,18 @@ class ForceDirectedLayout extends Frame {
           //println(selected.getID() + " talks to " + "\t" + edges.get(j).v1.getID());
 
           //solve the bigger case, deemphasize by coloring blue
-          fill(0, 0, 255);
+          stroke(200);
+          fill(200);
           //redraw the source, destination vertexes and the conneccting edge
           ellipse(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, 8, 8);
           ellipse(edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y, 8, 8);
-
-          stroke(0, 0, 255);
-
+          
+          //stroke(0, 0, 255);
+          
           line(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y);
 
-          fill(0);// return black
+          // return black
+          fill(0);
           stroke(0);// return black
         }
       } // End if loop through the edge list
@@ -187,8 +171,11 @@ class ForceDirectedLayout extends Frame {
         //solve the bigger case, deemphasize by coloring blue
         fill(255, 0, 0);
         //redraw the source, destination vertexes and the conneccting edge
+        
         ellipse(e.v0.getPosition().x, e.v0.getPosition().y, 8, 8);
+        e.v0.display();
         ellipse(e.v1.getPosition().x, e.v1.getPosition().y, 8, 8);
+        e.v1.display();
 
         stroke(255, 0, 0);
 
@@ -209,8 +196,12 @@ class ForceDirectedLayout extends Frame {
       int vertY = (int) v.getPosition().y;
 
       //System.out.println(vertX + "\t" + vertY + "\n");
-
+      //colorMode(HSB, 100);
+      int myColor = (int) map(v.group, 1, 10, 100, 255);
+      
+      fill(0, myColor, myColor);
       ellipse(vertX, vertY, 8, 8);
+      fill(0);
     }
 
     for ( GraphEdge e : edges ) {

@@ -67,7 +67,28 @@ public class GraphVertex {
       
   } 
   
+  void display(){
+      String pop = getID();
+      textSize(12);
+      rectMode(CORNER);
+      fill(255); // Set fill to white to draw background rectangle
+      
+      pushMatrix();
+      
+      //(0,0) - the origin point
+      translate( getPosition().x, getPosition().y);
+      rect(3, -18, textWidth(pop), 15);
+      
+      // Draw background rectangle
+      fill(0); // Reset fill
+      //text(pop, selected.getPosition().x + 3, selected.getPosition().y -18);
+       
+      popMatrix();
+      
+      textAlign(LEFT, TOP);
+      text(pop, getPosition().x + 3, getPosition().y -18);  
+  }
   
-  
+  //End the draw() function 
 
 }

@@ -9,16 +9,25 @@ HashMap<String, Integer> outdegreeMap = null;
 
 void setup() {
   size(800, 800);  
-  //selectInput("Select a file to process:", "fileSelected");
+  selectInput("Select a file to process:", "fileSelected");
 
-  ArrayList<GraphVertex> verts = new ArrayList<GraphVertex>();
+}// End setup method
 
-  ArrayList<GraphEdge>   edges = new ArrayList<GraphEdge>();
+void fileSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+    selectInput("Select a file to process:", "fileSelected");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+
+    ArrayList<GraphVertex> verts = new ArrayList<GraphVertex>();
+    ArrayList<GraphEdge>   edges = new ArrayList<GraphEdge>();
 
 
-  // TODO: PUT CODE IN TO LOAD THE GRAPH
-  // Reading in Node in the graph are characters. 
-  // Edge in the graph signify characters appearing in the same chapter of the novel
+    // TODO: PUT CODE IN TO LOAD THE GRAPH
+    // Reading in Node in the graph are characters. 
+    // Edge in the graph signify characters appearing in the same chapter of the novel
+    
   JSONObject characterFile = loadJSONObject("miserables_small.json");
   JSONArray charaters = characterFile.getJSONArray("nodes");
   JSONArray coAppearanceNum = characterFile.getJSONArray("links");
@@ -26,7 +35,8 @@ void setup() {
   JSONObject myCharacter = charaters.getJSONObject(0);
   String id = myCharacter.getString("id");
   int group = myCharacter.getInt("group");
-
+  
+  //The first vertex
   verts.add(new GraphVertex(id, group, width/2, height/2));
 
   Random rand = new Random();
@@ -126,24 +136,6 @@ void setup() {
    System.out.println(s + "\t" + outdegreeMap.get(s));
    }*/
 
-  myFrame = new ForceDirectedLayout( verts, edges );
-}// End setup method
-
-void fileSelected(File selection) {
-  if (selection == null) {
-    println("Window was closed or the user hit cancel.");
-    selectInput("Select a file to process:", "fileSelected");
-  } else {
-    println("User selected " + selection.getAbsolutePath());
-
-    ArrayList<GraphVertex> verts = new ArrayList<GraphVertex>();
-    ArrayList<GraphEdge>   edges = new ArrayList<GraphEdge>();
-
-
-    // TODO: PUT CODE IN TO LOAD THE GRAPH
-    // Reading in Node in the graph are characters. 
-    // Edge in the graph signify characters appearing in the same chapter of the novel
-
     myFrame = new ForceDirectedLayout( verts, edges );
   }
 }
@@ -152,8 +144,39 @@ void draw() {
   background( 255 );
 
   if ( myFrame != null ) {
-    myFrame.setPosition( 0, 0, width, height );
+    
+    int buffer = 100;
+    
+    myFrame.setPosition( 25, 25, width - 250, height - 100);
+
+    //Border of the frame
+    //rect(myFrame.u0, myFrame.v0, myFrame.w, myFrame.h);
+    
     myFrame.draw();
+
+    textAlign(CENTER, CENTER);
+
+    textAlign(CENTER, CENTER);
+    
+    String title = "Graph Directed Layout " + characterFile;
+    myFrame.drawTextOnScreen((width - buffer)/2, (myFrame.v0 - 2)/2, 
+      0, 16, title);
+      
+    //draw a function for title
+       String ins;
+       ins ="*Interactions:\n - Explore the netwrok in details \n by clicking on a source vertex.\n" + 
+       "- Use your mouse to relocate \nthe vertex (ongoing). \n" +
+       "* Visual encoding: red means the interested characters. \n" +
+       " At the beginning, different color means different group";
+       
+       //Border of the textbox
+       //rect(myFrame.u0 + myFrame.w + 10,  (myFrame.v0 - 2)/2, 
+       //width - (myFrame.u0 + myFrame.w + 15), buffer);
+       
+       textAlign(LEFT, CENTER);
+       myFrame.drawTextOnScreen(myFrame.u0 + 3*myFrame.w/4 ,  100,
+       0, 11, ins);
+
     //noLoop();
   }
 }
