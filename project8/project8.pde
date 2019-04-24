@@ -28,7 +28,7 @@ void fileSelected(File selection) {
     // Reading in Node in the graph are characters. 
     // Edge in the graph signify characters appearing in the same chapter of the novel
     
-  JSONObject characterFile = loadJSONObject("miserables_small.json");
+  JSONObject characterFile = loadJSONObject(selection.getAbsolutePath());
   JSONArray charaters = characterFile.getJSONArray("nodes");
   JSONArray coAppearanceNum = characterFile.getJSONArray("links");
 
