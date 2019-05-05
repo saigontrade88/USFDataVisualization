@@ -19,6 +19,7 @@ class ForceDirectedLayout extends Frame {
   // will need to set this variable and use it) 
   GraphVertex selected = null;
   ArrayList<GraphEdge> selectedEdges = null;
+  boolean locked = false; 
 
 
   ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges ) {
@@ -126,9 +127,9 @@ class ForceDirectedLayout extends Frame {
 
     //Interaction: fill adjacency vertex
     if (selected != null ) {
-      
+
       selected.display();
-      
+
       //loop through the edge list
 
       for (int j = 0; j < edges.size(); j++) {
@@ -142,9 +143,9 @@ class ForceDirectedLayout extends Frame {
           //redraw the source, destination vertexes and the conneccting edge
           ellipse(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, 8, 8);
           ellipse(edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y, 8, 8);
-          
+
           //stroke(0, 0, 255);
-          
+
           line(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y);
 
           // return black
@@ -171,7 +172,7 @@ class ForceDirectedLayout extends Frame {
         //solve the bigger case, deemphasize by coloring blue
         fill(255, 0, 0);
         //redraw the source, destination vertexes and the conneccting edge
-        
+
         ellipse(e.v0.getPosition().x, e.v0.getPosition().y, 8, 8);
         e.v0.display();
         ellipse(e.v1.getPosition().x, e.v1.getPosition().y, 8, 8);
@@ -185,6 +186,13 @@ class ForceDirectedLayout extends Frame {
         stroke(0);// return black
       } //End redraw the selected edge list
     } //End if check the selected edge list is not null
+    //Drag and drop
+    if (selected != null ) {
+      //drag and drop the vertex
+      if (locked) {
+        selected.setPosition(mouseX, mouseY);
+      }
+    }
   }//End function draw
 
 
@@ -198,7 +206,7 @@ class ForceDirectedLayout extends Frame {
       //System.out.println(vertX + "\t" + vertY + "\n");
       //colorMode(HSB, 100);
       int myColor = (int) map(v.group, 1, 10, 100, 255);
-      
+
       fill(0, myColor, myColor);
       ellipse(vertX, vertY, 8, 8);
       fill(0);
@@ -234,6 +242,9 @@ class ForceDirectedLayout extends Frame {
         //reset the selected edge list
         selectedEdges = new ArrayList<GraphEdge>();
         selected = v;
+
+        locked = true;//Drag and drop interaction
+        
         //println(selected.getID(), selected.group );
         //Build the adjacency list of the selected edge above
         for (int j = 0; j < edges.size(); j++) {
@@ -245,8 +256,11 @@ class ForceDirectedLayout extends Frame {
     }
   }//end mousePressed
 
+
+
   void mouseReleased() {    
     // TODO: ADD SOME INTERACTION CODE
+    locked = false;
   }
 
 

@@ -15,9 +15,6 @@ public class GraphVertex {
   float diam = 1;
   int group;
   
-  //mouse hovering interaction
-  int clickBuffer = 20;
-  boolean selected = false;
 
   public GraphVertex( String _id, int _group, float _x, float _y ){
     id = _id;
