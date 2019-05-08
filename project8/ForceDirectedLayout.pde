@@ -190,7 +190,7 @@ class ForceDirectedLayout extends Frame {
     if (selected != null ) {
       //drag and drop the vertex
       if (locked) {
-        selected.setPosition(mouseX, mouseY);
+        selected.mouseDragged();
       }
     }
   }//End function draw
@@ -200,8 +200,8 @@ class ForceDirectedLayout extends Frame {
   void display() {
     for ( GraphVertex v : verts ) {
 
-      int vertX = (int) v.getPosition().x;
-      int vertY = (int) v.getPosition().y;
+      float vertX =  v.getPosition().x;
+      float vertY =  v.getPosition().y;
 
       //System.out.println(vertX + "\t" + vertY + "\n");
       //colorMode(HSB, 100);
