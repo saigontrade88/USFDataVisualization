@@ -20,14 +20,32 @@ class ForceDirectedLayout extends Frame {
   GraphVertex selected = null;
   ArrayList<GraphEdge> selectedEdges = null;
   boolean locked = false; 
+  
+  //Dijkstras's parameters
+  
+  private int dist[]; //the total cost to the source node
+  private int distMatrix[][];
+  private Set<Integer> settled; // list of visited nodes
+  private PriorityQueue<GraphVertex> pq; //minimum parity queue
+  HashMap<String, ArrayList<String>> adj;
+  
 
-
-  ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges ) {
+  //Dijkstras's parameters
+  
+  ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges, HashMap<String, ArrayList<String>> _adj) {
     verts = _verts;
     edges = _edges;
     //selectedEdges = new ArrayList<GraphEdge>();
+    
+    adj = _adj;
+    dist = new int[verts.size()];
+    distMatrix = new int [verts.size()][verts.size()];
+    settled = new HashSet<Integer> ();
+    pq = new PriorityQueue<GraphVertex>(verts.size(), new GraphVertex());
+    
   }
-
+  //End constructor
+  
   void applyRepulsiveForce( GraphVertex v0, GraphVertex v1 ) {
     // TODO: PUT CODE IN HERE TO CALCULATE (AND APPLY) A REPULSIVE FORCE
 
@@ -59,6 +77,7 @@ class ForceDirectedLayout extends Frame {
 
     v1.addForce(repulsiveFrc * (+unitVect.x), repulsiveFrc * (+unitVect.y));
   }
+  //End applyRepulsiveForce method
 
   void applySpringForce( GraphEdge edge ) {
     // TODO: PUT CODE IN HERE TO CALCULATE (AND APPLY) A SPRING FORCE
@@ -82,7 +101,7 @@ class ForceDirectedLayout extends Frame {
     // 
     edge.v1.addForce( springForce * (-unitVect.x), springForce * (-unitVect.y) );
   }
-
+  //End applySpringForce
   void checkVertex(GraphVertex v0) {
 
     float xPos = v0.getPosition().x;
@@ -98,7 +117,7 @@ class ForceDirectedLayout extends Frame {
       v0.setPosition(xPos, _yPos);
     }
   }
-
+  //End checkVertex method
   void checkEdge(GraphEdge e, float minDist) {
 
     GraphVertex v0 = e.v0;
@@ -113,7 +132,7 @@ class ForceDirectedLayout extends Frame {
       v1.setPosition(v1Pos.x, v1Pos.y);
     }
   }
-
+  //End checkEdge method
   void draw() {
     update(); // don't modify this line
 
@@ -227,8 +246,8 @@ class ForceDirectedLayout extends Frame {
       line(vertSrcX, vertSrcY, vertDestX, vertDestY);
     }
   }
-
-
+  //End function display
+ 
   boolean mouseInside(GraphVertex v) {
     PVector m = new PVector(mouseX, mouseY);
     return abs(v.getPosition().dist(m)) < clickBuffer;

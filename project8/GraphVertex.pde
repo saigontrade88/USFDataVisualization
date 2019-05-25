@@ -4,7 +4,7 @@
 public static final float DAMPING_COEFFICIENT = 0.75f;
 
 
-public class GraphVertex {
+public class GraphVertex implements Comparator<GraphVertex>{
 
   String id;
   PVector pos = new PVector(0, 0);  
@@ -14,8 +14,15 @@ public class GraphVertex {
   float mass = 1;
   float diam = 1;
   int group;
+  
+  
+  /****Dijkstras*****/
+  //int status;
+  //int predecessor;
+  int cost;
+  /****Dijkstras*****/
 
-
+  public GraphVertex() {}
   public GraphVertex( String _id, int _group, float _x, float _y ) {
     id = _id;
     group = _group;
@@ -121,4 +128,15 @@ public class GraphVertex {
   }
 
   //End the draw() function
+  
+  @Override
+    public int compare(GraphVertex node1, GraphVertex node2) {
+      
+      if(node1.cost < node2.cost) return -1;
+      if(node1.cost > node2.cost) return 1;
+      return 0;
+      
+    }
+    
+    
 }
