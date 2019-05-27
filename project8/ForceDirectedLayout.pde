@@ -20,32 +20,36 @@ class ForceDirectedLayout extends Frame {
   GraphVertex selected = null;
   ArrayList<GraphEdge> selectedEdges = null;
   boolean locked = false; 
-  
-  //Dijkstras's parameters
-  
-  private int dist[]; //the total cost to the source node
-  private int distMatrix[][];
-  private Set<Integer> settled; // list of visited nodes
-  private PriorityQueue<GraphVertex> pq; //minimum parity queue
-  HashMap<String, ArrayList<String>> adj;
-  
 
   //Dijkstras's parameters
-  
+
+  private HashMap<String, Integer> dist; //the total cost to the source node
+  private float distMatrix[][];
+  private Set<String> settled; // list of visited nodes
+  private PriorityQueue<GraphVertex> pq; //minimum parity queue
+  HashMap<String, ArrayList<String>> adj;
+
+
+  //Dijkstras's parameters
+
   ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges, HashMap<String, ArrayList<String>> _adj) {
     verts = _verts;
     edges = _edges;
     //selectedEdges = new ArrayList<GraphEdge>();
-    
+
     adj = _adj;
-    dist = new int[verts.size()];
-    distMatrix = new int [verts.size()][verts.size()];
-    settled = new HashSet<Integer> ();
+
+    distMatrix = new float [verts.size()][verts.size()];
+
+    //Intiaize the above 2D distance matrix
+    initializeDistanceMatrix();
+
+    settled = new HashSet<String> ();
+
     pq = new PriorityQueue<GraphVertex>(verts.size(), new GraphVertex());
-    
   }
   //End constructor
-  
+
   void applyRepulsiveForce( GraphVertex v0, GraphVertex v1 ) {
     // TODO: PUT CODE IN HERE TO CALCULATE (AND APPLY) A REPULSIVE FORCE
 
@@ -133,6 +137,121 @@ class ForceDirectedLayout extends Frame {
     }
   }
   //End checkEdge method
+  //Dijkstra
+  //Function for Dikstra's algorithm
+  public void dijkstra(String srcNodeId) {
+
+    for (GraphVertex v : verts) {
+      if (!dist.containsKey(v.id)) {
+        dist.put(v.id, Integer.MAX_VALUE);
+      } else {
+        System.out.println("Double check initialization of the distance hashmap");
+        dist.put(v.id, Integer.MAX_VALUE);
+      }
+    }
+
+    // Add source node to the priority queue
+    GraphVertex srcNode = null;
+    for (GraphVertex v : verts) {
+      if (v.id.equals(srcNodeId)) {
+        srcNode = v;
+        break;
+      }
+    }
+    pq.add(srcNode);
+
+    //Distance to the source node is 0
+    dist.put(srcNode.id, 0);
+
+    //Reset the visited vertex
+    if (settled.size()== verts.size())
+      settled.clear();
+
+    while (settled.size() != verts.size()) {
+      //remove the minimum distance node 
+      //from  the priority queue
+      String u = pq.remove().id; //u = 0 for the first loop
+
+      //adding the node whose distance is finalized
+      settled.add(u);
+
+      //System.out.println("The visting nodes are ordered as  " + u);
+      //update adjacent's total distance to the source node
+      e_Neighbors(srcNode);
+    }
+  }
+  //End Dijkstra
+  //Function to process all the neighbors 
+  // of the visited node
+  private void e_Neighbors(GraphVertex srcNode) {
+
+    int edgeDistance = -1;
+    int newTotalDistance = -1;
+
+    //All the neighbors of u
+    for (int i = 0; i < adj.get(srcNode.id).size(); i++) {
+
+      String destId = adj.get(srcNode.id).get(i);
+
+      // Add source node to the priority queue
+      GraphVertex destNode = null;
+      for (GraphVertex v : verts) {
+        if (v.id.equals(destId)) {
+          destNode = v;
+          break;
+        }
+      }
+
+      //if the node v hasn't been processed
+      if (!settled.contains(destId)) {
+        edgeDistance = destNode.cost;
+        newTotalDistance = dist.get(srcNode.id) + edgeDistance;
+
+        // If new distance is cheaper in cost
+        if (newTotalDistance < destNode.cost)
+          dist.put(destId, newTotalDistance);
+
+        // Add the node v to the queue
+        pq.add(destNode);
+      }
+    }
+  }
+  //end e_Neighbors
+  //Initialize the original 2 dimensional distance matrix based on the weighted property of a GraphEdge object
+  void initializeDistanceMatrix() {
+    //Initialize the matrix
+    for (int row = 0; row < verts.size(); row++) {
+      for (int col = 0; col < verts.size(); col++) {
+        distMatrix[row][col] = 0;
+      }
+    }
+    //Update the square matrix
+    for ( GraphEdge e : edges ) {
+      int srcId =  e.v0.dId;
+      int destId =  e.v1.dId;
+      for (int row = 0; row < verts.size(); row++) {
+        for (int col = 0; col < verts.size(); col++) {
+          if ( row == srcId && col == destId ) {
+            distMatrix[srcId][destId] = e.weight;
+            distMatrix[destId][srcId] = e.weight;
+          } else if (row == col) {
+            distMatrix[row][col] = 0;
+          }
+        }
+      }
+    }
+    //print out the distance matrix
+    /**
+    System.out.println("Double check the distance matrix");
+    for (int row = 0; row < verts.size(); row++) {
+      System.out.println("The current row is " + row);
+      for (int col = 0; col < verts.size(); col++) {
+        System.out.print(distMatrix[row][col] + "    ");
+      }
+      System.out.println();
+    }*/
+  }
+  //end Initialize the original 2 dimensional distance matrix
   void draw() {
     update(); // don't modify this line
 
@@ -247,7 +366,7 @@ class ForceDirectedLayout extends Frame {
     }
   }
   //End function display
- 
+
   boolean mouseInside(GraphVertex v) {
     PVector m = new PVector(mouseX, mouseY);
     return abs(v.getPosition().dist(m)) < clickBuffer;
@@ -263,7 +382,7 @@ class ForceDirectedLayout extends Frame {
         selected = v;
 
         locked = true;//Drag and drop interaction
-        
+
         //println(selected.getID(), selected.group );
         //Build the adjacency list of the selected edge above
         for (int j = 0; j < edges.size(); j++) {

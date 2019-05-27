@@ -39,7 +39,7 @@ void fileSelected(File selection) {
     int group = myCharacter.getInt("group");
 
     //The first vertex
-    verts.add(new GraphVertex(id, group, width/2, height/2));
+    verts.add(new GraphVertex(id, group, width/2, height/2, 0));
 
     Random rand = new Random();
 
@@ -52,11 +52,16 @@ void fileSelected(File selection) {
       int x = (int) rand.nextInt(width);
       int y = (int) rand.nextInt(height);
 
-      verts.add(new GraphVertex(id, group, x, y));
+      verts.add(new GraphVertex(id, group, x, y, i));
     }
 
     System.out.println("Number of vertices" + verts.size() + "\n");
     //coAppearanceNum.size()
+    
+    /*
+    for(GraphVertex v: verts){
+      System.out.println(v.dId + " " + v.id); 
+    }*/
 
     for (int i = 0; i < coAppearanceNum.size(); i++) {
 
@@ -170,6 +175,17 @@ void fileSelected(File selection) {
       }
       System.out.println(myString);
     }
+    
+    System.out.println("Vertices are not included in the adjency list");
+    
+    for ( GraphVertex v : verts ) {
+       if(!adj.containsKey(v.id))
+         System.out.println(v.id);
+         ArrayList<String> adjList = new ArrayList<String>();
+         adjList.add("zero_Out_Degree");
+         adj.put(v.id, adjList);
+    }
+    
      
 
     myFrame = new ForceDirectedLayout( verts, edges, adj);

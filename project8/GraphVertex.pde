@@ -17,16 +17,17 @@ public class GraphVertex implements Comparator<GraphVertex>{
   
   
   /****Dijkstras*****/
-  //int status;
+  int dId;
   //int predecessor;
   int cost;
   /****Dijkstras*****/
 
   public GraphVertex() {}
-  public GraphVertex( String _id, int _group, float _x, float _y ) {
+  public GraphVertex( String _id, int _group, float _x, float _y, int _dId) {
     id = _id;
     group = _group;
     pos.set(_x, _y);
+    dId = _dId;
   }
 
   public String getID() { 
