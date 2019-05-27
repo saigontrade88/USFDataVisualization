@@ -23,7 +23,7 @@ class ForceDirectedLayout extends Frame {
 
   //Dijkstras's parameters
 
-  private HashMap<String, Integer> dist; //the total cost to the source node
+  private float dist1DMatrix[]; //the total cost to the source node
   private float distMatrix[][];
   private Set<String> settled; // list of visited nodes
   private PriorityQueue<GraphVertex> pq; //minimum parity queue
@@ -139,8 +139,16 @@ class ForceDirectedLayout extends Frame {
   //End checkEdge method
   //Dijkstra
   //Function for Dikstra's algorithm
-  public void dijkstra(String srcNodeId) {
-
+  public void dijkstra(int srcNodeId) {
+    //Initialize the dist1DMatrix 
+    if(srcNodeId < verts.size()){
+      for(int col = 0; col < verts.size(); col++)
+         dist1DMatrix[col] = Float.MAX_VALUE;
+    }
+    
+    
+    
+    
     for (GraphVertex v : verts) {
       if (!dist.containsKey(v.id)) {
         dist.put(v.id, Integer.MAX_VALUE);
