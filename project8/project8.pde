@@ -23,7 +23,12 @@ void fileSelected(File selection) {
     ArrayList<GraphEdge>   edges = new ArrayList<GraphEdge>();
 
     //Adjacency vertex list
-    HashMap<String, ArrayList<String>> adj = null;
+    // Map vertex to its ArrayList<String>
+    // Look up the ArrayList given the vertex name
+    // Return the ArrayList for the given vertex
+    // Summarize the info from the GraphEdge ArrayList
+    
+    HashMap<Integer, ArrayList<GraphVertex>> adj = null;
 
 
     // TODO: PUT CODE IN TO LOAD THE GRAPH
@@ -80,25 +85,25 @@ void fileSelected(File selection) {
       //verts.size()
       //Find the source vertext in the vertex list
       for (int j = 0; j < verts.size(); j++) {
-        //System.out.println("Character name= " + verts.get(j).getID() + "\n");
+        //System.out.println("Character name= " + verts.get(j).getStringID() + "\n");
         //System.out.println(srcVertString + "\n");
-        //System.out.println(verts.get(j).getID().equals(srcVertString));
-        if (verts.get(j).getID().equals(srcVertString)) {
+        //System.out.println(verts.get(j).getStringID().equals(srcVertString));
+        if (verts.get(j).getStringID().equals(srcVertString)) {
           mySrcVert =  verts.get(j);
         } else {
-          //System.out.println(verts.get(j).getID());
+          //System.out.println(verts.get(j).getStringID());
           //System.out.println("Can't find the corresponding vertex");
         }
       }
 
       //Find the dest vertext in the vertex list
       for (int j = 0; j < verts.size(); j++) {
-        //System.out.println("Character name= " + verts.get(j).getID() + "\n");
-        //System.out.println("Character name= " + verts.get(j).getID() + "\n");
-        if (verts.get(j).getID().equals(destVertString)) {
+        //System.out.println("Character name= " + verts.get(j).getStringID() + "\n");
+        //System.out.println("Character name= " + verts.get(j).getStringID() + "\n");
+        if (verts.get(j).getStringID().equals(destVertString)) {
           myDestVert =  verts.get(j);
         } else {
-          //System.out.println(verts.get(j).getID());
+          //System.out.println(verts.get(j).getStringID());
           //System.out.println("Can't find the corresponding vertex");
           //return;
         }
@@ -115,7 +120,7 @@ void fileSelected(File selection) {
 
     for ( GraphEdge e : edges ) {
       GraphVertex cur = e.v0;
-      String curId = cur.getID();
+      String curId = cur.getStringID();
       //println(curId);
       if (!outdegreeMap.containsKey(curId)) {
         outdegreeMap.put(curId, 1);
@@ -127,8 +132,8 @@ void fileSelected(File selection) {
     /**
      int counter = 0;
      for (int j = 0; j < edges.size(); j++) {
-     if (edges.get(j).v0.getID().equals("Valjean")) {
-     println("Valjean talks to " + "\t" + edges.get(j).v1.getID());
+     if (edges.get(j).v0.getStringID().equals("Valjean")) {
+     println("Valjean talks to " + "\t" + edges.get(j).v1.getStringID());
      counter += 1;
      if(counter > outdegreeMap.get("Valjean")){
      println("break at " + j);
@@ -145,33 +150,32 @@ void fileSelected(File selection) {
 
     //Initialize the adjacency vertex list
 
-    adj = new HashMap<String, ArrayList<String>>();
-
+    adj = new HashMap<Integer, ArrayList<GraphVertex>>();
+    
     for ( GraphVertex v : verts ) {
-      for ( GraphEdge u : edges) {
-        String srcID = v.id;
-        if (srcID.equals(u.v0.id) == true) {
-          String destID = u.v1.getID();
-          ArrayList<String> adjList;
-          //println(curId);
-          if (!adj.containsKey(srcID)) {
-            adjList = new ArrayList<String>();
-            adjList.add(destID);
-            adj.put(srcID, adjList);
-          } else {
-            adjList = adj.get(srcID);
-            adjList.add(destID);
-            adj.put(srcID, adjList);
-          }
-        }
-      }
+      ArrayList<GraphVertex> neighborList = new ArrayList<GraphVertex>();
+      adj.put(v.dId, neighborList);
     }
     
-    for (String s : adj.keySet()) {
-      ArrayList<String> adjList = adj.get(s);
-      String myString = s;
-      for(int i = 0; i < adjList.size(); i++){
-        myString = myString + "\t" + adjList.get(i);   
+    //Populate the adjacency list
+    for ( GraphEdge u : edges) {
+          if (adj.containsKey(u.v0.dId)) {
+            ArrayList<GraphVertex> neighborList = adj.get(u.v0.dId);
+            neighborList.add(u.v1);
+            adj.put(u.v0.dId, neighborList);
+          } else {
+            System.out.println("New vertex. Double check the input data");
+          }
+     }
+      
+    
+    System.out.println("The adjacency list");
+    
+    for (int dId : adj.keySet()) {
+      ArrayList<GraphVertex> neighborList = adj.get(dId);
+      String myString = dId + " ";
+      for(int i = 0; i < neighborList.size(); i++){
+        myString = myString + "\t" + neighborList.get(i).id;   
       }
       System.out.println(myString);
     }
@@ -179,15 +183,14 @@ void fileSelected(File selection) {
     System.out.println("Vertices are not included in the adjency list");
     
     for ( GraphVertex v : verts ) {
-       if(!adj.containsKey(v.id))
+       if(!adj.containsKey(v.dId)){
          System.out.println(v.id);
-         ArrayList<String> adjList = new ArrayList<String>();
-         adjList.add("zero_Out_Degree");
-         adj.put(v.id, adjList);
+    //     ArrayList<String> adjList = new ArrayList<String>();
+    //     adjList.add("zero_Out_Degree");
+    //     adj.put(v.id, adjList);
+       }
     }
     
-     
-
     myFrame = new ForceDirectedLayout( verts, edges, adj);
   }
 }

@@ -19,7 +19,7 @@ public class GraphVertex implements Comparator<GraphVertex>{
   /****Dijkstras*****/
   int dId;
   //int predecessor;
-  int cost;
+  float cost;
   /****Dijkstras*****/
 
   public GraphVertex() {}
@@ -29,9 +29,28 @@ public class GraphVertex implements Comparator<GraphVertex>{
     pos.set(_x, _y);
     dId = _dId;
   }
+  public GraphVertex(String _id, int _dId, float _cost){
+    id = _id;
+    dId = _dId;
+    cost = _cost;
+  }
+  
+  public GraphVertex(int _dId, float _cost){
+    
+    dId = _dId;
+    cost = _cost;
+  }
 
-  public String getID() { 
+  public String getStringID() { 
     return id;
+  }
+  
+  public int getNumbID(){
+    return dId;
+  }
+  
+  public int getCost(){
+    return (int) cost;
   }
 
   public void    setPosition( float _x, float _y ) { 
@@ -107,7 +126,7 @@ public class GraphVertex implements Comparator<GraphVertex>{
   }
 
   void display() {
-    String pop = getID();
+    String pop = getStringID();
     textSize(12);
     //rectMode(CORNER);
     fill(255); // Set fill to white to draw background rectangle

@@ -22,22 +22,28 @@ class ForceDirectedLayout extends Frame {
   boolean locked = false; 
 
   //Dijkstras's parameters
-
+  public static final int INF = 1000000000;
+  
+  private ArrayList<Integer> dist; // replace dist1DMatrix[] because method dynamic allocation for new element, set, get,... 
   private float dist1DMatrix[]; //the total cost to the source node
   private float distMatrix[][];
   private Set<String> settled; // list of visited nodes
   private PriorityQueue<GraphVertex> pq; //minimum parity queue
-  HashMap<String, ArrayList<String>> adj;
+  HashMap<Integer, ArrayList<GraphVertex>> adj;
 
 
   //Dijkstras's parameters
 
-  ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges, HashMap<String, ArrayList<String>> _adj) {
+  ForceDirectedLayout( ArrayList<GraphVertex> _verts, ArrayList<GraphEdge> _edges, HashMap<Integer, ArrayList<GraphVertex>> _adj) {
     verts = _verts;
     edges = _edges;
     //selectedEdges = new ArrayList<GraphEdge>();
 
     adj = _adj;
+        
+    dist1DMatrix = new float[verts.size()];
+    
+    //dist.addAll(Collections.nCopies(verts.size(), INF));  
 
     distMatrix = new float [verts.size()][verts.size()];
 
@@ -47,6 +53,33 @@ class ForceDirectedLayout extends Frame {
     settled = new HashSet<String> ();
 
     pq = new PriorityQueue<GraphVertex>(verts.size(), new GraphVertex());
+    
+    //for (int srcNodeId = 0; srcNodeId < 1; srcNodeId++) {
+    for (int srcNodeId = 0; srcNodeId < verts.size(); srcNodeId++) {
+
+      System.out.println("Call Dijkstra on the source vertex at " + srcNodeId);
+      //If the vertex has out degree different than zero
+      n_dijkstra(srcNodeId);
+
+      System.out.println("The shortest path from node: ");
+
+      for (int destNode = 0; destNode < verts.size(); destNode++) {
+        System.out.println(srcNodeId + " to " + destNode + 
+          " is " + dist.get(destNode));
+        //update the two dimensional matrix
+        distMatrix[srcNodeId][destNode] = dist.get(destNode);
+      }
+    }
+
+    System.out.println("The distance matrix: ");
+
+    for (int u = 0; u < verts.size(); u++) {
+      for (int v = 0; v < verts.size(); v++) {
+
+        System.out.print(distMatrix[u][v] + " ");
+      }
+      System.out.println();
+    }
   }
   //End constructor
 
@@ -137,96 +170,11 @@ class ForceDirectedLayout extends Frame {
     }
   }
   //End checkEdge method
-  //Dijkstra
-  //Function for Dikstra's algorithm
-  public void dijkstra(int srcNodeId) {
-    //Initialize the dist1DMatrix 
-    if(srcNodeId < verts.size()){
-      for(int col = 0; col < verts.size(); col++)
-         dist1DMatrix[col] = Float.MAX_VALUE;
-    }
-    
-    
-    
-    
-    for (GraphVertex v : verts) {
-      if (!dist.containsKey(v.id)) {
-        dist.put(v.id, Integer.MAX_VALUE);
-      } else {
-        System.out.println("Double check initialization of the distance hashmap");
-        dist.put(v.id, Integer.MAX_VALUE);
-      }
-    }
-
-    // Add source node to the priority queue
-    GraphVertex srcNode = null;
-    for (GraphVertex v : verts) {
-      if (v.id.equals(srcNodeId)) {
-        srcNode = v;
-        break;
-      }
-    }
-    pq.add(srcNode);
-
-    //Distance to the source node is 0
-    dist.put(srcNode.id, 0);
-
-    //Reset the visited vertex
-    if (settled.size()== verts.size())
-      settled.clear();
-
-    while (settled.size() != verts.size()) {
-      //remove the minimum distance node 
-      //from  the priority queue
-      String u = pq.remove().id; //u = 0 for the first loop
-
-      //adding the node whose distance is finalized
-      settled.add(u);
-
-      //System.out.println("The visting nodes are ordered as  " + u);
-      //update adjacent's total distance to the source node
-      e_Neighbors(srcNode);
-    }
-  }
-  //End Dijkstra
-  //Function to process all the neighbors 
-  // of the visited node
-  private void e_Neighbors(GraphVertex srcNode) {
-
-    int edgeDistance = -1;
-    int newTotalDistance = -1;
-
-    //All the neighbors of u
-    for (int i = 0; i < adj.get(srcNode.id).size(); i++) {
-
-      String destId = adj.get(srcNode.id).get(i);
-
-      // Add source node to the priority queue
-      GraphVertex destNode = null;
-      for (GraphVertex v : verts) {
-        if (v.id.equals(destId)) {
-          destNode = v;
-          break;
-        }
-      }
-
-      //if the node v hasn't been processed
-      if (!settled.contains(destId)) {
-        edgeDistance = destNode.cost;
-        newTotalDistance = dist.get(srcNode.id) + edgeDistance;
-
-        // If new distance is cheaper in cost
-        if (newTotalDistance < destNode.cost)
-          dist.put(destId, newTotalDistance);
-
-        // Add the node v to the queue
-        pq.add(destNode);
-      }
-    }
-  }
-  //end e_Neighbors
+ 
   //Initialize the original 2 dimensional distance matrix based on the weighted property of a GraphEdge object
   void initializeDistanceMatrix() {
+
+    System.out.println("initialize the Distance Matrix");
     //Initialize the matrix
     for (int row = 0; row < verts.size(); row++) {
       for (int col = 0; col < verts.size(); col++) {
@@ -234,6 +182,8 @@ class ForceDirectedLayout extends Frame {
       }
     }
     //Update the square matrix
+    System.out.println("update the Distance Matrix");
+
     for ( GraphEdge e : edges ) {
       int srcId =  e.v0.dId;
       int destId =  e.v1.dId;
@@ -241,7 +191,7 @@ class ForceDirectedLayout extends Frame {
         for (int col = 0; col < verts.size(); col++) {
           if ( row == srcId && col == destId ) {
             distMatrix[srcId][destId] = e.weight;
-            distMatrix[destId][srcId] = e.weight;
+            //distMatrix[destId][srcId] = e.weight;
           } else if (row == col) {
             distMatrix[row][col] = 0;
           }
@@ -249,116 +199,119 @@ class ForceDirectedLayout extends Frame {
       }
     }
     //print out the distance matrix
-    /**
+
     System.out.println("Double check the distance matrix");
-    for (int row = 0; row < verts.size(); row++) {
-      System.out.println("The current row is " + row);
-      for (int col = 0; col < verts.size(); col++) {
-        System.out.print(distMatrix[row][col] + "    ");
-      }
-      System.out.println();
-    }*/
+    
+     for (int row = 0; row < verts.size(); row++) {
+     //System.out.println("The current row is " + row);
+     for (int col = 0; col < verts.size(); col++) {
+     System.out.print(distMatrix[row][col] + "    ");
+     }
+     System.out.println();
+     }
   }
   //end Initialize the original 2 dimensional distance matrix
-  void draw() {
-    update(); // don't modify this line
 
-    // TODO: ADD CODE TO DRAW THE GRAPH
-
-    display();
-
-    for ( GraphEdge e : edges ) {
-      checkEdge(e, 5);
+//void n_dijkstra(int srcNodeId)
+void n_dijkstra(int srcNodeId){
+  
+  dist = new ArrayList<Integer>();
+  
+  dist.addAll(Collections.nCopies(verts.size(), INF)); dist.set(srcNodeId, 0);
+  
+  pq.offer(new GraphVertex(srcNodeId, 0)); //The source node is the first element of the queue
+  
+  while(!pq.isEmpty()){
+    
+   // System.out.println("Before poll");
+    
+    GraphVertex top = pq.poll(); //Greedy: pick shortest unvisited vertex
+    
+    //System.out.println("Before the get the info of the u node");
+    
+    int d = top.getCost(), uId = top.getNumbID();
+    
+    //String uStrId = top.getStringID();
+    
+    //System.out.println("After the get the info of the u node");
+    
+    if (d > dist.get(uId)) continue; // This check is important
+    
+    Iterator it = adj.get(uId).iterator();
+    
+    //loop through all outgoing edges from u
+    while (it.hasNext()){
+      
+      System.out.println("Inside the loop through all outgoing edges from u");
+      
+     
+            
+      GraphVertex v = (GraphVertex) it.next();
+      
+      int vId = v.dId;
+      
+      System.out.println("The neigbor vertex is " + v.dId);
+            
+      int weight_u_v = (int) distMatrix[uId][vId];
+      
+      if (dist.get(uId) + weight_u_v < dist.get(vId)){
+          dist.set(vId,  dist.get(uId) + weight_u_v);
+          pq.offer(new GraphVertex(vId, dist.get(vId)));
+      }
+           
     }
+       
+  }
+  
+  
+}
 
-    //Interaction: fill adjacency vertex
-    if (selected != null ) {
+//void n_dijkstra(int srcNodeId) {
 
-      selected.display();
+void draw() {
+  update(); // don't modify this line
 
-      //loop through the edge list
+  // TODO: ADD CODE TO DRAW THE GRAPH
 
-      for (int j = 0; j < edges.size(); j++) {
-        if (edges.get(j).v0.getID().equals(selected.getID()) == false) {
-          //Redraw
-          //println(selected.getID() + " talks to " + "\t" + edges.get(j).v1.getID());
+  display();
 
-          //solve the bigger case, deemphasize by coloring blue
-          stroke(200);
-          fill(200);
-          //redraw the source, destination vertexes and the conneccting edge
-          ellipse(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, 8, 8);
-          ellipse(edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y, 8, 8);
+  for ( GraphEdge e : edges ) {
+    checkEdge(e, 5);
+  }
 
-          //stroke(0, 0, 255);
+  //Interaction: fill adjacency vertex
+  if (selected != null ) {
 
-          line(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y);
+    selected.display();
 
-          // return black
-          fill(0);
-          stroke(0);// return black
-        }
-      } // End if loop through the edge list
-    }// End if the vertex is selected
-    //Draw the adjacency list of the selected vertex
-    if (selectedEdges != null ) {
-      //Redraw the selected edge list
-      for ( GraphEdge e : selectedEdges ) {
+    //loop through the edge list
 
-        float vertSrcX =  e.v0.getPosition().x;
-        float vertSrcY =  e.v0.getPosition().y;
-
-        float vertDestX =  e.v1.getPosition().x;
-        float vertDestY =  e.v1.getPosition().y;
-
-        //System.out.println(vertSrcX + "\t" + vertSrcY + "\n");
-
-        //System.out.println(vertDestX + "\t" + vertDestY + "\n");
+    for (int j = 0; j < edges.size(); j++) {
+      if (edges.get(j).v0.getStringID().equals(selected.getStringID()) == false) {
+        //Redraw
+        //println(selected.getStringID() + " talks to " + "\t" + edges.get(j).v1.getStringID());
 
         //solve the bigger case, deemphasize by coloring blue
-        fill(255, 0, 0);
+        stroke(200);
+        fill(200);
         //redraw the source, destination vertexes and the conneccting edge
+        ellipse(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, 8, 8);
+        ellipse(edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y, 8, 8);
 
-        ellipse(e.v0.getPosition().x, e.v0.getPosition().y, 8, 8);
-        e.v0.display();
-        ellipse(e.v1.getPosition().x, e.v1.getPosition().y, 8, 8);
-        e.v1.display();
+        //stroke(0, 0, 255);
 
-        stroke(255, 0, 0);
+        line(edges.get(j).v0.getPosition().x, edges.get(j).v0.getPosition().y, edges.get(j).v1.getPosition().x, edges.get(j).v1.getPosition().y);
 
-        line(vertSrcX, vertSrcY, vertDestX, vertDestY);
-
-        fill(0);// return black
+        // return black
+        fill(0);
         stroke(0);// return black
-      } //End redraw the selected edge list
-    } //End if check the selected edge list is not null
-    //Drag and drop
-    if (selected != null ) {
-      //drag and drop the vertex
-      if (locked) {
-        selected.mouseDragged();
       }
-    }
-  }//End function draw
-
-
-
-  void display() {
-    for ( GraphVertex v : verts ) {
-
-      float vertX =  v.getPosition().x;
-      float vertY =  v.getPosition().y;
-
-      //System.out.println(vertX + "\t" + vertY + "\n");
-      //colorMode(HSB, 100);
-      int myColor = (int) map(v.group, 1, 10, 100, 255);
-
-      fill(0, myColor, myColor);
-      ellipse(vertX, vertY, 8, 8);
-      fill(0);
-    }
-
-    for ( GraphEdge e : edges ) {
+    } // End if loop through the edge list
+  }// End if the vertex is selected
+  //Draw the adjacency list of the selected vertex
+  if (selectedEdges != null ) {
+    //Redraw the selected edge list
+    for ( GraphEdge e : selectedEdges ) {
 
       float vertSrcX =  e.v0.getPosition().x;
       float vertSrcY =  e.v0.getPosition().y;
@@ -370,69 +323,124 @@ class ForceDirectedLayout extends Frame {
 
       //System.out.println(vertDestX + "\t" + vertDestY + "\n");
 
+      //solve the bigger case, deemphasize by coloring blue
+      fill(255, 0, 0);
+      //redraw the source, destination vertexes and the conneccting edge
+
+      ellipse(e.v0.getPosition().x, e.v0.getPosition().y, 8, 8);
+      e.v0.display();
+      ellipse(e.v1.getPosition().x, e.v1.getPosition().y, 8, 8);
+      e.v1.display();
+
+      stroke(255, 0, 0);
+
       line(vertSrcX, vertSrcY, vertDestX, vertDestY);
+
+      fill(0);// return black
+      stroke(0);// return black
+    } //End redraw the selected edge list
+  } //End if check the selected edge list is not null
+  //Drag and drop
+  if (selected != null ) {
+    //drag and drop the vertex
+    if (locked) {
+      selected.mouseDragged();
     }
   }
-  //End function display
+}//End function draw
 
-  boolean mouseInside(GraphVertex v) {
-    PVector m = new PVector(mouseX, mouseY);
-    return abs(v.getPosition().dist(m)) < clickBuffer;
+
+
+void display() {
+  for ( GraphVertex v : verts ) {
+
+    float vertX =  v.getPosition().x;
+    float vertY =  v.getPosition().y;
+
+    //System.out.println(vertX + "\t" + vertY + "\n");
+    //colorMode(HSB, 100);
+    int myColor = (int) map(v.group, 1, 10, 100, 255);
+
+    fill(0, myColor, myColor);
+    ellipse(vertX, vertY, 8, 8);
+    fill(0);
   }
 
-  void mousePressed() { 
-    // TODO: ADD SOME INTERACTION CODE
-    //Interaction: print ID 
-    for ( GraphVertex v : verts ) {
-      if (mouseInside(v)) {
-        //reset the selected edge list
-        selectedEdges = new ArrayList<GraphEdge>();
-        selected = v;
+  for ( GraphEdge e : edges ) {
 
-        locked = true;//Drag and drop interaction
+    float vertSrcX =  e.v0.getPosition().x;
+    float vertSrcY =  e.v0.getPosition().y;
 
-        //println(selected.getID(), selected.group );
-        //Build the adjacency list of the selected edge above
-        for (int j = 0; j < edges.size(); j++) {
-          if (edges.get(j).v0.getID().equals(selected.getID()) == true) {     
-            selectedEdges.add(edges.get(j));
-          }
+    float vertDestX =  e.v1.getPosition().x;
+    float vertDestY =  e.v1.getPosition().y;
+
+    //System.out.println(vertSrcX + "\t" + vertSrcY + "\n");
+
+    //System.out.println(vertDestX + "\t" + vertDestY + "\n");
+
+    line(vertSrcX, vertSrcY, vertDestX, vertDestY);
+  }
+}
+//End function display
+
+boolean mouseInside(GraphVertex v) {
+  PVector m = new PVector(mouseX, mouseY);
+  return abs(v.getPosition().dist(m)) < clickBuffer;
+}
+
+void mousePressed() { 
+  // TODO: ADD SOME INTERACTION CODE
+  //Interaction: print ID 
+  for ( GraphVertex v : verts ) {
+    if (mouseInside(v)) {
+      //reset the selected edge list
+      selectedEdges = new ArrayList<GraphEdge>();
+      selected = v;
+
+      locked = true;//Drag and drop interaction
+
+      //println(selected.getStringID(), selected.group );
+      //Build the adjacency list of the selected edge above
+      for (int j = 0; j < edges.size(); j++) {
+        if (edges.get(j).v0.getStringID().equals(selected.getStringID()) == true) {     
+          selectedEdges.add(edges.get(j));
         }
       }
     }
-  }//end mousePressed
+  }
+}//end mousePressed
 
 
 
-  void mouseReleased() {    
-    // TODO: ADD SOME INTERACTION CODE
-    locked = false;
+void mouseReleased() {    
+  // TODO: ADD SOME INTERACTION CODE
+  locked = false;
+}
+
+
+
+
+
+// The following function applies forces to all of the nodes. 
+// This code does not need to be edited to complete this 
+// project (and I recommend against modifying it).
+void update() {
+  for ( GraphVertex v : verts ) {
+    v.clearForce();
   }
 
-
-
-
-
-  // The following function applies forces to all of the nodes. 
-  // This code does not need to be edited to complete this 
-  // project (and I recommend against modifying it).
-  void update() {
-    for ( GraphVertex v : verts ) {
-      v.clearForce();
-    }
-
-    for ( GraphVertex v0 : verts ) {
-      for ( GraphVertex v1 : verts ) {
-        if ( v0 != v1 ) applyRepulsiveForce( v0, v1 );
-      }
-    }
-
-    for ( GraphEdge e : edges ) {
-      applySpringForce( e );
-    }
-
-    for ( GraphVertex v : verts ) {
-      v.updatePosition( TIME_STEP );
+  for ( GraphVertex v0 : verts ) {
+    for ( GraphVertex v1 : verts ) {
+      if ( v0 != v1 ) applyRepulsiveForce( v0, v1 );
     }
   }
+
+  for ( GraphEdge e : edges ) {
+    applySpringForce( e );
+  }
+
+  for ( GraphVertex v : verts ) {
+    v.updatePosition( TIME_STEP );
+  }
+}
 }
